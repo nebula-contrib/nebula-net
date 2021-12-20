@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NebulaNet", "NebulaNet\Nebu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{18CBBEFD-A8C1-431D-AADF-E697575A6A0C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NebulaNetTest", "NebulaNetTest\NebulaNetTest.csproj", "{E80ADA5C-4ED5-4F0B-8B5F-FD6541222EA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{8DD952EA-5097-46B7-AE07-2B24DF7302EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DD952EA-5097-46B7-AE07-2B24DF7302EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DD952EA-5097-46B7-AE07-2B24DF7302EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E80ADA5C-4ED5-4F0B-8B5F-FD6541222EA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E80ADA5C-4ED5-4F0B-8B5F-FD6541222EA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E80ADA5C-4ED5-4F0B-8B5F-FD6541222EA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E80ADA5C-4ED5-4F0B-8B5F-FD6541222EA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,6 +40,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{E5EE94FA-0D1B-4F45-B6FA-9CAFCA28F4B3} = {99935AFF-8466-409C-87C4-5A66F6B7C1D5}
 		{8DD952EA-5097-46B7-AE07-2B24DF7302EC} = {833F56DF-15C2-4B0E-89EF-5A1D43E9612D}
+		{E80ADA5C-4ED5-4F0B-8B5F-FD6541222EA6} = {18CBBEFD-A8C1-431D-AADF-E697575A6A0C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {17C8FCD6-BDD0-44F6-8023-9FB945F6DE15}
