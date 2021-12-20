@@ -10,7 +10,7 @@ Nebula NET client.
 
 [https://www.nuget.org/packages/NebulaNet/](https://www.nuget.org/packages/NebulaNet/)
 ```shell
-dotnet add package NebulaNet --version 1.0.0
+dotnet add package NebulaNet
 ```
 
 ## Quick Start
