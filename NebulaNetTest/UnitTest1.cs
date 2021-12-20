@@ -23,22 +23,10 @@ namespace NebulaNetTest
         }
 
         [Test]
-        public void TestAll()
-        {
-            TestConnection();
-            CreateTable().Wait();
-            InsertTest().Wait();
-            FetchTest().Wait();
-            DropTest().Wait();
-        }
-
-        public void TestConnection()
+        public async Task TestAll()
         {
             Assert.IsTrue(_client.sessionId > 0);
-        }
 
-        public async Task CreateTable()
-        {
             StringBuilder sb = new StringBuilder();
             sb.Append("CREATE SPACE IF NOT EXISTS test(vid_type=FIXED_STRING(30));");
             sb.Append("USE test;");
@@ -48,33 +36,25 @@ namespace NebulaNetTest
             var executionResponse = await _client.Execute(sb.ToString());
             await Task.Delay(5000);
             Assert.IsTrue(executionResponse.Error_code == 0);
-        }
+            await Task.Delay(5000);
 
-        public async Task InsertTest()
-        {
-            var executionResponse = await _client.Execute("INSERT VERTEX person(name, age) VALUES \"Bob\":(\"Bob\", 10), \"Lily\":(\"Lily\", 9);");
+            executionResponse = await _client.Execute("INSERT VERTEX person(name, age) VALUES \"Bob\":(\"Bob\", 10), \"Lily\":(\"Lily\", 9);");
             await Task.Delay(5000);
             Assert.IsTrue(executionResponse.Error_code == 0);
 
             executionResponse = await _client.Execute("INSERT EDGE like(likeness) VALUES \"Bob\"->\"Lily\":(80.0);");
             await Task.Delay(5000);
             Assert.IsTrue(executionResponse.Error_code == 0);
-        }
 
-        public async Task FetchTest()
-        {
-            var executionResponse = await _client.Execute("FETCH PROP ON person \"Bob\" YIELD vertex as node;");
+            executionResponse = await _client.Execute("FETCH PROP ON person \"Bob\" YIELD vertex as node;");
             await Task.Delay(5000);
             Assert.IsTrue(executionResponse.Error_code == 0);
 
             executionResponse = await _client.Execute("FETCH PROP ON like \"Bob\"->\"Lily\" YIELD edge as e;");
             await Task.Delay(5000);
             Assert.IsTrue(executionResponse.Error_code == 0);
-        }
 
-        public async Task DropTest()
-        {
-            var executionResponse = await _client.Execute("DROP SPACE test;");
+            executionResponse = await _client.Execute("DROP SPACE test;");
             await Task.Delay(5000);
             Assert.IsTrue(executionResponse.Error_code == 0);
         }
