@@ -1,8 +1,8 @@
 ## NebulaNet
 [![NuGet version (NebulaNet)](https://img.shields.io/nuget/v/NebulaNet.svg?style=flat-square)](https://www.nuget.org/packages/NebulaNet/)
 [![CI](https://github.com/shyboylpf/nebula-net/workflows/E2E/badge.svg)](https://github.com/shyboylpf/nebula-net/actions/workflows/ci.yml)
-![license](https://img.shields.io/badge/license-Apache%202.0-green.svg)
-![issues](https://img.shields.io/github/issues/shyboylpf/nebula-net.svg)
+[![license](https://img.shields.io/badge/license-Apache%202.0-green.svg)](https://github.com/shyboylpf/nebula-net/blob/master-matt/LICENSES/Apache-2.0.txt)
+[![issues](https://img.shields.io/github/issues/shyboylpf/nebula-net.svg)](https://github.com/shyboylpf/nebula-net/issues)
 
 Nebula NET client.
 
