@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace nebula_net
+namespace NebulaNet
 {
     public class Class1
     {

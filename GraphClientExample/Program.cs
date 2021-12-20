@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Nebula.Meta;
+using System;
 
 namespace GraphClientExample
 {
     internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            Session session;
+            NebulaPool pool = new NebulaPool();
             Console.WriteLine("Hello World!");
         }
     }
