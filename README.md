@@ -1,10 +1,6 @@
 ## NebulaNet
 [![NuGet version (NebulaNet)](https://img.shields.io/nuget/v/NebulaNet.svg?style=flat-square)](https://www.nuget.org/packages/NebulaNet/)
 ![CI](https://github.com/shyboylpf/nebula-net/workflows/E2E/badge.svg)
-![release](https://img.shields.io/github/release/shyboylpf/nebula-net.svg)
-![net](https://img.shields.io/badge/.NET-%3E%3D%205.0-brightgreen.svg)
-![contributors](https://img.shields.io/github/contributors/shyboylpf/nebula-net.svg)
-![platform](https://img.shields.io/badge/platform-windows%20%7C%20linux-brightgreen.svg)
 ![license](https://img.shields.io/badge/license-Apache%202.0-green.svg)
 ![issues](https://img.shields.io/github/issues/shyboylpf/nebula-net.svg)
 
