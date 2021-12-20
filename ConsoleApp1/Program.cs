@@ -4,21 +4,43 @@ using Thrift.Transport.Client;
 using Thrift.Protocol;
 using Nebula.Graph;
 using System.Threading.Tasks;
+using System.Text;
+using System.Threading;
 
 namespace ConsoleApp1
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
             GraphClient graphClient = new GraphClient("127.0.0.1", 9669);
             graphClient.Authenticate("root", "nebula");
             Console.WriteLine(graphClient.sessionId);
 
-            var response = graphClient.Execute("use basketballplayer;");
+            StringBuilder sb = new StringBuilder();
+            sb.Append("CREATE SPACE IF NOT EXISTS test(vid_type=FIXED_STRING(30));");
+            sb.Append("USE test;");
+            sb.Append("CREATE TAG IF NOT EXISTS person(name string, age int);");
+            sb.Append("CREATE EDGE like (likeness double);");
 
-            graphClient.SignOff();
-            Console.WriteLine("Hello World!");
+            var a = await graphClient.Execute(sb.ToString());
+
+            await Task.Delay(10000);
+
+            a = await graphClient.Execute("INSERT VERTEX person(name, age) VALUES \"Bob\":(\"Bob\", 10), \"Lily\":(\"Lily\", 9);");
+            await Task.Delay(5000);
+            a = await graphClient.Execute("INSERT EDGE like(likeness) VALUES \"Bob\"->\"Lily\":(80.0);");
+            await Task.Delay(5000);
+            a = await graphClient.Execute("FETCH PROP ON person \"Bob\" YIELD vertex as node;");
+            await Task.Delay(5000);
+            a = await graphClient.Execute("FETCH PROP ON like \"Bob\"->\"Lily\" YIELD edge as e;");
+            Thread.Sleep(5000);
+            await Task.Delay(5000);
+            a = await graphClient.Execute("DROP SPACE test;");
+            Thread.Sleep(5000);
+            await Task.Delay(5000);
+
+            await graphClient.SignOff();
         }
     }
 
@@ -33,7 +55,6 @@ namespace ConsoleApp1
         {
             var tConfiguration = new TConfiguration();
             socketTransport = new TSocketTransport(ip, port, tConfiguration);
-            //var transport2 = new TMemoryBufferTransport(tConfiguration);
 
             socketTransport.OpenAsync(default);
 
@@ -66,9 +87,9 @@ namespace ConsoleApp1
             return executionResponse;
         }
 
-        public void SignOff()
+        public async Task SignOff()
         {
-            Client.signout(sessionId).Wait();
+            await Client.signout(sessionId);
         }
     }
 }
