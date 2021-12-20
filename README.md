@@ -12,9 +12,9 @@ Nebula NET client.
 
 ## Install with Composer
 
-[https://packagist.org/packages/vesoft-inc/nebula-net](https://packagist.org/packages/vesoft-inc/nebula-net)
+[https://www.nuget.org/packages/NebulaNet/](https://www.nuget.org/packages/NebulaNet/)
 ```shell
-composer require vesoft-inc/nebula-net
+dotnet add package NebulaNet --version 1.0.0
 ```
 
 ## Quick Start
