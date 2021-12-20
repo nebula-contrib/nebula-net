@@ -44,7 +44,7 @@ namespace NebulaNet
             var executionResponse = await Client.execute(sessionId, System.Text.Encoding.Default.GetBytes(statement));
             if (executionResponse.Error_code != 0)
             {
-                throw new Exception(statement + " execute failed.");
+                throw new Exception(System.Text.Encoding.ASCII.GetString(executionResponse.Error_msg) + statement + " execute failed.");
             }
 
             return executionResponse;
