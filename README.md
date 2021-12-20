@@ -4,7 +4,7 @@
 ![release](https://img.shields.io/github/release/shyboylpf/nebula-net.svg)
 ![net](https://img.shields.io/badge/.NET-%3E%3D%205.0-brightgreen.svg)
 ![contributors](https://img.shields.io/github/contributors/shyboylpf/nebula-net.svg)
-![platform](https://img.shields.io/badge/platform-macos%20%7C%20linux-brightgreen.svg)
+![platform](https://img.shields.io/badge/platform-windows%20%7C%20linux-brightgreen.svg)
 ![license](https://img.shields.io/badge/license-Apache%202.0-green.svg)
 ![issues](https://img.shields.io/github/issues/shyboylpf/nebula-net.svg)
 
