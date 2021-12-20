@@ -6,7 +6,7 @@
 
 Nebula NET client.
 
-## Install with Composer
+## Install with .NET Cli
 
 [https://www.nuget.org/packages/NebulaNet/](https://www.nuget.org/packages/NebulaNet/)
 ```shell
