@@ -19,19 +19,19 @@ namespace GraphClientExample
             sb.Append("CREATE TAG IF NOT EXISTS person(name string, age int);");
             sb.Append("CREATE EDGE like (likeness double);");
 
-            var a = await graphClient.Execute(sb.ToString());
+            var executionResponse = await graphClient.Execute(sb.ToString());
 
             await Task.Delay(10000);
 
-            a = await graphClient.Execute("INSERT VERTEX person(name, age) VALUES \"Bob\":(\"Bob\", 10), \"Lily\":(\"Lily\", 9);");
+            executionResponse = await graphClient.Execute("INSERT VERTEX person(name, age) VALUES \"Bob\":(\"Bob\", 10), \"Lily\":(\"Lily\", 9);");
             await Task.Delay(5000);
-            a = await graphClient.Execute("INSERT EDGE like(likeness) VALUES \"Bob\"->\"Lily\":(80.0);");
+            executionResponse = await graphClient.Execute("INSERT EDGE like(likeness) VALUES \"Bob\"->\"Lily\":(80.0);");
             await Task.Delay(5000);
-            a = await graphClient.Execute("FETCH PROP ON person \"Bob\" YIELD vertex as node;");
+            executionResponse = await graphClient.Execute("FETCH PROP ON person \"Bob\" YIELD vertex as node;");
             await Task.Delay(5000);
-            a = await graphClient.Execute("FETCH PROP ON like \"Bob\"->\"Lily\" YIELD edge as e;");
+            executionResponse = await graphClient.Execute("FETCH PROP ON like \"Bob\"->\"Lily\" YIELD edge as e;");
             await Task.Delay(5000);
-            a = await graphClient.Execute("DROP SPACE test;");
+            executionResponse = await graphClient.Execute("DROP SPACE test;");
             await Task.Delay(5000);
 
             await graphClient.SignOff();
