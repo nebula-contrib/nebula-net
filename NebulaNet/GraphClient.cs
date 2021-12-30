@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Thrift;
 using Thrift.Protocol;
 using Thrift.Transport.Client;
+using System.Net;
 
 namespace NebulaNet
 {
@@ -17,7 +18,11 @@ namespace NebulaNet
         public GraphClient(string ip, int port)
         {
             var tConfiguration = new TConfiguration();
-            socketTransport = new TSocketTransport(ip, port, tConfiguration);
+
+            if (IPAddress.TryParse(ip, out IPAddress iPAddress))
+                socketTransport = new TSocketTransport(iPAddress, port, tConfiguration);
+            else
+                socketTransport = new TSocketTransport(ip, port, tConfiguration);
 
             socketTransport.OpenAsync(default);
 
@@ -25,7 +30,6 @@ namespace NebulaNet
 
             Client = new GraphService.Client(protocolProtocol);
         }
-
         public void Authenticate(string user, string passwd)
         {
             var authResponse = Client.authenticate(System.Text.Encoding.Default.GetBytes(user), System.Text.Encoding.Default.GetBytes(passwd)).Result;
