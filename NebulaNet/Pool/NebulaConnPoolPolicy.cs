@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace NebulaNet
 {
-    public class NebulaPoolPolicy : IPooledObjectPolicy<NebulaConnection>
+    public class NebulaConnPoolPolicy : IPooledObjectPolicy<NebulaConnection>
     {
         private readonly NebulaConfig _nebulaConfig;
-        public NebulaPoolPolicy(NebulaConfig nebulaConfig)
+        public NebulaConnPoolPolicy(NebulaConfig nebulaConfig)
         {
             _nebulaConfig = nebulaConfig;
         }

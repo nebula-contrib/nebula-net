@@ -12,13 +12,13 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddSingleton<ObjectPool<NebulaConnection>>(serviceProvider =>
             {
-                var policy = new NebulaPoolPolicy(config);
-                return new DefaultObjectPool<NebulaConnection>(policy);
+                var policy = new NebulaConnPoolPolicy(config);
+                return new DefaultObjectPool<NebulaConnection>(policy,maximumRetained:config.MaxConnsSize);
             });
             services.AddSingleton(serviceProvider =>
             {
                 var objectPool = serviceProvider.GetRequiredService<ObjectPool<NebulaConnection>>();
-                return new NebulaPool(objectPool, config);
+                return new NebulaConnPool(objectPool, config);
             });
 
             return services;

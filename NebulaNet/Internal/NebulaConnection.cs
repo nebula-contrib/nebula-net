@@ -33,10 +33,16 @@ namespace NebulaNet
             
             await client.OpenTransportAsync();
         }
-
-        public AuthResponse Authenticate(string user, string passwd)
+        /// <summary>
+        /// 验证用户名和密码
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="passwd"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<AuthResponse> AuthenticateAsync(string user, string passwd)
         {
-            var authResponse = client.authenticate(Encoding.ASCII.GetBytes(user), Encoding.ASCII.GetBytes(passwd)).Result;
+            var authResponse =await client.authenticate(Encoding.ASCII.GetBytes(user), Encoding.ASCII.GetBytes(passwd));
 
             if (authResponse.Error_code != 0)
             {
@@ -45,7 +51,14 @@ namespace NebulaNet
 
             return authResponse;
         }
-        public async Task<ExecutionResponse> Execute(long sessionID, string statement)
+        /// <summary>
+        /// 执行
+        /// </summary>
+        /// <param name="sessionID"></param>
+        /// <param name="statement"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<ExecutionResponse> ExecuteAsync(long sessionID, string statement)
         {
             var executionResponse = await client.execute(sessionID, Encoding.UTF8.GetBytes(statement));
             if (executionResponse.Error_code != 0)
@@ -55,9 +68,41 @@ namespace NebulaNet
 
             return executionResponse;
         }
-        public async Task SignOff(long sessionId)
+        /// <summary>
+        /// 连接是否是可用的
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> PingAsync()
+        {
+            try
+            {
+                await ExecuteAsync(0, "YIELD 1;");
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 释放 sessionId
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <returns></returns>
+        public async Task SignOutAsync(long sessionId)
         {
             await client.signout(sessionId);
+        }
+        /// <summary>
+        /// 断开连接
+        /// </summary>
+        public void Close()
+        {
+            if (transport != null && transport.IsOpen)
+            {
+                transport.Close();
+            }
         }
     }
 }

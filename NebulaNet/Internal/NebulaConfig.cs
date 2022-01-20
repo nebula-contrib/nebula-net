@@ -6,9 +6,18 @@ namespace NebulaNet
 {
     public class NebulaConfig
     {
-        public string Ip { get;private set; } = "0.0.0.0";
-        public int Port { get; set; } = 9669;
-        public string UserName { get; set; } = "root";
-        public string Password { get; set; } = "nebula";
+        public NebulaConfig(string ip= "0.0.0.0",int port= 9669,string userName="root",string password="nebula",int maxConnsSize = 5)
+        {
+            Ip=ip;
+            Port = port;
+            UserName = userName;
+            Password = password;
+            MaxConnsSize = maxConnsSize;
+        }
+        public string Ip { get;private set; }
+        public int Port { get; private set; }
+        public string UserName { get; private set; }
+        public string Password { get; private set; }
+        public int MaxConnsSize { get; private set; }
     }
 }
