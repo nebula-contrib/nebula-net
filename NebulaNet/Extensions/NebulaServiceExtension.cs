@@ -12,8 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddSingleton<ObjectPool<NebulaConnection>>(serviceProvider =>
             {
-                var policy = new NebulaConnPoolPolicy(config);
-                return new DefaultObjectPool<NebulaConnection>(policy,maximumRetained:config.MaxConnsSize);
+                return new DefaultObjectPoolProvider().Create(new NebulaConnPoolPolicy(config));
             });
             services.AddSingleton(serviceProvider =>
             {

@@ -10,11 +10,11 @@ using Thrift.Transport.Client;
 
 namespace NebulaNet
 {
-    public class NebulaConnection
+    public class NebulaConnection : IDisposable
     {
-        private TTransport transport { get; set; }
-        private TProtocol protocol { get; set; }
-        private GraphService.Client client { get; set; }
+        private TTransport Transport { get; set; }
+        private TProtocol Protocol { get; set; }
+        private GraphService.Client Client { get; set; }
 
         /// <summary>
         /// 打开连接
@@ -23,15 +23,15 @@ namespace NebulaNet
         public async Task OpenAsync(string ip, int port)
         {
             if (IPAddress.TryParse(ip, out IPAddress iPAddress))
-                transport = new TSocketTransport(iPAddress, port,null,timeout:10);
+                Transport = new TSocketTransport(iPAddress, port,null,timeout:10);
             else
-                transport = new TSocketTransport(ip, port, null);
+                Transport = new TSocketTransport(ip, port, null);
 
-            protocol = new TBinaryProtocol(transport);
+            Protocol = new TBinaryProtocol(Transport);
 
-            client = new GraphService.Client(protocol);
+            Client = new GraphService.Client(Protocol);
             
-            await client.OpenTransportAsync();
+            await Client.OpenTransportAsync();
         }
         /// <summary>
         /// 验证用户名和密码
@@ -42,7 +42,7 @@ namespace NebulaNet
         /// <exception cref="Exception"></exception>
         public async Task<AuthResponse> AuthenticateAsync(string user, string passwd)
         {
-            var authResponse =await client.authenticate(Encoding.ASCII.GetBytes(user), Encoding.ASCII.GetBytes(passwd));
+            var authResponse =await Client.authenticate(Encoding.ASCII.GetBytes(user), Encoding.ASCII.GetBytes(passwd));
 
             if (authResponse.Error_code != 0)
             {
@@ -60,7 +60,7 @@ namespace NebulaNet
         /// <exception cref="Exception"></exception>
         public async Task<ExecutionResponse> ExecuteAsync(long sessionID, string statement)
         {
-            var executionResponse = await client.execute(sessionID, Encoding.UTF8.GetBytes(statement));
+            var executionResponse = await Client.execute(sessionID, Encoding.UTF8.GetBytes(statement));
             if (executionResponse.Error_code != 0)
             {
                 throw new Exception(Encoding.UTF8.GetString(executionResponse.Error_msg) + statement + " execute failed.");
@@ -92,17 +92,14 @@ namespace NebulaNet
         /// <returns></returns>
         public async Task SignOutAsync(long sessionId)
         {
-            await client.signout(sessionId);
+            await Client.signout(sessionId);
         }
         /// <summary>
-        /// 断开连接
+        /// 释放连接
         /// </summary>
-        public void Close()
+        public void Dispose()
         {
-            if (transport != null && transport.IsOpen)
-            {
-                transport.Close();
-            }
+            Client.Dispose();
         }
     }
 }
