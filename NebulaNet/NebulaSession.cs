@@ -8,12 +8,12 @@ namespace NebulaNet
     {
         private readonly SessionId _session;
         private NebulaConnection? _connection = null;
-        private readonly NebulaConnPool _connPool;
-        public NebulaSession(SessionId session, NebulaConnection connection, NebulaConnPool connPool)
+        private readonly NebulaPool _nebulaPool;
+        public NebulaSession(SessionId session, NebulaConnection connection, NebulaPool nebulaPool)
         {
             _session = session;
             _connection = connection;
-            _connPool = connPool;
+            _nebulaPool = nebulaPool;
         }
 
         public async Task<ExecutionResponse> ExecuteAsync(string statement)
@@ -34,9 +34,9 @@ namespace NebulaNet
         {
             if (_connection!=null)
             {
-                _connPool.ReturnConnect(_connection);
+                _nebulaPool.ReturnConnect(_connection);
             }
-            _connection = _connPool.GetConnect();
+            _connection = _nebulaPool.GetConnect();
         }
         public async Task<bool> PingAsync()
         {
@@ -56,8 +56,8 @@ namespace NebulaNet
             {
                 return;
             }
-            _connPool.ReturnConnect(_connection);
-            _connPool.ReturnSessionId(_session);
+            _nebulaPool.ReturnConnect(_connection);
+            _nebulaPool.ReturnSessionId(_session);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 var connPool = serviceProvider.GetRequiredService<ObjectPool<NebulaConnection>>();
                 var sessionIdPool = serviceProvider.GetRequiredService<ObjectPool<SessionId>>();
-                return new NebulaConnPool(connPool, sessionIdPool, config);
+                return new NebulaPool(connPool, sessionIdPool, config);
             });
 
             return services;

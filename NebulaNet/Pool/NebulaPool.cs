@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace NebulaNet
 {
-    public class NebulaConnPool
+    public class NebulaPool
     {
         private readonly ObjectPool<NebulaConnection> _connPool;
         private readonly NebulaConfig _nebulaConfig;
         private readonly ObjectPool<SessionId> _sessionIdPool;
-        public NebulaConnPool(ObjectPool<NebulaConnection> objectPool,
+        public NebulaPool(ObjectPool<NebulaConnection> objectPool,
             ObjectPool<SessionId> sessionIdPool,
             NebulaConfig nebulaConfig)
         {
