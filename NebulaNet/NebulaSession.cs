@@ -6,12 +6,12 @@ namespace NebulaNet
 {
     public class NebulaSession
     {
-        private readonly long sessionID;
+        private readonly SessionId _session;
         private NebulaConnection? _connection = null;
         private readonly NebulaConnPool _connPool;
-        public NebulaSession(long sessionId, NebulaConnection connection, NebulaConnPool connPool)
+        public NebulaSession(SessionId session, NebulaConnection connection, NebulaConnPool connPool)
         {
-            sessionID = sessionId;
+            _session = session;
             _connection = connection;
             _connPool = connPool;
         }
@@ -22,7 +22,7 @@ namespace NebulaNet
             {
                 throw new InvalidOperationException("The session was released, couldn't use again.");
             }
-            var executionResponse = await _connection.ExecuteAsync(sessionID, statement);
+            var executionResponse = await _connection.ExecuteAsync(_session.Id, statement);
 
             return executionResponse;
         }
@@ -50,14 +50,14 @@ namespace NebulaNet
         /// 释放session
         /// </summary>
         /// <returns></returns>
-        public async Task ReleaseAsync()
+        public void Release()
         {
             if (_connection == null)
             {
                 return;
             }
-            await _connection.SignOutAsync(sessionID);
             _connPool.ReturnConnect(_connection);
+            _connPool.ReturnSessionId(_session);
         }
     }
 }

@@ -13,15 +13,15 @@ namespace NebulaNet
         {
             _nebulaConfig = nebulaConfig;
         }
-        private int retryTime = 3;
         public NebulaConnection Create()
         {
+            int retryTime = 3;
             NebulaConnection connection = new NebulaConnection();
             while (retryTime-- > 0)
             {
                 try
                 {
-                    connection.OpenAsync(_nebulaConfig.Ip, _nebulaConfig.Port).Wait();
+                    connection.OpenAsync(_nebulaConfig.Ip, _nebulaConfig.Port).GetAwaiter().GetResult();
 
                     return connection;
                 }

@@ -12,12 +12,21 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddSingleton<ObjectPool<NebulaConnection>>(serviceProvider =>
             {
-                return new DefaultObjectPoolProvider().Create(new NebulaConnPoolPolicy(config));
+                var objectPoolProvider = new DefaultObjectPoolProvider();
+                objectPoolProvider.MaximumRetained = 30;
+                return objectPoolProvider.Create(new NebulaConnPoolPolicy(config));
+            });
+            services.AddSingleton<ObjectPool<SessionId>>(serviceProvider =>
+            {
+                var objectPoolProvider=new DefaultObjectPoolProvider();
+                objectPoolProvider.MaximumRetained = 30;
+                return objectPoolProvider.Create(new NebulaSessionIdPoolPolicy());
             });
             services.AddSingleton(serviceProvider =>
             {
-                var objectPool = serviceProvider.GetRequiredService<ObjectPool<NebulaConnection>>();
-                return new NebulaConnPool(objectPool, config);
+                var connPool = serviceProvider.GetRequiredService<ObjectPool<NebulaConnection>>();
+                var sessionIdPool = serviceProvider.GetRequiredService<ObjectPool<SessionId>>();
+                return new NebulaConnPool(connPool, sessionIdPool, config);
             });
 
             return services;

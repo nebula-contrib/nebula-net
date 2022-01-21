@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.ObjectPool;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,30 +9,45 @@ namespace NebulaNet
 {
     public class NebulaConnPool
     {
-        private readonly ObjectPool<NebulaConnection> _objectPool;
+        private readonly ObjectPool<NebulaConnection> _connPool;
         private readonly NebulaConfig _nebulaConfig;
-        public NebulaConnPool(ObjectPool<NebulaConnection> objectPool, NebulaConfig nebulaConfig)
+        private readonly ObjectPool<SessionId> _sessionIdPool;
+        public NebulaConnPool(ObjectPool<NebulaConnection> objectPool,
+            ObjectPool<SessionId> sessionIdPool,
+            NebulaConfig nebulaConfig)
         {
-            _objectPool = objectPool;
+            _connPool = objectPool;
             _nebulaConfig = nebulaConfig;
+            _sessionIdPool = sessionIdPool;
         }
 
         public async Task<NebulaSession> GetSessionAsync()
         {
-            var connection = _objectPool.Get();
-            var authResponse = await connection.AuthenticateAsync(_nebulaConfig.UserName, _nebulaConfig.Password);
+            var connection = _connPool.Get();
 
-            return new NebulaSession(authResponse.Session_id, connection,this);
+            var session = _sessionIdPool.Get();
+            if (!session.IsValid || session.Id <= 0)
+            {
+                var authResponse = await connection.AuthenticateAsync(_nebulaConfig.UserName, _nebulaConfig.Password);
+                session.SetId(authResponse.Session_id);
+            }
+
+            return new NebulaSession(session, connection,this);
         }
 
         public void ReturnConnect(NebulaConnection connection)
         {
-            _objectPool.Return(connection);
+            _connPool.Return(connection);
+        }
+
+        public void ReturnSessionId(SessionId sessionId)
+        {
+            _sessionIdPool.Return(sessionId);
         }
 
         public NebulaConnection GetConnect()
         {
-            return _objectPool.Get();
+            return _connPool.Get();
         }
     }
 }
