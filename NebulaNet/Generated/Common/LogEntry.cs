@@ -29,41 +29,37 @@ using Thrift.Processor;
 #pragma warning disable IDE1006  // parts of the code use IDL spelling
 #pragma warning disable IDE0083  // pattern matching "that is not SomeType" requires net5.0 but we still support earlier versions
 
-namespace Nebula.Raftex
+namespace Nebula.Common
 {
 
-  public partial class AskForVoteResponse : TBase
+  public partial class LogEntry : TBase
   {
-    private global::Nebula.Common.ErrorCode _error_code;
-    private long _current_term;
+    private long _cluster;
+    private byte[] _log_str;
 
-    /// <summary>
-    /// 
-    /// <seealso cref="global::Nebula.Common.ErrorCode"/>
-    /// </summary>
-    public global::Nebula.Common.ErrorCode Error_code
+    public long Cluster
     {
       get
       {
-        return _error_code;
+        return _cluster;
       }
       set
       {
-        __isset.error_code = true;
-        this._error_code = value;
+        __isset.cluster = true;
+        this._cluster = value;
       }
     }
 
-    public long Current_term
+    public byte[] Log_str
     {
       get
       {
-        return _current_term;
+        return _log_str;
       }
       set
       {
-        __isset.current_term = true;
-        this._current_term = value;
+        __isset.log_str = true;
+        this._log_str = value;
       }
     }
 
@@ -71,28 +67,28 @@ namespace Nebula.Raftex
     public Isset __isset;
     public struct Isset
     {
-      public bool error_code;
-      public bool current_term;
+      public bool cluster;
+      public bool log_str;
     }
 
-    public AskForVoteResponse()
+    public LogEntry()
     {
     }
 
-    public AskForVoteResponse DeepCopy()
+    public LogEntry DeepCopy()
     {
-      var tmp5 = new AskForVoteResponse();
-      if(__isset.error_code)
+      var tmp199 = new LogEntry();
+      if(__isset.cluster)
       {
-        tmp5.Error_code = this.Error_code;
+        tmp199.Cluster = this.Cluster;
       }
-      tmp5.__isset.error_code = this.__isset.error_code;
-      if(__isset.current_term)
+      tmp199.__isset.cluster = this.__isset.cluster;
+      if((Log_str != null) && __isset.log_str)
       {
-        tmp5.Current_term = this.Current_term;
+        tmp199.Log_str = this.Log_str.ToArray();
       }
-      tmp5.__isset.current_term = this.__isset.current_term;
-      return tmp5;
+      tmp199.__isset.log_str = this.__isset.log_str;
+      return tmp199;
     }
 
     public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -113,9 +109,9 @@ namespace Nebula.Raftex
           switch (field.ID)
           {
             case 1:
-              if (field.Type == TType.I32)
+              if (field.Type == TType.I64)
               {
-                Error_code = (global::Nebula.Common.ErrorCode)await iprot.ReadI32Async(cancellationToken);
+                Cluster = await iprot.ReadI64Async(cancellationToken);
               }
               else
               {
@@ -123,9 +119,9 @@ namespace Nebula.Raftex
               }
               break;
             case 2:
-              if (field.Type == TType.I64)
+              if (field.Type == TType.String)
               {
-                Current_term = await iprot.ReadI64Async(cancellationToken);
+                Log_str = await iprot.ReadBinaryAsync(cancellationToken);
               }
               else
               {
@@ -153,25 +149,25 @@ namespace Nebula.Raftex
       oprot.IncrementRecursionDepth();
       try
       {
-        var tmp6 = new TStruct("AskForVoteResponse");
-        await oprot.WriteStructBeginAsync(tmp6, cancellationToken);
-        var tmp7 = new TField();
-        if(__isset.error_code)
+        var tmp200 = new TStruct("LogEntry");
+        await oprot.WriteStructBeginAsync(tmp200, cancellationToken);
+        var tmp201 = new TField();
+        if(__isset.cluster)
         {
-          tmp7.Name = "error_code";
-          tmp7.Type = TType.I32;
-          tmp7.ID = 1;
-          await oprot.WriteFieldBeginAsync(tmp7, cancellationToken);
-          await oprot.WriteI32Async((int)Error_code, cancellationToken);
+          tmp201.Name = "cluster";
+          tmp201.Type = TType.I64;
+          tmp201.ID = 1;
+          await oprot.WriteFieldBeginAsync(tmp201, cancellationToken);
+          await oprot.WriteI64Async(Cluster, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
-        if(__isset.current_term)
+        if((Log_str != null) && __isset.log_str)
         {
-          tmp7.Name = "current_term";
-          tmp7.Type = TType.I64;
-          tmp7.ID = 2;
-          await oprot.WriteFieldBeginAsync(tmp7, cancellationToken);
-          await oprot.WriteI64Async(Current_term, cancellationToken);
+          tmp201.Name = "log_str";
+          tmp201.Type = TType.String;
+          tmp201.ID = 2;
+          await oprot.WriteFieldBeginAsync(tmp201, cancellationToken);
+          await oprot.WriteBinaryAsync(Log_str, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
         await oprot.WriteFieldStopAsync(cancellationToken);
@@ -185,22 +181,22 @@ namespace Nebula.Raftex
 
     public override bool Equals(object that)
     {
-      if (!(that is AskForVoteResponse other)) return false;
+      if (!(that is LogEntry other)) return false;
       if (ReferenceEquals(this, other)) return true;
-      return ((__isset.error_code == other.__isset.error_code) && ((!__isset.error_code) || (System.Object.Equals(Error_code, other.Error_code))))
-        && ((__isset.current_term == other.__isset.current_term) && ((!__isset.current_term) || (System.Object.Equals(Current_term, other.Current_term))));
+      return ((__isset.cluster == other.__isset.cluster) && ((!__isset.cluster) || (System.Object.Equals(Cluster, other.Cluster))))
+        && ((__isset.log_str == other.__isset.log_str) && ((!__isset.log_str) || (TCollections.Equals(Log_str, other.Log_str))));
     }
 
     public override int GetHashCode() {
       int hashcode = 157;
       unchecked {
-        if(__isset.error_code)
+        if(__isset.cluster)
         {
-          hashcode = (hashcode * 397) + Error_code.GetHashCode();
+          hashcode = (hashcode * 397) + Cluster.GetHashCode();
         }
-        if(__isset.current_term)
+        if((Log_str != null) && __isset.log_str)
         {
-          hashcode = (hashcode * 397) + Current_term.GetHashCode();
+          hashcode = (hashcode * 397) + Log_str.GetHashCode();
         }
       }
       return hashcode;
@@ -208,22 +204,22 @@ namespace Nebula.Raftex
 
     public override string ToString()
     {
-      var tmp8 = new StringBuilder("AskForVoteResponse(");
-      int tmp9 = 0;
-      if(__isset.error_code)
+      var tmp202 = new StringBuilder("LogEntry(");
+      int tmp203 = 0;
+      if(__isset.cluster)
       {
-        if(0 < tmp9++) { tmp8.Append(", "); }
-        tmp8.Append("Error_code: ");
-        Error_code.ToString(tmp8);
+        if(0 < tmp203++) { tmp202.Append(", "); }
+        tmp202.Append("Cluster: ");
+        Cluster.ToString(tmp202);
       }
-      if(__isset.current_term)
+      if((Log_str != null) && __isset.log_str)
       {
-        if(0 < tmp9++) { tmp8.Append(", "); }
-        tmp8.Append("Current_term: ");
-        Current_term.ToString(tmp8);
+        if(0 < tmp203++) { tmp202.Append(", "); }
+        tmp202.Append("Log_str: ");
+        Log_str.ToString(tmp202);
       }
-      tmp8.Append(')');
-      return tmp8.ToString();
+      tmp202.Append(')');
+      return tmp202.ToString();
     }
   }
 

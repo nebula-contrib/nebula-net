@@ -45,37 +45,37 @@ namespace Nebula.Raftex
       if (source == null)
         return null;
 
-      var tmp129 = new List<byte[]>(source.Count);
+      var tmp158 = new List<byte[]>(source.Count);
       foreach (var elem in source)
-        tmp129.Add((elem != null) ? elem.ToArray() : null);
-      return tmp129;
+        tmp158.Add((elem != null) ? elem.ToArray() : null);
+      return tmp158;
     }
 
 
-    public static bool Equals(this List<global::Nebula.Raftex.LogEntry> instance, object that)
+    public static bool Equals(this List<global::Nebula.Raftex.RaftLogEntry> instance, object that)
     {
-      if (!(that is List<global::Nebula.Raftex.LogEntry> other)) return false;
+      if (!(that is List<global::Nebula.Raftex.RaftLogEntry> other)) return false;
       if (ReferenceEquals(instance, other)) return true;
 
       return TCollections.Equals(instance, other);
     }
 
 
-    public static int GetHashCode(this List<global::Nebula.Raftex.LogEntry> instance)
+    public static int GetHashCode(this List<global::Nebula.Raftex.RaftLogEntry> instance)
     {
       return TCollections.GetHashCode(instance);
     }
 
 
-    public static List<global::Nebula.Raftex.LogEntry> DeepCopy(this List<global::Nebula.Raftex.LogEntry> source)
+    public static List<global::Nebula.Raftex.RaftLogEntry> DeepCopy(this List<global::Nebula.Raftex.RaftLogEntry> source)
     {
       if (source == null)
         return null;
 
-      var tmp130 = new List<global::Nebula.Raftex.LogEntry>(source.Count);
+      var tmp159 = new List<global::Nebula.Raftex.RaftLogEntry>(source.Count);
       foreach (var elem in source)
-        tmp130.Add((elem != null) ? elem.DeepCopy() : null);
-      return tmp130;
+        tmp159.Add((elem != null) ? elem.DeepCopy() : null);
+      return tmp159;
     }
 
 

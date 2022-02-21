@@ -43,6 +43,8 @@ namespace Nebula.Raftex
 
       global::System.Threading.Tasks.Task<global::Nebula.Raftex.HeartbeatResponse> heartbeat(global::Nebula.Raftex.HeartbeatRequest req, CancellationToken cancellationToken = default);
 
+      global::System.Threading.Tasks.Task<global::Nebula.Raftex.GetStateResponse> getState(global::Nebula.Raftex.GetStateRequest req, CancellationToken cancellationToken = default);
+
     }
 
 
@@ -66,11 +68,11 @@ namespace Nebula.Raftex
       {
         await OutputProtocol.WriteMessageBeginAsync(new TMessage("askForVote", TMessageType.Call, SeqId), cancellationToken);
         
-        var tmp53 = new InternalStructs.askForVote_args() {
+        var tmp63 = new InternalStructs.askForVote_args() {
           Req = req,
         };
         
-        await tmp53.WriteAsync(OutputProtocol, cancellationToken);
+        await tmp63.WriteAsync(OutputProtocol, cancellationToken);
         await OutputProtocol.WriteMessageEndAsync(cancellationToken);
         await OutputProtocol.Transport.FlushAsync(cancellationToken);
       }
@@ -78,20 +80,20 @@ namespace Nebula.Raftex
       public async global::System.Threading.Tasks.Task<global::Nebula.Raftex.AskForVoteResponse> recv_askForVote(CancellationToken cancellationToken = default)
       {
         
-        var tmp54 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
-        if (tmp54.Type == TMessageType.Exception)
+        var tmp64 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
+        if (tmp64.Type == TMessageType.Exception)
         {
-          var tmp55 = await TApplicationException.ReadAsync(InputProtocol, cancellationToken);
+          var tmp65 = await TApplicationException.ReadAsync(InputProtocol, cancellationToken);
           await InputProtocol.ReadMessageEndAsync(cancellationToken);
-          throw tmp55;
+          throw tmp65;
         }
 
-        var tmp56 = new InternalStructs.askForVote_result();
-        await tmp56.ReadAsync(InputProtocol, cancellationToken);
+        var tmp66 = new InternalStructs.askForVote_result();
+        await tmp66.ReadAsync(InputProtocol, cancellationToken);
         await InputProtocol.ReadMessageEndAsync(cancellationToken);
-        if (tmp56.__isset.success)
+        if (tmp66.__isset.success)
         {
-          return tmp56.Success;
+          return tmp66.Success;
         }
         throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "askForVote failed: unknown result");
       }
@@ -106,11 +108,11 @@ namespace Nebula.Raftex
       {
         await OutputProtocol.WriteMessageBeginAsync(new TMessage("appendLog", TMessageType.Call, SeqId), cancellationToken);
         
-        var tmp57 = new InternalStructs.appendLog_args() {
+        var tmp67 = new InternalStructs.appendLog_args() {
           Req = req,
         };
         
-        await tmp57.WriteAsync(OutputProtocol, cancellationToken);
+        await tmp67.WriteAsync(OutputProtocol, cancellationToken);
         await OutputProtocol.WriteMessageEndAsync(cancellationToken);
         await OutputProtocol.Transport.FlushAsync(cancellationToken);
       }
@@ -118,20 +120,20 @@ namespace Nebula.Raftex
       public async global::System.Threading.Tasks.Task<global::Nebula.Raftex.AppendLogResponse> recv_appendLog(CancellationToken cancellationToken = default)
       {
         
-        var tmp58 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
-        if (tmp58.Type == TMessageType.Exception)
+        var tmp68 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
+        if (tmp68.Type == TMessageType.Exception)
         {
-          var tmp59 = await TApplicationException.ReadAsync(InputProtocol, cancellationToken);
+          var tmp69 = await TApplicationException.ReadAsync(InputProtocol, cancellationToken);
           await InputProtocol.ReadMessageEndAsync(cancellationToken);
-          throw tmp59;
+          throw tmp69;
         }
 
-        var tmp60 = new InternalStructs.appendLog_result();
-        await tmp60.ReadAsync(InputProtocol, cancellationToken);
+        var tmp70 = new InternalStructs.appendLog_result();
+        await tmp70.ReadAsync(InputProtocol, cancellationToken);
         await InputProtocol.ReadMessageEndAsync(cancellationToken);
-        if (tmp60.__isset.success)
+        if (tmp70.__isset.success)
         {
-          return tmp60.Success;
+          return tmp70.Success;
         }
         throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "appendLog failed: unknown result");
       }
@@ -146,11 +148,11 @@ namespace Nebula.Raftex
       {
         await OutputProtocol.WriteMessageBeginAsync(new TMessage("sendSnapshot", TMessageType.Call, SeqId), cancellationToken);
         
-        var tmp61 = new InternalStructs.sendSnapshot_args() {
+        var tmp71 = new InternalStructs.sendSnapshot_args() {
           Req = req,
         };
         
-        await tmp61.WriteAsync(OutputProtocol, cancellationToken);
+        await tmp71.WriteAsync(OutputProtocol, cancellationToken);
         await OutputProtocol.WriteMessageEndAsync(cancellationToken);
         await OutputProtocol.Transport.FlushAsync(cancellationToken);
       }
@@ -158,20 +160,20 @@ namespace Nebula.Raftex
       public async global::System.Threading.Tasks.Task<global::Nebula.Raftex.SendSnapshotResponse> recv_sendSnapshot(CancellationToken cancellationToken = default)
       {
         
-        var tmp62 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
-        if (tmp62.Type == TMessageType.Exception)
+        var tmp72 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
+        if (tmp72.Type == TMessageType.Exception)
         {
-          var tmp63 = await TApplicationException.ReadAsync(InputProtocol, cancellationToken);
+          var tmp73 = await TApplicationException.ReadAsync(InputProtocol, cancellationToken);
           await InputProtocol.ReadMessageEndAsync(cancellationToken);
-          throw tmp63;
+          throw tmp73;
         }
 
-        var tmp64 = new InternalStructs.sendSnapshot_result();
-        await tmp64.ReadAsync(InputProtocol, cancellationToken);
+        var tmp74 = new InternalStructs.sendSnapshot_result();
+        await tmp74.ReadAsync(InputProtocol, cancellationToken);
         await InputProtocol.ReadMessageEndAsync(cancellationToken);
-        if (tmp64.__isset.success)
+        if (tmp74.__isset.success)
         {
-          return tmp64.Success;
+          return tmp74.Success;
         }
         throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "sendSnapshot failed: unknown result");
       }
@@ -186,11 +188,11 @@ namespace Nebula.Raftex
       {
         await OutputProtocol.WriteMessageBeginAsync(new TMessage("heartbeat", TMessageType.Call, SeqId), cancellationToken);
         
-        var tmp65 = new InternalStructs.heartbeat_args() {
+        var tmp75 = new InternalStructs.heartbeat_args() {
           Req = req,
         };
         
-        await tmp65.WriteAsync(OutputProtocol, cancellationToken);
+        await tmp75.WriteAsync(OutputProtocol, cancellationToken);
         await OutputProtocol.WriteMessageEndAsync(cancellationToken);
         await OutputProtocol.Transport.FlushAsync(cancellationToken);
       }
@@ -198,22 +200,62 @@ namespace Nebula.Raftex
       public async global::System.Threading.Tasks.Task<global::Nebula.Raftex.HeartbeatResponse> recv_heartbeat(CancellationToken cancellationToken = default)
       {
         
-        var tmp66 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
-        if (tmp66.Type == TMessageType.Exception)
+        var tmp76 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
+        if (tmp76.Type == TMessageType.Exception)
         {
-          var tmp67 = await TApplicationException.ReadAsync(InputProtocol, cancellationToken);
+          var tmp77 = await TApplicationException.ReadAsync(InputProtocol, cancellationToken);
           await InputProtocol.ReadMessageEndAsync(cancellationToken);
-          throw tmp67;
+          throw tmp77;
         }
 
-        var tmp68 = new InternalStructs.heartbeat_result();
-        await tmp68.ReadAsync(InputProtocol, cancellationToken);
+        var tmp78 = new InternalStructs.heartbeat_result();
+        await tmp78.ReadAsync(InputProtocol, cancellationToken);
         await InputProtocol.ReadMessageEndAsync(cancellationToken);
-        if (tmp68.__isset.success)
+        if (tmp78.__isset.success)
         {
-          return tmp68.Success;
+          return tmp78.Success;
         }
         throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "heartbeat failed: unknown result");
+      }
+
+      public async global::System.Threading.Tasks.Task<global::Nebula.Raftex.GetStateResponse> getState(global::Nebula.Raftex.GetStateRequest req, CancellationToken cancellationToken = default)
+      {
+        await send_getState(req, cancellationToken);
+        return await recv_getState(cancellationToken);
+      }
+
+      public async global::System.Threading.Tasks.Task send_getState(global::Nebula.Raftex.GetStateRequest req, CancellationToken cancellationToken = default)
+      {
+        await OutputProtocol.WriteMessageBeginAsync(new TMessage("getState", TMessageType.Call, SeqId), cancellationToken);
+        
+        var tmp79 = new InternalStructs.getState_args() {
+          Req = req,
+        };
+        
+        await tmp79.WriteAsync(OutputProtocol, cancellationToken);
+        await OutputProtocol.WriteMessageEndAsync(cancellationToken);
+        await OutputProtocol.Transport.FlushAsync(cancellationToken);
+      }
+
+      public async global::System.Threading.Tasks.Task<global::Nebula.Raftex.GetStateResponse> recv_getState(CancellationToken cancellationToken = default)
+      {
+        
+        var tmp80 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
+        if (tmp80.Type == TMessageType.Exception)
+        {
+          var tmp81 = await TApplicationException.ReadAsync(InputProtocol, cancellationToken);
+          await InputProtocol.ReadMessageEndAsync(cancellationToken);
+          throw tmp81;
+        }
+
+        var tmp82 = new InternalStructs.getState_result();
+        await tmp82.ReadAsync(InputProtocol, cancellationToken);
+        await InputProtocol.ReadMessageEndAsync(cancellationToken);
+        if (tmp82.__isset.success)
+        {
+          return tmp82.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getState failed: unknown result");
       }
 
     }
@@ -231,6 +273,7 @@ namespace Nebula.Raftex
         processMap_["appendLog"] = appendLog_ProcessAsync;
         processMap_["sendSnapshot"] = sendSnapshot_ProcessAsync;
         processMap_["heartbeat"] = heartbeat_ProcessAsync;
+        processMap_["getState"] = getState_ProcessAsync;
       }
 
       protected delegate global::System.Threading.Tasks.Task ProcessFunction(int seqid, TProtocol iprot, TProtocol oprot, CancellationToken cancellationToken);
@@ -274,30 +317,30 @@ namespace Nebula.Raftex
 
       public async global::System.Threading.Tasks.Task askForVote_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot, CancellationToken cancellationToken)
       {
-        var tmp69 = new InternalStructs.askForVote_args();
-        await tmp69.ReadAsync(iprot, cancellationToken);
+        var tmp83 = new InternalStructs.askForVote_args();
+        await tmp83.ReadAsync(iprot, cancellationToken);
         await iprot.ReadMessageEndAsync(cancellationToken);
-        var tmp70 = new InternalStructs.askForVote_result();
+        var tmp84 = new InternalStructs.askForVote_result();
         try
         {
-          tmp70.Success = await _iAsync.askForVote(tmp69.Req, cancellationToken);
+          tmp84.Success = await _iAsync.askForVote(tmp83.Req, cancellationToken);
           await oprot.WriteMessageBeginAsync(new TMessage("askForVote", TMessageType.Reply, seqid), cancellationToken); 
-          await tmp70.WriteAsync(oprot, cancellationToken);
+          await tmp84.WriteAsync(oprot, cancellationToken);
         }
         catch (TTransportException)
         {
           throw;
         }
-        catch (Exception tmp71)
+        catch (Exception tmp85)
         {
-          var tmp72 = $"Error occurred in {GetType().FullName}: {tmp71.Message}";
+          var tmp86 = $"Error occurred in {GetType().FullName}: {tmp85.Message}";
           if(_logger != null)
-            _logger.LogError(tmp71, tmp72);
+            _logger.LogError(tmp85, tmp86);
           else
-            Console.Error.WriteLine(tmp72);
-          var tmp73 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
+            Console.Error.WriteLine(tmp86);
+          var tmp87 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
           await oprot.WriteMessageBeginAsync(new TMessage("askForVote", TMessageType.Exception, seqid), cancellationToken);
-          await tmp73.WriteAsync(oprot, cancellationToken);
+          await tmp87.WriteAsync(oprot, cancellationToken);
         }
         await oprot.WriteMessageEndAsync(cancellationToken);
         await oprot.Transport.FlushAsync(cancellationToken);
@@ -305,30 +348,30 @@ namespace Nebula.Raftex
 
       public async global::System.Threading.Tasks.Task appendLog_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot, CancellationToken cancellationToken)
       {
-        var tmp74 = new InternalStructs.appendLog_args();
-        await tmp74.ReadAsync(iprot, cancellationToken);
+        var tmp88 = new InternalStructs.appendLog_args();
+        await tmp88.ReadAsync(iprot, cancellationToken);
         await iprot.ReadMessageEndAsync(cancellationToken);
-        var tmp75 = new InternalStructs.appendLog_result();
+        var tmp89 = new InternalStructs.appendLog_result();
         try
         {
-          tmp75.Success = await _iAsync.appendLog(tmp74.Req, cancellationToken);
+          tmp89.Success = await _iAsync.appendLog(tmp88.Req, cancellationToken);
           await oprot.WriteMessageBeginAsync(new TMessage("appendLog", TMessageType.Reply, seqid), cancellationToken); 
-          await tmp75.WriteAsync(oprot, cancellationToken);
+          await tmp89.WriteAsync(oprot, cancellationToken);
         }
         catch (TTransportException)
         {
           throw;
         }
-        catch (Exception tmp76)
+        catch (Exception tmp90)
         {
-          var tmp77 = $"Error occurred in {GetType().FullName}: {tmp76.Message}";
+          var tmp91 = $"Error occurred in {GetType().FullName}: {tmp90.Message}";
           if(_logger != null)
-            _logger.LogError(tmp76, tmp77);
+            _logger.LogError(tmp90, tmp91);
           else
-            Console.Error.WriteLine(tmp77);
-          var tmp78 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
+            Console.Error.WriteLine(tmp91);
+          var tmp92 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
           await oprot.WriteMessageBeginAsync(new TMessage("appendLog", TMessageType.Exception, seqid), cancellationToken);
-          await tmp78.WriteAsync(oprot, cancellationToken);
+          await tmp92.WriteAsync(oprot, cancellationToken);
         }
         await oprot.WriteMessageEndAsync(cancellationToken);
         await oprot.Transport.FlushAsync(cancellationToken);
@@ -336,30 +379,30 @@ namespace Nebula.Raftex
 
       public async global::System.Threading.Tasks.Task sendSnapshot_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot, CancellationToken cancellationToken)
       {
-        var tmp79 = new InternalStructs.sendSnapshot_args();
-        await tmp79.ReadAsync(iprot, cancellationToken);
+        var tmp93 = new InternalStructs.sendSnapshot_args();
+        await tmp93.ReadAsync(iprot, cancellationToken);
         await iprot.ReadMessageEndAsync(cancellationToken);
-        var tmp80 = new InternalStructs.sendSnapshot_result();
+        var tmp94 = new InternalStructs.sendSnapshot_result();
         try
         {
-          tmp80.Success = await _iAsync.sendSnapshot(tmp79.Req, cancellationToken);
+          tmp94.Success = await _iAsync.sendSnapshot(tmp93.Req, cancellationToken);
           await oprot.WriteMessageBeginAsync(new TMessage("sendSnapshot", TMessageType.Reply, seqid), cancellationToken); 
-          await tmp80.WriteAsync(oprot, cancellationToken);
+          await tmp94.WriteAsync(oprot, cancellationToken);
         }
         catch (TTransportException)
         {
           throw;
         }
-        catch (Exception tmp81)
+        catch (Exception tmp95)
         {
-          var tmp82 = $"Error occurred in {GetType().FullName}: {tmp81.Message}";
+          var tmp96 = $"Error occurred in {GetType().FullName}: {tmp95.Message}";
           if(_logger != null)
-            _logger.LogError(tmp81, tmp82);
+            _logger.LogError(tmp95, tmp96);
           else
-            Console.Error.WriteLine(tmp82);
-          var tmp83 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
+            Console.Error.WriteLine(tmp96);
+          var tmp97 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
           await oprot.WriteMessageBeginAsync(new TMessage("sendSnapshot", TMessageType.Exception, seqid), cancellationToken);
-          await tmp83.WriteAsync(oprot, cancellationToken);
+          await tmp97.WriteAsync(oprot, cancellationToken);
         }
         await oprot.WriteMessageEndAsync(cancellationToken);
         await oprot.Transport.FlushAsync(cancellationToken);
@@ -367,30 +410,61 @@ namespace Nebula.Raftex
 
       public async global::System.Threading.Tasks.Task heartbeat_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot, CancellationToken cancellationToken)
       {
-        var tmp84 = new InternalStructs.heartbeat_args();
-        await tmp84.ReadAsync(iprot, cancellationToken);
+        var tmp98 = new InternalStructs.heartbeat_args();
+        await tmp98.ReadAsync(iprot, cancellationToken);
         await iprot.ReadMessageEndAsync(cancellationToken);
-        var tmp85 = new InternalStructs.heartbeat_result();
+        var tmp99 = new InternalStructs.heartbeat_result();
         try
         {
-          tmp85.Success = await _iAsync.heartbeat(tmp84.Req, cancellationToken);
+          tmp99.Success = await _iAsync.heartbeat(tmp98.Req, cancellationToken);
           await oprot.WriteMessageBeginAsync(new TMessage("heartbeat", TMessageType.Reply, seqid), cancellationToken); 
-          await tmp85.WriteAsync(oprot, cancellationToken);
+          await tmp99.WriteAsync(oprot, cancellationToken);
         }
         catch (TTransportException)
         {
           throw;
         }
-        catch (Exception tmp86)
+        catch (Exception tmp100)
         {
-          var tmp87 = $"Error occurred in {GetType().FullName}: {tmp86.Message}";
+          var tmp101 = $"Error occurred in {GetType().FullName}: {tmp100.Message}";
           if(_logger != null)
-            _logger.LogError(tmp86, tmp87);
+            _logger.LogError(tmp100, tmp101);
           else
-            Console.Error.WriteLine(tmp87);
-          var tmp88 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
+            Console.Error.WriteLine(tmp101);
+          var tmp102 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
           await oprot.WriteMessageBeginAsync(new TMessage("heartbeat", TMessageType.Exception, seqid), cancellationToken);
-          await tmp88.WriteAsync(oprot, cancellationToken);
+          await tmp102.WriteAsync(oprot, cancellationToken);
+        }
+        await oprot.WriteMessageEndAsync(cancellationToken);
+        await oprot.Transport.FlushAsync(cancellationToken);
+      }
+
+      public async global::System.Threading.Tasks.Task getState_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot, CancellationToken cancellationToken)
+      {
+        var tmp103 = new InternalStructs.getState_args();
+        await tmp103.ReadAsync(iprot, cancellationToken);
+        await iprot.ReadMessageEndAsync(cancellationToken);
+        var tmp104 = new InternalStructs.getState_result();
+        try
+        {
+          tmp104.Success = await _iAsync.getState(tmp103.Req, cancellationToken);
+          await oprot.WriteMessageBeginAsync(new TMessage("getState", TMessageType.Reply, seqid), cancellationToken); 
+          await tmp104.WriteAsync(oprot, cancellationToken);
+        }
+        catch (TTransportException)
+        {
+          throw;
+        }
+        catch (Exception tmp105)
+        {
+          var tmp106 = $"Error occurred in {GetType().FullName}: {tmp105.Message}";
+          if(_logger != null)
+            _logger.LogError(tmp105, tmp106);
+          else
+            Console.Error.WriteLine(tmp106);
+          var tmp107 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
+          await oprot.WriteMessageBeginAsync(new TMessage("getState", TMessageType.Exception, seqid), cancellationToken);
+          await tmp107.WriteAsync(oprot, cancellationToken);
         }
         await oprot.WriteMessageEndAsync(cancellationToken);
         await oprot.Transport.FlushAsync(cancellationToken);
@@ -431,13 +505,13 @@ namespace Nebula.Raftex
 
         public askForVote_args DeepCopy()
         {
-          var tmp89 = new askForVote_args();
+          var tmp108 = new askForVote_args();
           if((Req != null) && __isset.req)
           {
-            tmp89.Req = (global::Nebula.Raftex.AskForVoteRequest)this.Req.DeepCopy();
+            tmp108.Req = (global::Nebula.Raftex.AskForVoteRequest)this.Req.DeepCopy();
           }
-          tmp89.__isset.req = this.__isset.req;
-          return tmp89;
+          tmp108.__isset.req = this.__isset.req;
+          return tmp108;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -489,15 +563,15 @@ namespace Nebula.Raftex
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp90 = new TStruct("askForVote_args");
-            await oprot.WriteStructBeginAsync(tmp90, cancellationToken);
-            var tmp91 = new TField();
+            var tmp109 = new TStruct("askForVote_args");
+            await oprot.WriteStructBeginAsync(tmp109, cancellationToken);
+            var tmp110 = new TField();
             if((Req != null) && __isset.req)
             {
-              tmp91.Name = "req";
-              tmp91.Type = TType.Struct;
-              tmp91.ID = 1;
-              await oprot.WriteFieldBeginAsync(tmp91, cancellationToken);
+              tmp110.Name = "req";
+              tmp110.Type = TType.Struct;
+              tmp110.ID = 1;
+              await oprot.WriteFieldBeginAsync(tmp110, cancellationToken);
               await Req.WriteAsync(oprot, cancellationToken);
               await oprot.WriteFieldEndAsync(cancellationToken);
             }
@@ -530,16 +604,16 @@ namespace Nebula.Raftex
 
         public override string ToString()
         {
-          var tmp92 = new StringBuilder("askForVote_args(");
-          int tmp93 = 0;
+          var tmp111 = new StringBuilder("askForVote_args(");
+          int tmp112 = 0;
           if((Req != null) && __isset.req)
           {
-            if(0 < tmp93++) { tmp92.Append(", "); }
-            tmp92.Append("Req: ");
-            Req.ToString(tmp92);
+            if(0 < tmp112++) { tmp111.Append(", "); }
+            tmp111.Append("Req: ");
+            Req.ToString(tmp111);
           }
-          tmp92.Append(')');
-          return tmp92.ToString();
+          tmp111.Append(')');
+          return tmp111.ToString();
         }
       }
 
@@ -574,13 +648,13 @@ namespace Nebula.Raftex
 
         public askForVote_result DeepCopy()
         {
-          var tmp94 = new askForVote_result();
+          var tmp113 = new askForVote_result();
           if((Success != null) && __isset.success)
           {
-            tmp94.Success = (global::Nebula.Raftex.AskForVoteResponse)this.Success.DeepCopy();
+            tmp113.Success = (global::Nebula.Raftex.AskForVoteResponse)this.Success.DeepCopy();
           }
-          tmp94.__isset.success = this.__isset.success;
-          return tmp94;
+          tmp113.__isset.success = this.__isset.success;
+          return tmp113;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -632,18 +706,18 @@ namespace Nebula.Raftex
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp95 = new TStruct("askForVote_result");
-            await oprot.WriteStructBeginAsync(tmp95, cancellationToken);
-            var tmp96 = new TField();
+            var tmp114 = new TStruct("askForVote_result");
+            await oprot.WriteStructBeginAsync(tmp114, cancellationToken);
+            var tmp115 = new TField();
 
             if(this.__isset.success)
             {
               if (Success != null)
               {
-                tmp96.Name = "Success";
-                tmp96.Type = TType.Struct;
-                tmp96.ID = 0;
-                await oprot.WriteFieldBeginAsync(tmp96, cancellationToken);
+                tmp115.Name = "Success";
+                tmp115.Type = TType.Struct;
+                tmp115.ID = 0;
+                await oprot.WriteFieldBeginAsync(tmp115, cancellationToken);
                 await Success.WriteAsync(oprot, cancellationToken);
                 await oprot.WriteFieldEndAsync(cancellationToken);
               }
@@ -677,16 +751,16 @@ namespace Nebula.Raftex
 
         public override string ToString()
         {
-          var tmp97 = new StringBuilder("askForVote_result(");
-          int tmp98 = 0;
+          var tmp116 = new StringBuilder("askForVote_result(");
+          int tmp117 = 0;
           if((Success != null) && __isset.success)
           {
-            if(0 < tmp98++) { tmp97.Append(", "); }
-            tmp97.Append("Success: ");
-            Success.ToString(tmp97);
+            if(0 < tmp117++) { tmp116.Append(", "); }
+            tmp116.Append("Success: ");
+            Success.ToString(tmp116);
           }
-          tmp97.Append(')');
-          return tmp97.ToString();
+          tmp116.Append(')');
+          return tmp116.ToString();
         }
       }
 
@@ -721,13 +795,13 @@ namespace Nebula.Raftex
 
         public appendLog_args DeepCopy()
         {
-          var tmp99 = new appendLog_args();
+          var tmp118 = new appendLog_args();
           if((Req != null) && __isset.req)
           {
-            tmp99.Req = (global::Nebula.Raftex.AppendLogRequest)this.Req.DeepCopy();
+            tmp118.Req = (global::Nebula.Raftex.AppendLogRequest)this.Req.DeepCopy();
           }
-          tmp99.__isset.req = this.__isset.req;
-          return tmp99;
+          tmp118.__isset.req = this.__isset.req;
+          return tmp118;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -779,15 +853,15 @@ namespace Nebula.Raftex
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp100 = new TStruct("appendLog_args");
-            await oprot.WriteStructBeginAsync(tmp100, cancellationToken);
-            var tmp101 = new TField();
+            var tmp119 = new TStruct("appendLog_args");
+            await oprot.WriteStructBeginAsync(tmp119, cancellationToken);
+            var tmp120 = new TField();
             if((Req != null) && __isset.req)
             {
-              tmp101.Name = "req";
-              tmp101.Type = TType.Struct;
-              tmp101.ID = 1;
-              await oprot.WriteFieldBeginAsync(tmp101, cancellationToken);
+              tmp120.Name = "req";
+              tmp120.Type = TType.Struct;
+              tmp120.ID = 1;
+              await oprot.WriteFieldBeginAsync(tmp120, cancellationToken);
               await Req.WriteAsync(oprot, cancellationToken);
               await oprot.WriteFieldEndAsync(cancellationToken);
             }
@@ -820,16 +894,16 @@ namespace Nebula.Raftex
 
         public override string ToString()
         {
-          var tmp102 = new StringBuilder("appendLog_args(");
-          int tmp103 = 0;
+          var tmp121 = new StringBuilder("appendLog_args(");
+          int tmp122 = 0;
           if((Req != null) && __isset.req)
           {
-            if(0 < tmp103++) { tmp102.Append(", "); }
-            tmp102.Append("Req: ");
-            Req.ToString(tmp102);
+            if(0 < tmp122++) { tmp121.Append(", "); }
+            tmp121.Append("Req: ");
+            Req.ToString(tmp121);
           }
-          tmp102.Append(')');
-          return tmp102.ToString();
+          tmp121.Append(')');
+          return tmp121.ToString();
         }
       }
 
@@ -864,13 +938,13 @@ namespace Nebula.Raftex
 
         public appendLog_result DeepCopy()
         {
-          var tmp104 = new appendLog_result();
+          var tmp123 = new appendLog_result();
           if((Success != null) && __isset.success)
           {
-            tmp104.Success = (global::Nebula.Raftex.AppendLogResponse)this.Success.DeepCopy();
+            tmp123.Success = (global::Nebula.Raftex.AppendLogResponse)this.Success.DeepCopy();
           }
-          tmp104.__isset.success = this.__isset.success;
-          return tmp104;
+          tmp123.__isset.success = this.__isset.success;
+          return tmp123;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -922,18 +996,18 @@ namespace Nebula.Raftex
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp105 = new TStruct("appendLog_result");
-            await oprot.WriteStructBeginAsync(tmp105, cancellationToken);
-            var tmp106 = new TField();
+            var tmp124 = new TStruct("appendLog_result");
+            await oprot.WriteStructBeginAsync(tmp124, cancellationToken);
+            var tmp125 = new TField();
 
             if(this.__isset.success)
             {
               if (Success != null)
               {
-                tmp106.Name = "Success";
-                tmp106.Type = TType.Struct;
-                tmp106.ID = 0;
-                await oprot.WriteFieldBeginAsync(tmp106, cancellationToken);
+                tmp125.Name = "Success";
+                tmp125.Type = TType.Struct;
+                tmp125.ID = 0;
+                await oprot.WriteFieldBeginAsync(tmp125, cancellationToken);
                 await Success.WriteAsync(oprot, cancellationToken);
                 await oprot.WriteFieldEndAsync(cancellationToken);
               }
@@ -967,16 +1041,16 @@ namespace Nebula.Raftex
 
         public override string ToString()
         {
-          var tmp107 = new StringBuilder("appendLog_result(");
-          int tmp108 = 0;
+          var tmp126 = new StringBuilder("appendLog_result(");
+          int tmp127 = 0;
           if((Success != null) && __isset.success)
           {
-            if(0 < tmp108++) { tmp107.Append(", "); }
-            tmp107.Append("Success: ");
-            Success.ToString(tmp107);
+            if(0 < tmp127++) { tmp126.Append(", "); }
+            tmp126.Append("Success: ");
+            Success.ToString(tmp126);
           }
-          tmp107.Append(')');
-          return tmp107.ToString();
+          tmp126.Append(')');
+          return tmp126.ToString();
         }
       }
 
@@ -1011,13 +1085,13 @@ namespace Nebula.Raftex
 
         public sendSnapshot_args DeepCopy()
         {
-          var tmp109 = new sendSnapshot_args();
+          var tmp128 = new sendSnapshot_args();
           if((Req != null) && __isset.req)
           {
-            tmp109.Req = (global::Nebula.Raftex.SendSnapshotRequest)this.Req.DeepCopy();
+            tmp128.Req = (global::Nebula.Raftex.SendSnapshotRequest)this.Req.DeepCopy();
           }
-          tmp109.__isset.req = this.__isset.req;
-          return tmp109;
+          tmp128.__isset.req = this.__isset.req;
+          return tmp128;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -1069,15 +1143,15 @@ namespace Nebula.Raftex
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp110 = new TStruct("sendSnapshot_args");
-            await oprot.WriteStructBeginAsync(tmp110, cancellationToken);
-            var tmp111 = new TField();
+            var tmp129 = new TStruct("sendSnapshot_args");
+            await oprot.WriteStructBeginAsync(tmp129, cancellationToken);
+            var tmp130 = new TField();
             if((Req != null) && __isset.req)
             {
-              tmp111.Name = "req";
-              tmp111.Type = TType.Struct;
-              tmp111.ID = 1;
-              await oprot.WriteFieldBeginAsync(tmp111, cancellationToken);
+              tmp130.Name = "req";
+              tmp130.Type = TType.Struct;
+              tmp130.ID = 1;
+              await oprot.WriteFieldBeginAsync(tmp130, cancellationToken);
               await Req.WriteAsync(oprot, cancellationToken);
               await oprot.WriteFieldEndAsync(cancellationToken);
             }
@@ -1110,16 +1184,16 @@ namespace Nebula.Raftex
 
         public override string ToString()
         {
-          var tmp112 = new StringBuilder("sendSnapshot_args(");
-          int tmp113 = 0;
+          var tmp131 = new StringBuilder("sendSnapshot_args(");
+          int tmp132 = 0;
           if((Req != null) && __isset.req)
           {
-            if(0 < tmp113++) { tmp112.Append(", "); }
-            tmp112.Append("Req: ");
-            Req.ToString(tmp112);
+            if(0 < tmp132++) { tmp131.Append(", "); }
+            tmp131.Append("Req: ");
+            Req.ToString(tmp131);
           }
-          tmp112.Append(')');
-          return tmp112.ToString();
+          tmp131.Append(')');
+          return tmp131.ToString();
         }
       }
 
@@ -1154,13 +1228,13 @@ namespace Nebula.Raftex
 
         public sendSnapshot_result DeepCopy()
         {
-          var tmp114 = new sendSnapshot_result();
+          var tmp133 = new sendSnapshot_result();
           if((Success != null) && __isset.success)
           {
-            tmp114.Success = (global::Nebula.Raftex.SendSnapshotResponse)this.Success.DeepCopy();
+            tmp133.Success = (global::Nebula.Raftex.SendSnapshotResponse)this.Success.DeepCopy();
           }
-          tmp114.__isset.success = this.__isset.success;
-          return tmp114;
+          tmp133.__isset.success = this.__isset.success;
+          return tmp133;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -1212,18 +1286,18 @@ namespace Nebula.Raftex
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp115 = new TStruct("sendSnapshot_result");
-            await oprot.WriteStructBeginAsync(tmp115, cancellationToken);
-            var tmp116 = new TField();
+            var tmp134 = new TStruct("sendSnapshot_result");
+            await oprot.WriteStructBeginAsync(tmp134, cancellationToken);
+            var tmp135 = new TField();
 
             if(this.__isset.success)
             {
               if (Success != null)
               {
-                tmp116.Name = "Success";
-                tmp116.Type = TType.Struct;
-                tmp116.ID = 0;
-                await oprot.WriteFieldBeginAsync(tmp116, cancellationToken);
+                tmp135.Name = "Success";
+                tmp135.Type = TType.Struct;
+                tmp135.ID = 0;
+                await oprot.WriteFieldBeginAsync(tmp135, cancellationToken);
                 await Success.WriteAsync(oprot, cancellationToken);
                 await oprot.WriteFieldEndAsync(cancellationToken);
               }
@@ -1257,16 +1331,16 @@ namespace Nebula.Raftex
 
         public override string ToString()
         {
-          var tmp117 = new StringBuilder("sendSnapshot_result(");
-          int tmp118 = 0;
+          var tmp136 = new StringBuilder("sendSnapshot_result(");
+          int tmp137 = 0;
           if((Success != null) && __isset.success)
           {
-            if(0 < tmp118++) { tmp117.Append(", "); }
-            tmp117.Append("Success: ");
-            Success.ToString(tmp117);
+            if(0 < tmp137++) { tmp136.Append(", "); }
+            tmp136.Append("Success: ");
+            Success.ToString(tmp136);
           }
-          tmp117.Append(')');
-          return tmp117.ToString();
+          tmp136.Append(')');
+          return tmp136.ToString();
         }
       }
 
@@ -1301,13 +1375,13 @@ namespace Nebula.Raftex
 
         public heartbeat_args DeepCopy()
         {
-          var tmp119 = new heartbeat_args();
+          var tmp138 = new heartbeat_args();
           if((Req != null) && __isset.req)
           {
-            tmp119.Req = (global::Nebula.Raftex.HeartbeatRequest)this.Req.DeepCopy();
+            tmp138.Req = (global::Nebula.Raftex.HeartbeatRequest)this.Req.DeepCopy();
           }
-          tmp119.__isset.req = this.__isset.req;
-          return tmp119;
+          tmp138.__isset.req = this.__isset.req;
+          return tmp138;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -1359,15 +1433,15 @@ namespace Nebula.Raftex
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp120 = new TStruct("heartbeat_args");
-            await oprot.WriteStructBeginAsync(tmp120, cancellationToken);
-            var tmp121 = new TField();
+            var tmp139 = new TStruct("heartbeat_args");
+            await oprot.WriteStructBeginAsync(tmp139, cancellationToken);
+            var tmp140 = new TField();
             if((Req != null) && __isset.req)
             {
-              tmp121.Name = "req";
-              tmp121.Type = TType.Struct;
-              tmp121.ID = 1;
-              await oprot.WriteFieldBeginAsync(tmp121, cancellationToken);
+              tmp140.Name = "req";
+              tmp140.Type = TType.Struct;
+              tmp140.ID = 1;
+              await oprot.WriteFieldBeginAsync(tmp140, cancellationToken);
               await Req.WriteAsync(oprot, cancellationToken);
               await oprot.WriteFieldEndAsync(cancellationToken);
             }
@@ -1400,16 +1474,16 @@ namespace Nebula.Raftex
 
         public override string ToString()
         {
-          var tmp122 = new StringBuilder("heartbeat_args(");
-          int tmp123 = 0;
+          var tmp141 = new StringBuilder("heartbeat_args(");
+          int tmp142 = 0;
           if((Req != null) && __isset.req)
           {
-            if(0 < tmp123++) { tmp122.Append(", "); }
-            tmp122.Append("Req: ");
-            Req.ToString(tmp122);
+            if(0 < tmp142++) { tmp141.Append(", "); }
+            tmp141.Append("Req: ");
+            Req.ToString(tmp141);
           }
-          tmp122.Append(')');
-          return tmp122.ToString();
+          tmp141.Append(')');
+          return tmp141.ToString();
         }
       }
 
@@ -1444,13 +1518,13 @@ namespace Nebula.Raftex
 
         public heartbeat_result DeepCopy()
         {
-          var tmp124 = new heartbeat_result();
+          var tmp143 = new heartbeat_result();
           if((Success != null) && __isset.success)
           {
-            tmp124.Success = (global::Nebula.Raftex.HeartbeatResponse)this.Success.DeepCopy();
+            tmp143.Success = (global::Nebula.Raftex.HeartbeatResponse)this.Success.DeepCopy();
           }
-          tmp124.__isset.success = this.__isset.success;
-          return tmp124;
+          tmp143.__isset.success = this.__isset.success;
+          return tmp143;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -1502,18 +1576,18 @@ namespace Nebula.Raftex
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp125 = new TStruct("heartbeat_result");
-            await oprot.WriteStructBeginAsync(tmp125, cancellationToken);
-            var tmp126 = new TField();
+            var tmp144 = new TStruct("heartbeat_result");
+            await oprot.WriteStructBeginAsync(tmp144, cancellationToken);
+            var tmp145 = new TField();
 
             if(this.__isset.success)
             {
               if (Success != null)
               {
-                tmp126.Name = "Success";
-                tmp126.Type = TType.Struct;
-                tmp126.ID = 0;
-                await oprot.WriteFieldBeginAsync(tmp126, cancellationToken);
+                tmp145.Name = "Success";
+                tmp145.Type = TType.Struct;
+                tmp145.ID = 0;
+                await oprot.WriteFieldBeginAsync(tmp145, cancellationToken);
                 await Success.WriteAsync(oprot, cancellationToken);
                 await oprot.WriteFieldEndAsync(cancellationToken);
               }
@@ -1547,16 +1621,306 @@ namespace Nebula.Raftex
 
         public override string ToString()
         {
-          var tmp127 = new StringBuilder("heartbeat_result(");
-          int tmp128 = 0;
+          var tmp146 = new StringBuilder("heartbeat_result(");
+          int tmp147 = 0;
           if((Success != null) && __isset.success)
           {
-            if(0 < tmp128++) { tmp127.Append(", "); }
-            tmp127.Append("Success: ");
-            Success.ToString(tmp127);
+            if(0 < tmp147++) { tmp146.Append(", "); }
+            tmp146.Append("Success: ");
+            Success.ToString(tmp146);
           }
-          tmp127.Append(')');
-          return tmp127.ToString();
+          tmp146.Append(')');
+          return tmp146.ToString();
+        }
+      }
+
+
+      public partial class getState_args : TBase
+      {
+        private global::Nebula.Raftex.GetStateRequest _req;
+
+        public global::Nebula.Raftex.GetStateRequest Req
+        {
+          get
+          {
+            return _req;
+          }
+          set
+          {
+            __isset.req = true;
+            this._req = value;
+          }
+        }
+
+
+        public Isset __isset;
+        public struct Isset
+        {
+          public bool req;
+        }
+
+        public getState_args()
+        {
+        }
+
+        public getState_args DeepCopy()
+        {
+          var tmp148 = new getState_args();
+          if((Req != null) && __isset.req)
+          {
+            tmp148.Req = (global::Nebula.Raftex.GetStateRequest)this.Req.DeepCopy();
+          }
+          tmp148.__isset.req = this.__isset.req;
+          return tmp148;
+        }
+
+        public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
+        {
+          iprot.IncrementRecursionDepth();
+          try
+          {
+            TField field;
+            await iprot.ReadStructBeginAsync(cancellationToken);
+            while (true)
+            {
+              field = await iprot.ReadFieldBeginAsync(cancellationToken);
+              if (field.Type == TType.Stop)
+              {
+                break;
+              }
+
+              switch (field.ID)
+              {
+                case 1:
+                  if (field.Type == TType.Struct)
+                  {
+                    Req = new global::Nebula.Raftex.GetStateRequest();
+                    await Req.ReadAsync(iprot, cancellationToken);
+                  }
+                  else
+                  {
+                    await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  }
+                  break;
+                default: 
+                  await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  break;
+              }
+
+              await iprot.ReadFieldEndAsync(cancellationToken);
+            }
+
+            await iprot.ReadStructEndAsync(cancellationToken);
+          }
+          finally
+          {
+            iprot.DecrementRecursionDepth();
+          }
+        }
+
+        public async global::System.Threading.Tasks.Task WriteAsync(TProtocol oprot, CancellationToken cancellationToken)
+        {
+          oprot.IncrementRecursionDepth();
+          try
+          {
+            var tmp149 = new TStruct("getState_args");
+            await oprot.WriteStructBeginAsync(tmp149, cancellationToken);
+            var tmp150 = new TField();
+            if((Req != null) && __isset.req)
+            {
+              tmp150.Name = "req";
+              tmp150.Type = TType.Struct;
+              tmp150.ID = 1;
+              await oprot.WriteFieldBeginAsync(tmp150, cancellationToken);
+              await Req.WriteAsync(oprot, cancellationToken);
+              await oprot.WriteFieldEndAsync(cancellationToken);
+            }
+            await oprot.WriteFieldStopAsync(cancellationToken);
+            await oprot.WriteStructEndAsync(cancellationToken);
+          }
+          finally
+          {
+            oprot.DecrementRecursionDepth();
+          }
+        }
+
+        public override bool Equals(object that)
+        {
+          if (!(that is getState_args other)) return false;
+          if (ReferenceEquals(this, other)) return true;
+          return ((__isset.req == other.__isset.req) && ((!__isset.req) || (System.Object.Equals(Req, other.Req))));
+        }
+
+        public override int GetHashCode() {
+          int hashcode = 157;
+          unchecked {
+            if((Req != null) && __isset.req)
+            {
+              hashcode = (hashcode * 397) + Req.GetHashCode();
+            }
+          }
+          return hashcode;
+        }
+
+        public override string ToString()
+        {
+          var tmp151 = new StringBuilder("getState_args(");
+          int tmp152 = 0;
+          if((Req != null) && __isset.req)
+          {
+            if(0 < tmp152++) { tmp151.Append(", "); }
+            tmp151.Append("Req: ");
+            Req.ToString(tmp151);
+          }
+          tmp151.Append(')');
+          return tmp151.ToString();
+        }
+      }
+
+
+      public partial class getState_result : TBase
+      {
+        private global::Nebula.Raftex.GetStateResponse _success;
+
+        public global::Nebula.Raftex.GetStateResponse Success
+        {
+          get
+          {
+            return _success;
+          }
+          set
+          {
+            __isset.success = true;
+            this._success = value;
+          }
+        }
+
+
+        public Isset __isset;
+        public struct Isset
+        {
+          public bool success;
+        }
+
+        public getState_result()
+        {
+        }
+
+        public getState_result DeepCopy()
+        {
+          var tmp153 = new getState_result();
+          if((Success != null) && __isset.success)
+          {
+            tmp153.Success = (global::Nebula.Raftex.GetStateResponse)this.Success.DeepCopy();
+          }
+          tmp153.__isset.success = this.__isset.success;
+          return tmp153;
+        }
+
+        public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
+        {
+          iprot.IncrementRecursionDepth();
+          try
+          {
+            TField field;
+            await iprot.ReadStructBeginAsync(cancellationToken);
+            while (true)
+            {
+              field = await iprot.ReadFieldBeginAsync(cancellationToken);
+              if (field.Type == TType.Stop)
+              {
+                break;
+              }
+
+              switch (field.ID)
+              {
+                case 0:
+                  if (field.Type == TType.Struct)
+                  {
+                    Success = new global::Nebula.Raftex.GetStateResponse();
+                    await Success.ReadAsync(iprot, cancellationToken);
+                  }
+                  else
+                  {
+                    await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  }
+                  break;
+                default: 
+                  await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  break;
+              }
+
+              await iprot.ReadFieldEndAsync(cancellationToken);
+            }
+
+            await iprot.ReadStructEndAsync(cancellationToken);
+          }
+          finally
+          {
+            iprot.DecrementRecursionDepth();
+          }
+        }
+
+        public async global::System.Threading.Tasks.Task WriteAsync(TProtocol oprot, CancellationToken cancellationToken)
+        {
+          oprot.IncrementRecursionDepth();
+          try
+          {
+            var tmp154 = new TStruct("getState_result");
+            await oprot.WriteStructBeginAsync(tmp154, cancellationToken);
+            var tmp155 = new TField();
+
+            if(this.__isset.success)
+            {
+              if (Success != null)
+              {
+                tmp155.Name = "Success";
+                tmp155.Type = TType.Struct;
+                tmp155.ID = 0;
+                await oprot.WriteFieldBeginAsync(tmp155, cancellationToken);
+                await Success.WriteAsync(oprot, cancellationToken);
+                await oprot.WriteFieldEndAsync(cancellationToken);
+              }
+            }
+            await oprot.WriteFieldStopAsync(cancellationToken);
+            await oprot.WriteStructEndAsync(cancellationToken);
+          }
+          finally
+          {
+            oprot.DecrementRecursionDepth();
+          }
+        }
+
+        public override bool Equals(object that)
+        {
+          if (!(that is getState_result other)) return false;
+          if (ReferenceEquals(this, other)) return true;
+          return ((__isset.success == other.__isset.success) && ((!__isset.success) || (System.Object.Equals(Success, other.Success))));
+        }
+
+        public override int GetHashCode() {
+          int hashcode = 157;
+          unchecked {
+            if((Success != null) && __isset.success)
+            {
+              hashcode = (hashcode * 397) + Success.GetHashCode();
+            }
+          }
+          return hashcode;
+        }
+
+        public override string ToString()
+        {
+          var tmp156 = new StringBuilder("getState_result(");
+          int tmp157 = 0;
+          if((Success != null) && __isset.success)
+          {
+            if(0 < tmp157++) { tmp156.Append(", "); }
+            tmp156.Append("Success: ");
+            Success.ToString(tmp156);
+          }
+          tmp156.Append(')');
+          return tmp156.ToString();
         }
       }
 

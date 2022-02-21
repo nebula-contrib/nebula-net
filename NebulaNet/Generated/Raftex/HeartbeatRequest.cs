@@ -37,7 +37,6 @@ namespace Nebula.Raftex
     private int _space;
     private int _part;
     private long _current_term;
-    private long _last_log_id;
     private long _committed_log_id;
     private string _leader_addr;
     private int _leader_port;
@@ -80,19 +79,6 @@ namespace Nebula.Raftex
       {
         __isset.current_term = true;
         this._current_term = value;
-      }
-    }
-
-    public long Last_log_id
-    {
-      get
-      {
-        return _last_log_id;
-      }
-      set
-      {
-        __isset.last_log_id = true;
-        this._last_log_id = value;
       }
     }
 
@@ -168,7 +154,6 @@ namespace Nebula.Raftex
       public bool space;
       public bool part;
       public bool current_term;
-      public bool last_log_id;
       public bool committed_log_id;
       public bool leader_addr;
       public bool leader_port;
@@ -198,11 +183,6 @@ namespace Nebula.Raftex
         tmp38.Current_term = this.Current_term;
       }
       tmp38.__isset.current_term = this.__isset.current_term;
-      if(__isset.last_log_id)
-      {
-        tmp38.Last_log_id = this.Last_log_id;
-      }
-      tmp38.__isset.last_log_id = this.__isset.last_log_id;
       if(__isset.committed_log_id)
       {
         tmp38.Committed_log_id = this.Committed_log_id;
@@ -272,16 +252,6 @@ namespace Nebula.Raftex
               if (field.Type == TType.I64)
               {
                 Current_term = await iprot.ReadI64Async(cancellationToken);
-              }
-              else
-              {
-                await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
-              }
-              break;
-            case 4:
-              if (field.Type == TType.I64)
-              {
-                Last_log_id = await iprot.ReadI64Async(cancellationToken);
               }
               else
               {
@@ -389,15 +359,6 @@ namespace Nebula.Raftex
           await oprot.WriteI64Async(Current_term, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
-        if(__isset.last_log_id)
-        {
-          tmp40.Name = "last_log_id";
-          tmp40.Type = TType.I64;
-          tmp40.ID = 4;
-          await oprot.WriteFieldBeginAsync(tmp40, cancellationToken);
-          await oprot.WriteI64Async(Last_log_id, cancellationToken);
-          await oprot.WriteFieldEndAsync(cancellationToken);
-        }
         if(__isset.committed_log_id)
         {
           tmp40.Name = "committed_log_id";
@@ -459,7 +420,6 @@ namespace Nebula.Raftex
       return ((__isset.space == other.__isset.space) && ((!__isset.space) || (System.Object.Equals(Space, other.Space))))
         && ((__isset.part == other.__isset.part) && ((!__isset.part) || (System.Object.Equals(Part, other.Part))))
         && ((__isset.current_term == other.__isset.current_term) && ((!__isset.current_term) || (System.Object.Equals(Current_term, other.Current_term))))
-        && ((__isset.last_log_id == other.__isset.last_log_id) && ((!__isset.last_log_id) || (System.Object.Equals(Last_log_id, other.Last_log_id))))
         && ((__isset.committed_log_id == other.__isset.committed_log_id) && ((!__isset.committed_log_id) || (System.Object.Equals(Committed_log_id, other.Committed_log_id))))
         && ((__isset.leader_addr == other.__isset.leader_addr) && ((!__isset.leader_addr) || (System.Object.Equals(Leader_addr, other.Leader_addr))))
         && ((__isset.leader_port == other.__isset.leader_port) && ((!__isset.leader_port) || (System.Object.Equals(Leader_port, other.Leader_port))))
@@ -481,10 +441,6 @@ namespace Nebula.Raftex
         if(__isset.current_term)
         {
           hashcode = (hashcode * 397) + Current_term.GetHashCode();
-        }
-        if(__isset.last_log_id)
-        {
-          hashcode = (hashcode * 397) + Last_log_id.GetHashCode();
         }
         if(__isset.committed_log_id)
         {
@@ -531,12 +487,6 @@ namespace Nebula.Raftex
         if(0 < tmp42++) { tmp41.Append(", "); }
         tmp41.Append("Current_term: ");
         Current_term.ToString(tmp41);
-      }
-      if(__isset.last_log_id)
-      {
-        if(0 < tmp42++) { tmp41.Append(", "); }
-        tmp41.Append("Last_log_id: ");
-        Last_log_id.ToString(tmp41);
       }
       if(__isset.committed_log_id)
       {

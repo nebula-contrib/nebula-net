@@ -41,6 +41,7 @@ namespace Nebula.Raftex
     private long _term;
     private long _last_log_id;
     private long _last_log_term;
+    private bool _is_pre_vote;
 
     public int Space
     {
@@ -133,6 +134,19 @@ namespace Nebula.Raftex
       }
     }
 
+    public bool Is_pre_vote
+    {
+      get
+      {
+        return _is_pre_vote;
+      }
+      set
+      {
+        __isset.is_pre_vote = true;
+        this._is_pre_vote = value;
+      }
+    }
+
 
     public Isset __isset;
     public struct Isset
@@ -144,6 +158,7 @@ namespace Nebula.Raftex
       public bool term;
       public bool last_log_id;
       public bool last_log_term;
+      public bool is_pre_vote;
     }
 
     public AskForVoteRequest()
@@ -188,6 +203,11 @@ namespace Nebula.Raftex
         tmp0.Last_log_term = this.Last_log_term;
       }
       tmp0.__isset.last_log_term = this.__isset.last_log_term;
+      if(__isset.is_pre_vote)
+      {
+        tmp0.Is_pre_vote = this.Is_pre_vote;
+      }
+      tmp0.__isset.is_pre_vote = this.__isset.is_pre_vote;
       return tmp0;
     }
 
@@ -272,6 +292,16 @@ namespace Nebula.Raftex
               if (field.Type == TType.I64)
               {
                 Last_log_term = await iprot.ReadI64Async(cancellationToken);
+              }
+              else
+              {
+                await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+              }
+              break;
+            case 8:
+              if (field.Type == TType.Bool)
+              {
+                Is_pre_vote = await iprot.ReadBoolAsync(cancellationToken);
               }
               else
               {
@@ -365,6 +395,15 @@ namespace Nebula.Raftex
           await oprot.WriteI64Async(Last_log_term, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
+        if(__isset.is_pre_vote)
+        {
+          tmp2.Name = "is_pre_vote";
+          tmp2.Type = TType.Bool;
+          tmp2.ID = 8;
+          await oprot.WriteFieldBeginAsync(tmp2, cancellationToken);
+          await oprot.WriteBoolAsync(Is_pre_vote, cancellationToken);
+          await oprot.WriteFieldEndAsync(cancellationToken);
+        }
         await oprot.WriteFieldStopAsync(cancellationToken);
         await oprot.WriteStructEndAsync(cancellationToken);
       }
@@ -384,7 +423,8 @@ namespace Nebula.Raftex
         && ((__isset.candidate_port == other.__isset.candidate_port) && ((!__isset.candidate_port) || (System.Object.Equals(Candidate_port, other.Candidate_port))))
         && ((__isset.term == other.__isset.term) && ((!__isset.term) || (System.Object.Equals(Term, other.Term))))
         && ((__isset.last_log_id == other.__isset.last_log_id) && ((!__isset.last_log_id) || (System.Object.Equals(Last_log_id, other.Last_log_id))))
-        && ((__isset.last_log_term == other.__isset.last_log_term) && ((!__isset.last_log_term) || (System.Object.Equals(Last_log_term, other.Last_log_term))));
+        && ((__isset.last_log_term == other.__isset.last_log_term) && ((!__isset.last_log_term) || (System.Object.Equals(Last_log_term, other.Last_log_term))))
+        && ((__isset.is_pre_vote == other.__isset.is_pre_vote) && ((!__isset.is_pre_vote) || (System.Object.Equals(Is_pre_vote, other.Is_pre_vote))));
     }
 
     public override int GetHashCode() {
@@ -417,6 +457,10 @@ namespace Nebula.Raftex
         if(__isset.last_log_term)
         {
           hashcode = (hashcode * 397) + Last_log_term.GetHashCode();
+        }
+        if(__isset.is_pre_vote)
+        {
+          hashcode = (hashcode * 397) + Is_pre_vote.GetHashCode();
         }
       }
       return hashcode;
@@ -467,6 +511,12 @@ namespace Nebula.Raftex
         if(0 < tmp4++) { tmp3.Append(", "); }
         tmp3.Append("Last_log_term: ");
         Last_log_term.ToString(tmp3);
+      }
+      if(__isset.is_pre_vote)
+      {
+        if(0 < tmp4++) { tmp3.Append(", "); }
+        tmp3.Append("Is_pre_vote: ");
+        Is_pre_vote.ToString(tmp3);
       }
       tmp3.Append(')');
       return tmp3.ToString();

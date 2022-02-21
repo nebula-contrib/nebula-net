@@ -38,7 +38,7 @@ namespace Nebula.Graph
 
     /// <summary>
     /// 
-    /// <seealso cref="global::Nebula.Common.ErrorCode"/>
+    /// <seealso cref="global::nebula.ErrorCode"/>
     /// </summary>
     public global::Nebula.Common.ErrorCode Error_code { get; set; }
 

@@ -46,7 +46,7 @@ namespace Nebula.Graph
     /// </summary>
     public global::Nebula.Common.ErrorCode Error_code { get; set; }
 
-    public int Latency_in_us { get; set; }
+    public long Latency_in_us { get; set; }
 
     public global::Nebula.Common.DataSet Data
     {
@@ -128,7 +128,7 @@ namespace Nebula.Graph
     {
     }
 
-    public ExecutionResponse(global::Nebula.Common.ErrorCode error_code, int latency_in_us) : this()
+    public ExecutionResponse(global::Nebula.Common.ErrorCode error_code, long latency_in_us) : this()
     {
       this.Error_code = error_code;
       this.Latency_in_us = latency_in_us;
@@ -198,9 +198,9 @@ namespace Nebula.Graph
               }
               break;
             case 2:
-              if (field.Type == TType.I32)
+              if (field.Type == TType.I64)
               {
-                Latency_in_us = await iprot.ReadI32Async(cancellationToken);
+                Latency_in_us = await iprot.ReadI64Async(cancellationToken);
                 isset_latency_in_us = true;
               }
               else
@@ -299,10 +299,10 @@ namespace Nebula.Graph
         await oprot.WriteI32Async((int)Error_code, cancellationToken);
         await oprot.WriteFieldEndAsync(cancellationToken);
         tmp53.Name = "latency_in_us";
-        tmp53.Type = TType.I32;
+        tmp53.Type = TType.I64;
         tmp53.ID = 2;
         await oprot.WriteFieldBeginAsync(tmp53, cancellationToken);
-        await oprot.WriteI32Async(Latency_in_us, cancellationToken);
+        await oprot.WriteI64Async(Latency_in_us, cancellationToken);
         await oprot.WriteFieldEndAsync(cancellationToken);
         if((Data != null) && __isset.data)
         {

@@ -34,19 +34,19 @@ namespace Nebula.Raftex
 
   public partial class AppendLogResponse : TBase
   {
-    private global::Nebula.Raftex.ErrorCode _error_code;
+    private global::Nebula.Common.ErrorCode _error_code;
     private long _current_term;
     private string _leader_addr;
     private int _leader_port;
     private long _committed_log_id;
-    private long _last_log_id;
-    private long _last_log_term;
+    private long _last_matched_log_id;
+    private long _last_matched_log_term;
 
     /// <summary>
     /// 
-    /// <seealso cref="global::Nebula.Raftex.ErrorCode"/>
+    /// <seealso cref="global::Nebula.Common.ErrorCode"/>
     /// </summary>
-    public global::Nebula.Raftex.ErrorCode Error_code
+    public global::Nebula.Common.ErrorCode Error_code
     {
       get
       {
@@ -111,29 +111,29 @@ namespace Nebula.Raftex
       }
     }
 
-    public long Last_log_id
+    public long Last_matched_log_id
     {
       get
       {
-        return _last_log_id;
+        return _last_matched_log_id;
       }
       set
       {
-        __isset.last_log_id = true;
-        this._last_log_id = value;
+        __isset.last_matched_log_id = true;
+        this._last_matched_log_id = value;
       }
     }
 
-    public long Last_log_term
+    public long Last_matched_log_term
     {
       get
       {
-        return _last_log_term;
+        return _last_matched_log_term;
       }
       set
       {
-        __isset.last_log_term = true;
-        this._last_log_term = value;
+        __isset.last_matched_log_term = true;
+        this._last_matched_log_term = value;
       }
     }
 
@@ -146,8 +146,8 @@ namespace Nebula.Raftex
       public bool leader_addr;
       public bool leader_port;
       public bool committed_log_id;
-      public bool last_log_id;
-      public bool last_log_term;
+      public bool last_matched_log_id;
+      public bool last_matched_log_term;
     }
 
     public AppendLogResponse()
@@ -182,16 +182,16 @@ namespace Nebula.Raftex
         tmp24.Committed_log_id = this.Committed_log_id;
       }
       tmp24.__isset.committed_log_id = this.__isset.committed_log_id;
-      if(__isset.last_log_id)
+      if(__isset.last_matched_log_id)
       {
-        tmp24.Last_log_id = this.Last_log_id;
+        tmp24.Last_matched_log_id = this.Last_matched_log_id;
       }
-      tmp24.__isset.last_log_id = this.__isset.last_log_id;
-      if(__isset.last_log_term)
+      tmp24.__isset.last_matched_log_id = this.__isset.last_matched_log_id;
+      if(__isset.last_matched_log_term)
       {
-        tmp24.Last_log_term = this.Last_log_term;
+        tmp24.Last_matched_log_term = this.Last_matched_log_term;
       }
-      tmp24.__isset.last_log_term = this.__isset.last_log_term;
+      tmp24.__isset.last_matched_log_term = this.__isset.last_matched_log_term;
       return tmp24;
     }
 
@@ -215,7 +215,7 @@ namespace Nebula.Raftex
             case 1:
               if (field.Type == TType.I32)
               {
-                Error_code = (global::Nebula.Raftex.ErrorCode)await iprot.ReadI32Async(cancellationToken);
+                Error_code = (global::Nebula.Common.ErrorCode)await iprot.ReadI32Async(cancellationToken);
               }
               else
               {
@@ -265,7 +265,7 @@ namespace Nebula.Raftex
             case 6:
               if (field.Type == TType.I64)
               {
-                Last_log_id = await iprot.ReadI64Async(cancellationToken);
+                Last_matched_log_id = await iprot.ReadI64Async(cancellationToken);
               }
               else
               {
@@ -275,7 +275,7 @@ namespace Nebula.Raftex
             case 7:
               if (field.Type == TType.I64)
               {
-                Last_log_term = await iprot.ReadI64Async(cancellationToken);
+                Last_matched_log_term = await iprot.ReadI64Async(cancellationToken);
               }
               else
               {
@@ -351,22 +351,22 @@ namespace Nebula.Raftex
           await oprot.WriteI64Async(Committed_log_id, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
-        if(__isset.last_log_id)
+        if(__isset.last_matched_log_id)
         {
-          tmp26.Name = "last_log_id";
+          tmp26.Name = "last_matched_log_id";
           tmp26.Type = TType.I64;
           tmp26.ID = 6;
           await oprot.WriteFieldBeginAsync(tmp26, cancellationToken);
-          await oprot.WriteI64Async(Last_log_id, cancellationToken);
+          await oprot.WriteI64Async(Last_matched_log_id, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
-        if(__isset.last_log_term)
+        if(__isset.last_matched_log_term)
         {
-          tmp26.Name = "last_log_term";
+          tmp26.Name = "last_matched_log_term";
           tmp26.Type = TType.I64;
           tmp26.ID = 7;
           await oprot.WriteFieldBeginAsync(tmp26, cancellationToken);
-          await oprot.WriteI64Async(Last_log_term, cancellationToken);
+          await oprot.WriteI64Async(Last_matched_log_term, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
         await oprot.WriteFieldStopAsync(cancellationToken);
@@ -387,8 +387,8 @@ namespace Nebula.Raftex
         && ((__isset.leader_addr == other.__isset.leader_addr) && ((!__isset.leader_addr) || (System.Object.Equals(Leader_addr, other.Leader_addr))))
         && ((__isset.leader_port == other.__isset.leader_port) && ((!__isset.leader_port) || (System.Object.Equals(Leader_port, other.Leader_port))))
         && ((__isset.committed_log_id == other.__isset.committed_log_id) && ((!__isset.committed_log_id) || (System.Object.Equals(Committed_log_id, other.Committed_log_id))))
-        && ((__isset.last_log_id == other.__isset.last_log_id) && ((!__isset.last_log_id) || (System.Object.Equals(Last_log_id, other.Last_log_id))))
-        && ((__isset.last_log_term == other.__isset.last_log_term) && ((!__isset.last_log_term) || (System.Object.Equals(Last_log_term, other.Last_log_term))));
+        && ((__isset.last_matched_log_id == other.__isset.last_matched_log_id) && ((!__isset.last_matched_log_id) || (System.Object.Equals(Last_matched_log_id, other.Last_matched_log_id))))
+        && ((__isset.last_matched_log_term == other.__isset.last_matched_log_term) && ((!__isset.last_matched_log_term) || (System.Object.Equals(Last_matched_log_term, other.Last_matched_log_term))));
     }
 
     public override int GetHashCode() {
@@ -414,13 +414,13 @@ namespace Nebula.Raftex
         {
           hashcode = (hashcode * 397) + Committed_log_id.GetHashCode();
         }
-        if(__isset.last_log_id)
+        if(__isset.last_matched_log_id)
         {
-          hashcode = (hashcode * 397) + Last_log_id.GetHashCode();
+          hashcode = (hashcode * 397) + Last_matched_log_id.GetHashCode();
         }
-        if(__isset.last_log_term)
+        if(__isset.last_matched_log_term)
         {
-          hashcode = (hashcode * 397) + Last_log_term.GetHashCode();
+          hashcode = (hashcode * 397) + Last_matched_log_term.GetHashCode();
         }
       }
       return hashcode;
@@ -460,17 +460,17 @@ namespace Nebula.Raftex
         tmp27.Append("Committed_log_id: ");
         Committed_log_id.ToString(tmp27);
       }
-      if(__isset.last_log_id)
+      if(__isset.last_matched_log_id)
       {
         if(0 < tmp28++) { tmp27.Append(", "); }
-        tmp27.Append("Last_log_id: ");
-        Last_log_id.ToString(tmp27);
+        tmp27.Append("Last_matched_log_id: ");
+        Last_matched_log_id.ToString(tmp27);
       }
-      if(__isset.last_log_term)
+      if(__isset.last_matched_log_term)
       {
         if(0 < tmp28++) { tmp27.Append(", "); }
-        tmp27.Append("Last_log_term: ");
-        Last_log_term.ToString(tmp27);
+        tmp27.Append("Last_matched_log_term: ");
+        Last_matched_log_term.ToString(tmp27);
       }
       tmp27.Append(')');
       return tmp27.ToString();

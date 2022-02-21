@@ -32,15 +32,16 @@ using Thrift.Processor;
 namespace Nebula.Raftex
 {
 
-  public partial class HeartbeatResponse : TBase
+  public partial class GetStateResponse : TBase
   {
     private global::Nebula.Common.ErrorCode _error_code;
-    private long _current_term;
-    private string _leader_addr;
-    private int _leader_port;
+    private global::Nebula.Raftex.Role _role;
+    private long _term;
+    private bool _is_leader;
     private long _committed_log_id;
     private long _last_log_id;
     private long _last_log_term;
+    private global::Nebula.Raftex.Status _status;
 
     /// <summary>
     /// 
@@ -59,42 +60,46 @@ namespace Nebula.Raftex
       }
     }
 
-    public long Current_term
+    /// <summary>
+    /// 
+    /// <seealso cref="global::Nebula.Raftex.Role"/>
+    /// </summary>
+    public global::Nebula.Raftex.Role Role
     {
       get
       {
-        return _current_term;
+        return _role;
       }
       set
       {
-        __isset.current_term = true;
-        this._current_term = value;
+        __isset.role = true;
+        this._role = value;
       }
     }
 
-    public string Leader_addr
+    public long Term
     {
       get
       {
-        return _leader_addr;
+        return _term;
       }
       set
       {
-        __isset.leader_addr = true;
-        this._leader_addr = value;
+        __isset.term = true;
+        this._term = value;
       }
     }
 
-    public int Leader_port
+    public bool Is_leader
     {
       get
       {
-        return _leader_port;
+        return _is_leader;
       }
       set
       {
-        __isset.leader_port = true;
-        this._leader_port = value;
+        __isset.is_leader = true;
+        this._is_leader = value;
       }
     }
 
@@ -137,62 +142,85 @@ namespace Nebula.Raftex
       }
     }
 
+    /// <summary>
+    /// 
+    /// <seealso cref="global::Nebula.Raftex.Status"/>
+    /// </summary>
+    public global::Nebula.Raftex.Status Status
+    {
+      get
+      {
+        return _status;
+      }
+      set
+      {
+        __isset.status = true;
+        this._status = value;
+      }
+    }
+
 
     public Isset __isset;
     public struct Isset
     {
       public bool error_code;
-      public bool current_term;
-      public bool leader_addr;
-      public bool leader_port;
+      public bool role;
+      public bool term;
+      public bool is_leader;
       public bool committed_log_id;
       public bool last_log_id;
       public bool last_log_term;
+      public bool status;
     }
 
-    public HeartbeatResponse()
+    public GetStateResponse()
     {
     }
 
-    public HeartbeatResponse DeepCopy()
+    public GetStateResponse DeepCopy()
     {
-      var tmp43 = new HeartbeatResponse();
+      var tmp58 = new GetStateResponse();
       if(__isset.error_code)
       {
-        tmp43.Error_code = this.Error_code;
+        tmp58.Error_code = this.Error_code;
       }
-      tmp43.__isset.error_code = this.__isset.error_code;
-      if(__isset.current_term)
+      tmp58.__isset.error_code = this.__isset.error_code;
+      if(__isset.role)
       {
-        tmp43.Current_term = this.Current_term;
+        tmp58.Role = this.Role;
       }
-      tmp43.__isset.current_term = this.__isset.current_term;
-      if((Leader_addr != null) && __isset.leader_addr)
+      tmp58.__isset.role = this.__isset.role;
+      if(__isset.term)
       {
-        tmp43.Leader_addr = this.Leader_addr;
+        tmp58.Term = this.Term;
       }
-      tmp43.__isset.leader_addr = this.__isset.leader_addr;
-      if(__isset.leader_port)
+      tmp58.__isset.term = this.__isset.term;
+      if(__isset.is_leader)
       {
-        tmp43.Leader_port = this.Leader_port;
+        tmp58.Is_leader = this.Is_leader;
       }
-      tmp43.__isset.leader_port = this.__isset.leader_port;
+      tmp58.__isset.is_leader = this.__isset.is_leader;
       if(__isset.committed_log_id)
       {
-        tmp43.Committed_log_id = this.Committed_log_id;
+        tmp58.Committed_log_id = this.Committed_log_id;
       }
-      tmp43.__isset.committed_log_id = this.__isset.committed_log_id;
+      tmp58.__isset.committed_log_id = this.__isset.committed_log_id;
       if(__isset.last_log_id)
       {
-        tmp43.Last_log_id = this.Last_log_id;
+        tmp58.Last_log_id = this.Last_log_id;
       }
-      tmp43.__isset.last_log_id = this.__isset.last_log_id;
+      tmp58.__isset.last_log_id = this.__isset.last_log_id;
       if(__isset.last_log_term)
       {
-        tmp43.Last_log_term = this.Last_log_term;
+        tmp58.Last_log_term = this.Last_log_term;
       }
-      tmp43.__isset.last_log_term = this.__isset.last_log_term;
-      return tmp43;
+      tmp58.__isset.last_log_term = this.__isset.last_log_term;
+      if(__isset.status)
+      {
+        tmp58.Status = this.Status;
+      }
+      tmp58.__isset.status = this.__isset.status;
+      return tmp58;
     }
 
     public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -223,9 +251,9 @@ namespace Nebula.Raftex
               }
               break;
             case 2:
-              if (field.Type == TType.I64)
+              if (field.Type == TType.I32)
               {
-                Current_term = await iprot.ReadI64Async(cancellationToken);
+                Role = (global::Nebula.Raftex.Role)await iprot.ReadI32Async(cancellationToken);
               }
               else
               {
@@ -233,9 +261,9 @@ namespace Nebula.Raftex
               }
               break;
             case 3:
-              if (field.Type == TType.String)
+              if (field.Type == TType.I64)
               {
-                Leader_addr = await iprot.ReadStringAsync(cancellationToken);
+                Term = await iprot.ReadI64Async(cancellationToken);
               }
               else
               {
@@ -243,9 +271,9 @@ namespace Nebula.Raftex
               }
               break;
             case 4:
-              if (field.Type == TType.I32)
+              if (field.Type == TType.Bool)
               {
-                Leader_port = await iprot.ReadI32Async(cancellationToken);
+                Is_leader = await iprot.ReadBoolAsync(cancellationToken);
               }
               else
               {
@@ -282,6 +310,16 @@ namespace Nebula.Raftex
                 await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
               }
               break;
+            case 8:
+              if (field.Type == TType.I32)
+              {
+                Status = (global::Nebula.Raftex.Status)await iprot.ReadI32Async(cancellationToken);
+              }
+              else
+              {
+                await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+              }
+              break;
             default: 
               await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
               break;
@@ -303,70 +341,79 @@ namespace Nebula.Raftex
       oprot.IncrementRecursionDepth();
       try
       {
-        var tmp44 = new TStruct("HeartbeatResponse");
-        await oprot.WriteStructBeginAsync(tmp44, cancellationToken);
-        var tmp45 = new TField();
+        var tmp59 = new TStruct("GetStateResponse");
+        await oprot.WriteStructBeginAsync(tmp59, cancellationToken);
+        var tmp60 = new TField();
         if(__isset.error_code)
         {
-          tmp45.Name = "error_code";
-          tmp45.Type = TType.I32;
-          tmp45.ID = 1;
-          await oprot.WriteFieldBeginAsync(tmp45, cancellationToken);
+          tmp60.Name = "error_code";
+          tmp60.Type = TType.I32;
+          tmp60.ID = 1;
+          await oprot.WriteFieldBeginAsync(tmp60, cancellationToken);
           await oprot.WriteI32Async((int)Error_code, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
-        if(__isset.current_term)
+        if(__isset.role)
         {
-          tmp45.Name = "current_term";
-          tmp45.Type = TType.I64;
-          tmp45.ID = 2;
-          await oprot.WriteFieldBeginAsync(tmp45, cancellationToken);
-          await oprot.WriteI64Async(Current_term, cancellationToken);
+          tmp60.Name = "role";
+          tmp60.Type = TType.I32;
+          tmp60.ID = 2;
+          await oprot.WriteFieldBeginAsync(tmp60, cancellationToken);
+          await oprot.WriteI32Async((int)Role, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
-        if((Leader_addr != null) && __isset.leader_addr)
+        if(__isset.term)
         {
-          tmp45.Name = "leader_addr";
-          tmp45.Type = TType.String;
-          tmp45.ID = 3;
-          await oprot.WriteFieldBeginAsync(tmp45, cancellationToken);
-          await oprot.WriteStringAsync(Leader_addr, cancellationToken);
+          tmp60.Name = "term";
+          tmp60.Type = TType.I64;
+          tmp60.ID = 3;
+          await oprot.WriteFieldBeginAsync(tmp60, cancellationToken);
+          await oprot.WriteI64Async(Term, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
-        if(__isset.leader_port)
+        if(__isset.is_leader)
         {
-          tmp45.Name = "leader_port";
-          tmp45.Type = TType.I32;
-          tmp45.ID = 4;
-          await oprot.WriteFieldBeginAsync(tmp45, cancellationToken);
-          await oprot.WriteI32Async(Leader_port, cancellationToken);
+          tmp60.Name = "is_leader";
+          tmp60.Type = TType.Bool;
+          tmp60.ID = 4;
+          await oprot.WriteFieldBeginAsync(tmp60, cancellationToken);
+          await oprot.WriteBoolAsync(Is_leader, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
         if(__isset.committed_log_id)
         {
-          tmp45.Name = "committed_log_id";
-          tmp45.Type = TType.I64;
-          tmp45.ID = 5;
-          await oprot.WriteFieldBeginAsync(tmp45, cancellationToken);
+          tmp60.Name = "committed_log_id";
+          tmp60.Type = TType.I64;
+          tmp60.ID = 5;
+          await oprot.WriteFieldBeginAsync(tmp60, cancellationToken);
           await oprot.WriteI64Async(Committed_log_id, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
         if(__isset.last_log_id)
         {
-          tmp45.Name = "last_log_id";
-          tmp45.Type = TType.I64;
-          tmp45.ID = 6;
-          await oprot.WriteFieldBeginAsync(tmp45, cancellationToken);
+          tmp60.Name = "last_log_id";
+          tmp60.Type = TType.I64;
+          tmp60.ID = 6;
+          await oprot.WriteFieldBeginAsync(tmp60, cancellationToken);
           await oprot.WriteI64Async(Last_log_id, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
         if(__isset.last_log_term)
         {
-          tmp45.Name = "last_log_term";
-          tmp45.Type = TType.I64;
-          tmp45.ID = 7;
-          await oprot.WriteFieldBeginAsync(tmp45, cancellationToken);
+          tmp60.Name = "last_log_term";
+          tmp60.Type = TType.I64;
+          tmp60.ID = 7;
+          await oprot.WriteFieldBeginAsync(tmp60, cancellationToken);
           await oprot.WriteI64Async(Last_log_term, cancellationToken);
+          await oprot.WriteFieldEndAsync(cancellationToken);
+        }
+        if(__isset.status)
+        {
+          tmp60.Name = "status";
+          tmp60.Type = TType.I32;
+          tmp60.ID = 8;
+          await oprot.WriteFieldBeginAsync(tmp60, cancellationToken);
+          await oprot.WriteI32Async((int)Status, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
         await oprot.WriteFieldStopAsync(cancellationToken);
@@ -380,15 +427,16 @@ namespace Nebula.Raftex
 
     public override bool Equals(object that)
     {
-      if (!(that is HeartbeatResponse other)) return false;
+      if (!(that is GetStateResponse other)) return false;
       if (ReferenceEquals(this, other)) return true;
       return ((__isset.error_code == other.__isset.error_code) && ((!__isset.error_code) || (System.Object.Equals(Error_code, other.Error_code))))
-        && ((__isset.current_term == other.__isset.current_term) && ((!__isset.current_term) || (System.Object.Equals(Current_term, other.Current_term))))
-        && ((__isset.leader_addr == other.__isset.leader_addr) && ((!__isset.leader_addr) || (System.Object.Equals(Leader_addr, other.Leader_addr))))
-        && ((__isset.leader_port == other.__isset.leader_port) && ((!__isset.leader_port) || (System.Object.Equals(Leader_port, other.Leader_port))))
+        && ((__isset.role == other.__isset.role) && ((!__isset.role) || (System.Object.Equals(Role, other.Role))))
+        && ((__isset.term == other.__isset.term) && ((!__isset.term) || (System.Object.Equals(Term, other.Term))))
+        && ((__isset.is_leader == other.__isset.is_leader) && ((!__isset.is_leader) || (System.Object.Equals(Is_leader, other.Is_leader))))
         && ((__isset.committed_log_id == other.__isset.committed_log_id) && ((!__isset.committed_log_id) || (System.Object.Equals(Committed_log_id, other.Committed_log_id))))
         && ((__isset.last_log_id == other.__isset.last_log_id) && ((!__isset.last_log_id) || (System.Object.Equals(Last_log_id, other.Last_log_id))))
-        && ((__isset.last_log_term == other.__isset.last_log_term) && ((!__isset.last_log_term) || (System.Object.Equals(Last_log_term, other.Last_log_term))));
+        && ((__isset.last_log_term == other.__isset.last_log_term) && ((!__isset.last_log_term) || (System.Object.Equals(Last_log_term, other.Last_log_term))))
+        && ((__isset.status == other.__isset.status) && ((!__isset.status) || (System.Object.Equals(Status, other.Status))));
     }
 
     public override int GetHashCode() {
@@ -398,17 +446,17 @@ namespace Nebula.Raftex
         {
           hashcode = (hashcode * 397) + Error_code.GetHashCode();
         }
-        if(__isset.current_term)
+        if(__isset.role)
         {
-          hashcode = (hashcode * 397) + Current_term.GetHashCode();
+          hashcode = (hashcode * 397) + Role.GetHashCode();
         }
-        if((Leader_addr != null) && __isset.leader_addr)
+        if(__isset.term)
         {
-          hashcode = (hashcode * 397) + Leader_addr.GetHashCode();
+          hashcode = (hashcode * 397) + Term.GetHashCode();
         }
-        if(__isset.leader_port)
+        if(__isset.is_leader)
         {
-          hashcode = (hashcode * 397) + Leader_port.GetHashCode();
+          hashcode = (hashcode * 397) + Is_leader.GetHashCode();
         }
         if(__isset.committed_log_id)
         {
@@ -422,58 +470,68 @@ namespace Nebula.Raftex
         {
           hashcode = (hashcode * 397) + Last_log_term.GetHashCode();
         }
+        if(__isset.status)
+        {
+          hashcode = (hashcode * 397) + Status.GetHashCode();
+        }
       }
       return hashcode;
     }
 
     public override string ToString()
     {
-      var tmp46 = new StringBuilder("HeartbeatResponse(");
-      int tmp47 = 0;
+      var tmp61 = new StringBuilder("GetStateResponse(");
+      int tmp62 = 0;
       if(__isset.error_code)
       {
-        if(0 < tmp47++) { tmp46.Append(", "); }
-        tmp46.Append("Error_code: ");
-        Error_code.ToString(tmp46);
+        if(0 < tmp62++) { tmp61.Append(", "); }
+        tmp61.Append("Error_code: ");
+        Error_code.ToString(tmp61);
       }
-      if(__isset.current_term)
+      if(__isset.role)
       {
-        if(0 < tmp47++) { tmp46.Append(", "); }
-        tmp46.Append("Current_term: ");
-        Current_term.ToString(tmp46);
+        if(0 < tmp62++) { tmp61.Append(", "); }
+        tmp61.Append("Role: ");
+        Role.ToString(tmp61);
       }
-      if((Leader_addr != null) && __isset.leader_addr)
+      if(__isset.term)
       {
-        if(0 < tmp47++) { tmp46.Append(", "); }
-        tmp46.Append("Leader_addr: ");
-        Leader_addr.ToString(tmp46);
+        if(0 < tmp62++) { tmp61.Append(", "); }
+        tmp61.Append("Term: ");
+        Term.ToString(tmp61);
       }
-      if(__isset.leader_port)
+      if(__isset.is_leader)
       {
-        if(0 < tmp47++) { tmp46.Append(", "); }
-        tmp46.Append("Leader_port: ");
-        Leader_port.ToString(tmp46);
+        if(0 < tmp62++) { tmp61.Append(", "); }
+        tmp61.Append("Is_leader: ");
+        Is_leader.ToString(tmp61);
       }
       if(__isset.committed_log_id)
       {
-        if(0 < tmp47++) { tmp46.Append(", "); }
-        tmp46.Append("Committed_log_id: ");
-        Committed_log_id.ToString(tmp46);
+        if(0 < tmp62++) { tmp61.Append(", "); }
+        tmp61.Append("Committed_log_id: ");
+        Committed_log_id.ToString(tmp61);
       }
       if(__isset.last_log_id)
       {
-        if(0 < tmp47++) { tmp46.Append(", "); }
-        tmp46.Append("Last_log_id: ");
-        Last_log_id.ToString(tmp46);
+        if(0 < tmp62++) { tmp61.Append(", "); }
+        tmp61.Append("Last_log_id: ");
+        Last_log_id.ToString(tmp61);
       }
       if(__isset.last_log_term)
       {
-        if(0 < tmp47++) { tmp46.Append(", "); }
-        tmp46.Append("Last_log_term: ");
-        Last_log_term.ToString(tmp46);
+        if(0 < tmp62++) { tmp61.Append(", "); }
+        tmp61.Append("Last_log_term: ");
+        Last_log_term.ToString(tmp61);
       }
-      tmp46.Append(')');
-      return tmp46.ToString();
+      if(__isset.status)
+      {
+        if(0 < tmp62++) { tmp61.Append(", "); }
+        tmp61.Append("Status: ");
+        Status.ToString(tmp61);
+      }
+      tmp61.Append(')');
+      return tmp61.ToString();
     }
   }
 

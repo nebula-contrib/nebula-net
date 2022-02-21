@@ -77,18 +77,18 @@ namespace Nebula.Common
 
     public LogInfo DeepCopy()
     {
-      var tmp170 = new LogInfo();
+      var tmp175 = new LogInfo();
       if(__isset.log_id)
       {
-        tmp170.Log_id = this.Log_id;
+        tmp175.Log_id = this.Log_id;
       }
-      tmp170.__isset.log_id = this.__isset.log_id;
+      tmp175.__isset.log_id = this.__isset.log_id;
       if(__isset.term_id)
       {
-        tmp170.Term_id = this.Term_id;
+        tmp175.Term_id = this.Term_id;
       }
-      tmp170.__isset.term_id = this.__isset.term_id;
-      return tmp170;
+      tmp175.__isset.term_id = this.__isset.term_id;
+      return tmp175;
     }
 
     public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -149,24 +149,24 @@ namespace Nebula.Common
       oprot.IncrementRecursionDepth();
       try
       {
-        var tmp171 = new TStruct("LogInfo");
-        await oprot.WriteStructBeginAsync(tmp171, cancellationToken);
-        var tmp172 = new TField();
+        var tmp176 = new TStruct("LogInfo");
+        await oprot.WriteStructBeginAsync(tmp176, cancellationToken);
+        var tmp177 = new TField();
         if(__isset.log_id)
         {
-          tmp172.Name = "log_id";
-          tmp172.Type = TType.I64;
-          tmp172.ID = 1;
-          await oprot.WriteFieldBeginAsync(tmp172, cancellationToken);
+          tmp177.Name = "log_id";
+          tmp177.Type = TType.I64;
+          tmp177.ID = 1;
+          await oprot.WriteFieldBeginAsync(tmp177, cancellationToken);
           await oprot.WriteI64Async(Log_id, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
         if(__isset.term_id)
         {
-          tmp172.Name = "term_id";
-          tmp172.Type = TType.I64;
-          tmp172.ID = 2;
-          await oprot.WriteFieldBeginAsync(tmp172, cancellationToken);
+          tmp177.Name = "term_id";
+          tmp177.Type = TType.I64;
+          tmp177.ID = 2;
+          await oprot.WriteFieldBeginAsync(tmp177, cancellationToken);
           await oprot.WriteI64Async(Term_id, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
@@ -204,22 +204,22 @@ namespace Nebula.Common
 
     public override string ToString()
     {
-      var tmp173 = new StringBuilder("LogInfo(");
-      int tmp174 = 0;
+      var tmp178 = new StringBuilder("LogInfo(");
+      int tmp179 = 0;
       if(__isset.log_id)
       {
-        if(0 < tmp174++) { tmp173.Append(", "); }
-        tmp173.Append("Log_id: ");
-        Log_id.ToString(tmp173);
+        if(0 < tmp179++) { tmp178.Append(", "); }
+        tmp178.Append("Log_id: ");
+        Log_id.ToString(tmp178);
       }
       if(__isset.term_id)
       {
-        if(0 < tmp174++) { tmp173.Append(", "); }
-        tmp173.Append("Term_id: ");
-        Term_id.ToString(tmp173);
+        if(0 < tmp179++) { tmp178.Append(", "); }
+        tmp178.Append("Term_id: ");
+        Term_id.ToString(tmp178);
       }
-      tmp173.Append(')');
-      return tmp173.ToString();
+      tmp178.Append(')');
+      return tmp178.ToString();
     }
   }
 

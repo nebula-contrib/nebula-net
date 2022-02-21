@@ -32,24 +32,34 @@ using Thrift.Processor;
 namespace Nebula.Raftex
 {
 
-  public partial class SendSnapshotResponse : TBase
+  public partial class GetStateRequest : TBase
   {
-    private global::Nebula.Common.ErrorCode _error_code;
+    private int _space;
+    private int _part;
 
-    /// <summary>
-    /// 
-    /// <seealso cref="global::Nebula.Common.ErrorCode"/>
-    /// </summary>
-    public global::Nebula.Common.ErrorCode Error_code
+    public int Space
     {
       get
       {
-        return _error_code;
+        return _space;
       }
       set
       {
-        __isset.error_code = true;
-        this._error_code = value;
+        __isset.space = true;
+        this._space = value;
+      }
+    }
+
+    public int Part
+    {
+      get
+      {
+        return _part;
+      }
+      set
+      {
+        __isset.part = true;
+        this._part = value;
       }
     }
 
@@ -57,22 +67,28 @@ namespace Nebula.Raftex
     public Isset __isset;
     public struct Isset
     {
-      public bool error_code;
+      public bool space;
+      public bool part;
     }
 
-    public SendSnapshotResponse()
+    public GetStateRequest()
     {
     }
 
-    public SendSnapshotResponse DeepCopy()
+    public GetStateRequest DeepCopy()
     {
-      var tmp48 = new SendSnapshotResponse();
-      if(__isset.error_code)
+      var tmp53 = new GetStateRequest();
+      if(__isset.space)
       {
-        tmp48.Error_code = this.Error_code;
+        tmp53.Space = this.Space;
       }
-      tmp48.__isset.error_code = this.__isset.error_code;
-      return tmp48;
+      tmp53.__isset.space = this.__isset.space;
+      if(__isset.part)
+      {
+        tmp53.Part = this.Part;
+      }
+      tmp53.__isset.part = this.__isset.part;
+      return tmp53;
     }
 
     public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -95,7 +111,17 @@ namespace Nebula.Raftex
             case 1:
               if (field.Type == TType.I32)
               {
-                Error_code = (global::Nebula.Common.ErrorCode)await iprot.ReadI32Async(cancellationToken);
+                Space = await iprot.ReadI32Async(cancellationToken);
+              }
+              else
+              {
+                await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.I32)
+              {
+                Part = await iprot.ReadI32Async(cancellationToken);
               }
               else
               {
@@ -123,16 +149,25 @@ namespace Nebula.Raftex
       oprot.IncrementRecursionDepth();
       try
       {
-        var tmp49 = new TStruct("SendSnapshotResponse");
-        await oprot.WriteStructBeginAsync(tmp49, cancellationToken);
-        var tmp50 = new TField();
-        if(__isset.error_code)
+        var tmp54 = new TStruct("GetStateRequest");
+        await oprot.WriteStructBeginAsync(tmp54, cancellationToken);
+        var tmp55 = new TField();
+        if(__isset.space)
         {
-          tmp50.Name = "error_code";
-          tmp50.Type = TType.I32;
-          tmp50.ID = 1;
-          await oprot.WriteFieldBeginAsync(tmp50, cancellationToken);
-          await oprot.WriteI32Async((int)Error_code, cancellationToken);
+          tmp55.Name = "space";
+          tmp55.Type = TType.I32;
+          tmp55.ID = 1;
+          await oprot.WriteFieldBeginAsync(tmp55, cancellationToken);
+          await oprot.WriteI32Async(Space, cancellationToken);
+          await oprot.WriteFieldEndAsync(cancellationToken);
+        }
+        if(__isset.part)
+        {
+          tmp55.Name = "part";
+          tmp55.Type = TType.I32;
+          tmp55.ID = 2;
+          await oprot.WriteFieldBeginAsync(tmp55, cancellationToken);
+          await oprot.WriteI32Async(Part, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
         await oprot.WriteFieldStopAsync(cancellationToken);
@@ -146,17 +181,22 @@ namespace Nebula.Raftex
 
     public override bool Equals(object that)
     {
-      if (!(that is SendSnapshotResponse other)) return false;
+      if (!(that is GetStateRequest other)) return false;
       if (ReferenceEquals(this, other)) return true;
-      return ((__isset.error_code == other.__isset.error_code) && ((!__isset.error_code) || (System.Object.Equals(Error_code, other.Error_code))));
+      return ((__isset.space == other.__isset.space) && ((!__isset.space) || (System.Object.Equals(Space, other.Space))))
+        && ((__isset.part == other.__isset.part) && ((!__isset.part) || (System.Object.Equals(Part, other.Part))));
     }
 
     public override int GetHashCode() {
       int hashcode = 157;
       unchecked {
-        if(__isset.error_code)
+        if(__isset.space)
         {
-          hashcode = (hashcode * 397) + Error_code.GetHashCode();
+          hashcode = (hashcode * 397) + Space.GetHashCode();
+        }
+        if(__isset.part)
+        {
+          hashcode = (hashcode * 397) + Part.GetHashCode();
         }
       }
       return hashcode;
@@ -164,16 +204,22 @@ namespace Nebula.Raftex
 
     public override string ToString()
     {
-      var tmp51 = new StringBuilder("SendSnapshotResponse(");
-      int tmp52 = 0;
-      if(__isset.error_code)
+      var tmp56 = new StringBuilder("GetStateRequest(");
+      int tmp57 = 0;
+      if(__isset.space)
       {
-        if(0 < tmp52++) { tmp51.Append(", "); }
-        tmp51.Append("Error_code: ");
-        Error_code.ToString(tmp51);
+        if(0 < tmp57++) { tmp56.Append(", "); }
+        tmp56.Append("Space: ");
+        Space.ToString(tmp56);
       }
-      tmp51.Append(')');
-      return tmp51.ToString();
+      if(__isset.part)
+      {
+        if(0 < tmp57++) { tmp56.Append(", "); }
+        tmp56.Append("Part: ");
+        Part.ToString(tmp56);
+      }
+      tmp56.Append(')');
+      return tmp56.ToString();
     }
   }
 

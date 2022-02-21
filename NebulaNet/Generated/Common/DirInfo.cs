@@ -77,18 +77,18 @@ namespace Nebula.Common
 
     public DirInfo DeepCopy()
     {
-      var tmp175 = new DirInfo();
+      var tmp180 = new DirInfo();
       if((Root != null) && __isset.root)
       {
-        tmp175.Root = this.Root.ToArray();
+        tmp180.Root = this.Root.ToArray();
       }
-      tmp175.__isset.root = this.__isset.root;
+      tmp180.__isset.root = this.__isset.root;
       if((Data != null) && __isset.data)
       {
-        tmp175.Data = this.Data.DeepCopy();
+        tmp180.Data = this.Data.DeepCopy();
       }
-      tmp175.__isset.data = this.__isset.data;
-      return tmp175;
+      tmp180.__isset.data = this.__isset.data;
+      return tmp180;
     }
 
     public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -122,13 +122,13 @@ namespace Nebula.Common
               if (field.Type == TType.List)
               {
                 {
-                  TList _list176 = await iprot.ReadListBeginAsync(cancellationToken);
-                  Data = new List<byte[]>(_list176.Count);
-                  for(int _i177 = 0; _i177 < _list176.Count; ++_i177)
+                  TList _list181 = await iprot.ReadListBeginAsync(cancellationToken);
+                  Data = new List<byte[]>(_list181.Count);
+                  for(int _i182 = 0; _i182 < _list181.Count; ++_i182)
                   {
-                    byte[] _elem178;
-                    _elem178 = await iprot.ReadBinaryAsync(cancellationToken);
-                    Data.Add(_elem178);
+                    byte[] _elem183;
+                    _elem183 = await iprot.ReadBinaryAsync(cancellationToken);
+                    Data.Add(_elem183);
                   }
                   await iprot.ReadListEndAsync(cancellationToken);
                 }
@@ -159,29 +159,29 @@ namespace Nebula.Common
       oprot.IncrementRecursionDepth();
       try
       {
-        var tmp179 = new TStruct("DirInfo");
-        await oprot.WriteStructBeginAsync(tmp179, cancellationToken);
-        var tmp180 = new TField();
+        var tmp184 = new TStruct("DirInfo");
+        await oprot.WriteStructBeginAsync(tmp184, cancellationToken);
+        var tmp185 = new TField();
         if((Root != null) && __isset.root)
         {
-          tmp180.Name = "root";
-          tmp180.Type = TType.String;
-          tmp180.ID = 1;
-          await oprot.WriteFieldBeginAsync(tmp180, cancellationToken);
+          tmp185.Name = "root";
+          tmp185.Type = TType.String;
+          tmp185.ID = 1;
+          await oprot.WriteFieldBeginAsync(tmp185, cancellationToken);
           await oprot.WriteBinaryAsync(Root, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
         if((Data != null) && __isset.data)
         {
-          tmp180.Name = "data";
-          tmp180.Type = TType.List;
-          tmp180.ID = 2;
-          await oprot.WriteFieldBeginAsync(tmp180, cancellationToken);
+          tmp185.Name = "data";
+          tmp185.Type = TType.List;
+          tmp185.ID = 2;
+          await oprot.WriteFieldBeginAsync(tmp185, cancellationToken);
           {
             await oprot.WriteListBeginAsync(new TList(TType.String, Data.Count), cancellationToken);
-            foreach (byte[] _iter181 in Data)
+            foreach (byte[] _iter186 in Data)
             {
-              await oprot.WriteBinaryAsync(_iter181, cancellationToken);
+              await oprot.WriteBinaryAsync(_iter186, cancellationToken);
             }
             await oprot.WriteListEndAsync(cancellationToken);
           }
@@ -221,22 +221,22 @@ namespace Nebula.Common
 
     public override string ToString()
     {
-      var tmp182 = new StringBuilder("DirInfo(");
-      int tmp183 = 0;
+      var tmp187 = new StringBuilder("DirInfo(");
+      int tmp188 = 0;
       if((Root != null) && __isset.root)
       {
-        if(0 < tmp183++) { tmp182.Append(", "); }
-        tmp182.Append("Root: ");
-        Root.ToString(tmp182);
+        if(0 < tmp188++) { tmp187.Append(", "); }
+        tmp187.Append("Root: ");
+        Root.ToString(tmp187);
       }
       if((Data != null) && __isset.data)
       {
-        if(0 < tmp183++) { tmp182.Append(", "); }
-        tmp182.Append("Data: ");
-        Data.ToString(tmp182);
+        if(0 < tmp188++) { tmp187.Append(", "); }
+        tmp187.Append("Data: ");
+        Data.ToString(tmp187);
       }
-      tmp182.Append(')');
-      return tmp182.ToString();
+      tmp187.Append(')');
+      return tmp187.ToString();
     }
   }
 
