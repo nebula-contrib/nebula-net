@@ -11,33 +11,6 @@ namespace NebulaNet
 {
     public static class NebulaNetExtensions
     {
-        internal static object GetValue(this @Value value, Type targetType)
-        {
-            switch (targetType.Name)
-            {
-                case "Bool":
-                    return value.BVal;
-                case "Int32":
-                    return (int)value.IVal;
-                case "Int64":
-                    return value.IVal;
-                case "Double":
-                    return value.FVal;
-                case "String":
-                    return Encoding.UTF8.GetString(value.SVal);
-                case "DateTime":
-                    return value.DtVal;
-                case "String[]":
-                    return value.LVal.Values.Select(x => x.GetValue(typeof(string))).Cast<string>().ToArray();
-                case "Int32[]":
-                    return value.LVal.Values.Select(x => x.GetValue(typeof(int))).Cast<int>().ToArray();
-                case "List`1":
-                    return value.LVal.Values.Select(x => x.GetValue(typeof(string))).Cast<string>().ToList();
-                default:
-                    return default;
-            }
-        }
-
         public static async Task<T[]> ToArrayAsync<T>(this Task<ExecutionResponse> executionTask)
         {
             var executionResponse = await executionTask;
@@ -46,7 +19,7 @@ namespace NebulaNet
             if (executionResponse.Data.Rows.Count != 1)
                 return default;//不能解析多行
 
-            return (T[])executionResponse.Data.Rows[0].Values[0].GetValue(typeof(T[]));
+            return (T[])executionResponse.Data.Rows[0].Values[0].Mapping(typeof(T[]));
         }
         public static async Task<IList<T>> ToListAsync<T>(this Task<ExecutionResponse> executionTask)
         {
@@ -70,7 +43,7 @@ namespace NebulaNet
                 var o = Activator.CreateInstance<T>();
                 foreach (var item in indexAndProps)
                 {
-                    item.Prop.SetValue(o, row.Values[item.Index].GetValue(item.Prop.PropertyType));
+                    item.Prop.SetValue(o, row.Values[item.Index].Mapping(item.Prop.PropertyType));
                 }
                 result.Add(o);
             }

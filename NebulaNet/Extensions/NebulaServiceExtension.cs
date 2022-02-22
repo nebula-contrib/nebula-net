@@ -8,8 +8,10 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class NebulaServiceExtension
     {
-        public static IServiceCollection AddNebulaGraph(this IServiceCollection services, NebulaConfig config)
+        public static IServiceCollection AddNebulaGraph(this IServiceCollection services,Action<NebulaConfig> configProvider)
         {
+            var config = new NebulaConfig(configProvider);
+
             services.AddSingleton<ObjectPool<NebulaConnection>>(serviceProvider =>
             {
                 var objectPoolProvider = new DefaultObjectPoolProvider();
