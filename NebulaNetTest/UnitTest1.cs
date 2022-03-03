@@ -31,7 +31,7 @@ namespace NebulaNetTest
             Assert.IsTrue(Session_id > 0);
             
             await _client.ExecuteAsync(Session_id,"ADD HOSTS 127.0.0.1:9669;");
-            await Task.Delay(20000);
+            await Task.Delay(30000);
 
             StringBuilder sb = new StringBuilder();
             sb.Append("CREATE SPACE IF NOT EXISTS test(vid_type=FIXED_STRING(30));");
