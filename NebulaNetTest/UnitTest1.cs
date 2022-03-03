@@ -7,25 +7,28 @@ namespace NebulaNetTest
 {
     public class Tests
     {
-        private static GraphClient _client;
+        private static NebulaConnection _client;
+        private static long Session_id;
 
         [OneTimeSetUp]
         public void Setup()
         {
-            _client = new GraphClient("127.0.0.1", 9669);
-            _client.Authenticate("root", "nebula");
+            _client = new NebulaConnection();
+            _client.OpenAsync("127.0.0.1", 9669).Wait();
+            var authResponse = _client.AuthenticateAsync("root", "123456").Result;
+            Session_id=authResponse.Session_id;
         }
 
         [OneTimeTearDown]
         public async Task TearDown()
         {
-            await _client.SignOff();
+            await _client.SignOutAsync(Session_id);
         }
 
         [Test]
         public async Task TestAll()
         {
-            Assert.IsTrue(_client.sessionId > 0);
+            Assert.IsTrue(Session_id > 0);
 
             StringBuilder sb = new StringBuilder();
             sb.Append("CREATE SPACE IF NOT EXISTS test(vid_type=FIXED_STRING(30));");
@@ -33,28 +36,28 @@ namespace NebulaNetTest
             sb.Append("CREATE TAG IF NOT EXISTS person(name string, age int);");
             sb.Append("CREATE EDGE like (likeness double);");
 
-            var executionResponse = await _client.Execute(sb.ToString());
+            var executionResponse = await _client.ExecuteAsync(Session_id,sb.ToString());
             await Task.Delay(5000);
             Assert.IsTrue(executionResponse.Error_code == 0);
             await Task.Delay(5000);
 
-            executionResponse = await _client.Execute("INSERT VERTEX person(name, age) VALUES \"Bob\":(\"Bob\", 10), \"Lily\":(\"Lily\", 9);");
+            executionResponse = await _client.ExecuteAsync(Session_id, "INSERT VERTEX person(name, age) VALUES \"Bob\":(\"Bob\", 10), \"Lily\":(\"Lily\", 9);");
             await Task.Delay(5000);
             Assert.IsTrue(executionResponse.Error_code == 0);
 
-            executionResponse = await _client.Execute("INSERT EDGE like(likeness) VALUES \"Bob\"->\"Lily\":(80.0);");
+            executionResponse = await _client.ExecuteAsync(Session_id, "INSERT EDGE like(likeness) VALUES \"Bob\"->\"Lily\":(80.0);");
             await Task.Delay(5000);
             Assert.IsTrue(executionResponse.Error_code == 0);
 
-            executionResponse = await _client.Execute("FETCH PROP ON person \"Bob\" YIELD vertex as node;");
+            executionResponse = await _client.ExecuteAsync(Session_id, "FETCH PROP ON person \"Bob\" YIELD vertex as node;");
             await Task.Delay(5000);
             Assert.IsTrue(executionResponse.Error_code == 0);
 
-            executionResponse = await _client.Execute("FETCH PROP ON like \"Bob\"->\"Lily\" YIELD edge as e;");
+            executionResponse = await _client.ExecuteAsync(Session_id, "FETCH PROP ON like \"Bob\"->\"Lily\" YIELD edge as e;");
             await Task.Delay(5000);
             Assert.IsTrue(executionResponse.Error_code == 0);
 
-            executionResponse = await _client.Execute("DROP SPACE test;");
+            executionResponse = await _client.ExecuteAsync(Session_id, "DROP SPACE test;");
             await Task.Delay(5000);
             Assert.IsTrue(executionResponse.Error_code == 0);
         }

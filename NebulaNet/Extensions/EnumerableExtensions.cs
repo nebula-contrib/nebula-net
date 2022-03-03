@@ -1,5 +1,4 @@
-﻿using Nebula.Common;
-using Nebula.Graph;
+﻿using Nebula.Graph;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NebulaNet
 {
-    public static class NebulaNetExtensions
+    public static class EnumerableExtensions
     {
         public static async Task<T[]> ToArrayAsync<T>(this Task<ExecutionResponse> executionTask)
         {

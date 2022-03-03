@@ -10,23 +10,50 @@ namespace GraphClientExample
     {
         private static async Task Main(string[] args)
         {
-            //GraphClient graphClient = new GraphClient("www.hexcopy.com", 8669);
-           
-            GraphClient graphClient = new GraphClient("49.232.18.127", 8669);
-            graphClient.Authenticate("root", "123456");
-            Console.WriteLine(graphClient.sessionId);
+            NebulaConnection graphClient = new NebulaConnection();
+            await graphClient.OpenAsync("127.0.0.1", 9669);
+            var authResponse = await graphClient.AuthenticateAsync("root", "123456");
+            Console.WriteLine(authResponse.Session_id);
 
-            await graphClient.Execute("USE test;");
-            var a = await graphClient.Execute("FETCH PROP ON question \"0016e9fe-cd3b-4fcc-ba8d-23cfc267bd3a\",\"f4f51cf7-5fa9-4cbb-8e7d-82e52d58b6e9\" yield properties(vertex).questionId as questionId,properties(vertex).difficulty as difficulty")
+            StringBuilder sb = new StringBuilder();
+            sb.Append("CREATE SPACE IF NOT EXISTS test(vid_type=FIXED_STRING(30));");
+            sb.Append("USE test;");
+            sb.Append("CREATE TAG IF NOT EXISTS person(name string, age int);");
+            sb.Append("CREATE EDGE like (likeness double);");
+
+            var executionResponse = await graphClient.ExecuteAsync(authResponse.Session_id, sb.ToString());
+
+            await Task.Delay(10000);
+
+            executionResponse = await graphClient.ExecuteAsync(authResponse.Session_id, "INSERT VERTEX person(name, age) VALUES \"Bob\":(\"Bob\", 10), \"Lily\":(\"Lily\", 9);");
+            await Task.Delay(5000);
+            executionResponse = await graphClient.ExecuteAsync(authResponse.Session_id, "INSERT EDGE like(likeness) VALUES \"Bob\"->\"Lily\":(80.0);");
+            await Task.Delay(5000);
+            executionResponse = await graphClient.ExecuteAsync(authResponse.Session_id, "FETCH PROP ON person \"Bob\" YIELD vertex as node;");
+            await Task.Delay(5000);
+            executionResponse = await graphClient.ExecuteAsync(authResponse.Session_id, "FETCH PROP ON like \"Bob\"->\"Lily\" YIELD edge as e;");
+            await Task.Delay(5000);
+            
+            // 
+            var testDtos = await graphClient.ExecuteAsync(authResponse.Session_id, "FETCH PROP ON person \"Bob\",\"Lily\" YIELD properties(vertex).name AS name,properties(vertex).age AS age;")
                 .ToListAsync<TestDto>();
+            foreach (var item in testDtos)
+            {
+                Console.WriteLine($"1.name:{item.Name},age:{item.Age}");
+            }
+
+            executionResponse = await graphClient.ExecuteAsync(authResponse.Session_id, "DROP SPACE test;");
+            await Task.Delay(5000);
+
+            await graphClient.SignOutAsync(authResponse.Session_id);
+
 
             Console.ReadKey();
         }
     }
     public class TestDto
     {
-        public string QuestionId { get; set; }
-
-        public int Difficulty { get; set; }
+        public string Name { get; set; }
+        public long Age { get; set; }
     }
 }
