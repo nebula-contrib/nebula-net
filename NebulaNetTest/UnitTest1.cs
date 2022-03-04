@@ -30,7 +30,7 @@ namespace NebulaNetTest
         {
             Assert.IsTrue(Session_id > 0);
             
-            await _client.ExecuteAsync(Session_id,"ADD HOSTS 127.0.0.1:9779;");
+            await _client.ExecuteAsync(Session_id, "ADD HOSTS \"storaged0\":9779,\"storaged1\":9779,\"storaged2\":9779");
             await Task.Delay(20000);
 
             StringBuilder sb = new StringBuilder();
