@@ -29,29 +29,37 @@ using Thrift.Processor;
 #pragma warning disable IDE1006  // parts of the code use IDL spelling
 #pragma warning disable IDE0083  // pattern matching "that is not SomeType" requires net5.0 but we still support earlier versions
 
-namespace Nebula.Graph
+namespace Nebula.Common
 {
 
-  public partial class VerifyClientVersionResp : TBase
+  public partial class LogEntry : TBase
   {
-    private byte[] _error_msg;
+    private long _cluster;
+    private byte[] _log_str;
 
-    /// <summary>
-    /// 
-    /// <seealso cref="global::nebula.ErrorCode"/>
-    /// </summary>
-    public global::Nebula.Common.ErrorCode Error_code { get; set; }
-
-    public byte[] Error_msg
+    public long Cluster
     {
       get
       {
-        return _error_msg;
+        return _cluster;
       }
       set
       {
-        __isset.error_msg = true;
-        this._error_msg = value;
+        __isset.cluster = true;
+        this._cluster = value;
+      }
+    }
+
+    public byte[] Log_str
+    {
+      get
+      {
+        return _log_str;
+      }
+      set
+      {
+        __isset.log_str = true;
+        this._log_str = value;
       }
     }
 
@@ -59,28 +67,28 @@ namespace Nebula.Graph
     public Isset __isset;
     public struct Isset
     {
-      public bool error_msg;
+      public bool cluster;
+      public bool log_str;
     }
 
-    public VerifyClientVersionResp()
+    public LogEntry()
     {
     }
 
-    public VerifyClientVersionResp(global::Nebula.Common.ErrorCode error_code) : this()
+    public LogEntry DeepCopy()
     {
-      this.Error_code = error_code;
-    }
-
-    public VerifyClientVersionResp DeepCopy()
-    {
-      var tmp61 = new VerifyClientVersionResp();
-      tmp61.Error_code = this.Error_code;
-      if((Error_msg != null) && __isset.error_msg)
+      var tmp199 = new LogEntry();
+      if(__isset.cluster)
       {
-        tmp61.Error_msg = this.Error_msg.ToArray();
+        tmp199.Cluster = this.Cluster;
       }
-      tmp61.__isset.error_msg = this.__isset.error_msg;
-      return tmp61;
+      tmp199.__isset.cluster = this.__isset.cluster;
+      if((Log_str != null) && __isset.log_str)
+      {
+        tmp199.Log_str = this.Log_str.ToArray();
+      }
+      tmp199.__isset.log_str = this.__isset.log_str;
+      return tmp199;
     }
 
     public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -88,7 +96,6 @@ namespace Nebula.Graph
       iprot.IncrementRecursionDepth();
       try
       {
-        bool isset_error_code = false;
         TField field;
         await iprot.ReadStructBeginAsync(cancellationToken);
         while (true)
@@ -102,10 +109,9 @@ namespace Nebula.Graph
           switch (field.ID)
           {
             case 1:
-              if (field.Type == TType.I32)
+              if (field.Type == TType.I64)
               {
-                Error_code = (global::Nebula.Common.ErrorCode)await iprot.ReadI32Async(cancellationToken);
-                isset_error_code = true;
+                Cluster = await iprot.ReadI64Async(cancellationToken);
               }
               else
               {
@@ -115,7 +121,7 @@ namespace Nebula.Graph
             case 2:
               if (field.Type == TType.String)
               {
-                Error_msg = await iprot.ReadBinaryAsync(cancellationToken);
+                Log_str = await iprot.ReadBinaryAsync(cancellationToken);
               }
               else
               {
@@ -131,10 +137,6 @@ namespace Nebula.Graph
         }
 
         await iprot.ReadStructEndAsync(cancellationToken);
-        if (!isset_error_code)
-        {
-          throw new TProtocolException(TProtocolException.INVALID_DATA);
-        }
       }
       finally
       {
@@ -147,22 +149,25 @@ namespace Nebula.Graph
       oprot.IncrementRecursionDepth();
       try
       {
-        var tmp62 = new TStruct("VerifyClientVersionResp");
-        await oprot.WriteStructBeginAsync(tmp62, cancellationToken);
-        var tmp63 = new TField();
-        tmp63.Name = "error_code";
-        tmp63.Type = TType.I32;
-        tmp63.ID = 1;
-        await oprot.WriteFieldBeginAsync(tmp63, cancellationToken);
-        await oprot.WriteI32Async((int)Error_code, cancellationToken);
-        await oprot.WriteFieldEndAsync(cancellationToken);
-        if((Error_msg != null) && __isset.error_msg)
+        var tmp200 = new TStruct("LogEntry");
+        await oprot.WriteStructBeginAsync(tmp200, cancellationToken);
+        var tmp201 = new TField();
+        if(__isset.cluster)
         {
-          tmp63.Name = "error_msg";
-          tmp63.Type = TType.String;
-          tmp63.ID = 2;
-          await oprot.WriteFieldBeginAsync(tmp63, cancellationToken);
-          await oprot.WriteBinaryAsync(Error_msg, cancellationToken);
+          tmp201.Name = "cluster";
+          tmp201.Type = TType.I64;
+          tmp201.ID = 1;
+          await oprot.WriteFieldBeginAsync(tmp201, cancellationToken);
+          await oprot.WriteI64Async(Cluster, cancellationToken);
+          await oprot.WriteFieldEndAsync(cancellationToken);
+        }
+        if((Log_str != null) && __isset.log_str)
+        {
+          tmp201.Name = "log_str";
+          tmp201.Type = TType.String;
+          tmp201.ID = 2;
+          await oprot.WriteFieldBeginAsync(tmp201, cancellationToken);
+          await oprot.WriteBinaryAsync(Log_str, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
         await oprot.WriteFieldStopAsync(cancellationToken);
@@ -176,19 +181,22 @@ namespace Nebula.Graph
 
     public override bool Equals(object that)
     {
-      if (!(that is VerifyClientVersionResp other)) return false;
+      if (!(that is LogEntry other)) return false;
       if (ReferenceEquals(this, other)) return true;
-      return System.Object.Equals(Error_code, other.Error_code)
-        && ((__isset.error_msg == other.__isset.error_msg) && ((!__isset.error_msg) || (TCollections.Equals(Error_msg, other.Error_msg))));
+      return ((__isset.cluster == other.__isset.cluster) && ((!__isset.cluster) || (System.Object.Equals(Cluster, other.Cluster))))
+        && ((__isset.log_str == other.__isset.log_str) && ((!__isset.log_str) || (TCollections.Equals(Log_str, other.Log_str))));
     }
 
     public override int GetHashCode() {
       int hashcode = 157;
       unchecked {
-        hashcode = (hashcode * 397) + Error_code.GetHashCode();
-        if((Error_msg != null) && __isset.error_msg)
+        if(__isset.cluster)
         {
-          hashcode = (hashcode * 397) + Error_msg.GetHashCode();
+          hashcode = (hashcode * 397) + Cluster.GetHashCode();
+        }
+        if((Log_str != null) && __isset.log_str)
+        {
+          hashcode = (hashcode * 397) + Log_str.GetHashCode();
         }
       }
       return hashcode;
@@ -196,16 +204,22 @@ namespace Nebula.Graph
 
     public override string ToString()
     {
-      var tmp64 = new StringBuilder("VerifyClientVersionResp(");
-      tmp64.Append(", Error_code: ");
-      Error_code.ToString(tmp64);
-      if((Error_msg != null) && __isset.error_msg)
+      var tmp202 = new StringBuilder("LogEntry(");
+      int tmp203 = 0;
+      if(__isset.cluster)
       {
-        tmp64.Append(", Error_msg: ");
-        Error_msg.ToString(tmp64);
+        if(0 < tmp203++) { tmp202.Append(", "); }
+        tmp202.Append("Cluster: ");
+        Cluster.ToString(tmp202);
       }
-      tmp64.Append(')');
-      return tmp64.ToString();
+      if((Log_str != null) && __isset.log_str)
+      {
+        if(0 < tmp203++) { tmp202.Append(", "); }
+        tmp202.Append("Log_str: ");
+        Log_str.ToString(tmp202);
+      }
+      tmp202.Append(')');
+      return tmp202.ToString();
     }
   }
 

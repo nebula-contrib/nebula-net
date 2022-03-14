@@ -39,7 +39,7 @@ namespace Nebula.Graph
 
     public VerifyClientVersionReq()
     {
-      this.Version = System.Text.Encoding.UTF8.GetBytes("2.6.0");
+      this.Version = System.Text.Encoding.UTF8.GetBytes("3.0.0");
     }
 
     public VerifyClientVersionReq(byte[] version) : this()

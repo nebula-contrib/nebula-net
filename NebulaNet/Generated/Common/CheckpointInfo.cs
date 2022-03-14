@@ -34,19 +34,33 @@ namespace Nebula.Common
 
   public partial class CheckpointInfo : TBase
   {
-    private global::Nebula.Common.PartitionBackupInfo _partition_info;
+    private int _space_id;
+    private Dictionary<int, global::Nebula.Common.LogInfo> _parts;
     private byte[] _path;
 
-    public global::Nebula.Common.PartitionBackupInfo Partition_info
+    public int Space_id
     {
       get
       {
-        return _partition_info;
+        return _space_id;
       }
       set
       {
-        __isset.partition_info = true;
-        this._partition_info = value;
+        __isset.space_id = true;
+        this._space_id = value;
+      }
+    }
+
+    public Dictionary<int, global::Nebula.Common.LogInfo> Parts
+    {
+      get
+      {
+        return _parts;
+      }
+      set
+      {
+        __isset.parts = true;
+        this._parts = value;
       }
     }
 
@@ -67,7 +81,8 @@ namespace Nebula.Common
     public Isset __isset;
     public struct Isset
     {
-      public bool partition_info;
+      public bool space_id;
+      public bool parts;
       public bool path;
     }
 
@@ -77,18 +92,23 @@ namespace Nebula.Common
 
     public CheckpointInfo DeepCopy()
     {
-      var tmp199 = new CheckpointInfo();
-      if((Partition_info != null) && __isset.partition_info)
+      var tmp189 = new CheckpointInfo();
+      if(__isset.space_id)
       {
-        tmp199.Partition_info = (global::Nebula.Common.PartitionBackupInfo)this.Partition_info.DeepCopy();
+        tmp189.Space_id = this.Space_id;
       }
-      tmp199.__isset.partition_info = this.__isset.partition_info;
+      tmp189.__isset.space_id = this.__isset.space_id;
+      if((Parts != null) && __isset.parts)
+      {
+        tmp189.Parts = this.Parts.DeepCopy();
+      }
+      tmp189.__isset.parts = this.__isset.parts;
       if((Path != null) && __isset.path)
       {
-        tmp199.Path = this.Path.ToArray();
+        tmp189.Path = this.Path.ToArray();
       }
-      tmp199.__isset.path = this.__isset.path;
-      return tmp199;
+      tmp189.__isset.path = this.__isset.path;
+      return tmp189;
     }
 
     public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -109,10 +129,9 @@ namespace Nebula.Common
           switch (field.ID)
           {
             case 1:
-              if (field.Type == TType.Struct)
+              if (field.Type == TType.I32)
               {
-                Partition_info = new global::Nebula.Common.PartitionBackupInfo();
-                await Partition_info.ReadAsync(iprot, cancellationToken);
+                Space_id = await iprot.ReadI32Async(cancellationToken);
               }
               else
               {
@@ -120,6 +139,29 @@ namespace Nebula.Common
               }
               break;
             case 2:
+              if (field.Type == TType.Map)
+              {
+                {
+                  TMap _map190 = await iprot.ReadMapBeginAsync(cancellationToken);
+                  Parts = new Dictionary<int, global::Nebula.Common.LogInfo>(_map190.Count);
+                  for(int _i191 = 0; _i191 < _map190.Count; ++_i191)
+                  {
+                    int _key192;
+                    global::Nebula.Common.LogInfo _val193;
+                    _key192 = await iprot.ReadI32Async(cancellationToken);
+                    _val193 = new global::Nebula.Common.LogInfo();
+                    await _val193.ReadAsync(iprot, cancellationToken);
+                    Parts[_key192] = _val193;
+                  }
+                  await iprot.ReadMapEndAsync(cancellationToken);
+                }
+              }
+              else
+              {
+                await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+              }
+              break;
+            case 3:
               if (field.Type == TType.String)
               {
                 Path = await iprot.ReadBinaryAsync(cancellationToken);
@@ -150,24 +192,41 @@ namespace Nebula.Common
       oprot.IncrementRecursionDepth();
       try
       {
-        var tmp200 = new TStruct("CheckpointInfo");
-        await oprot.WriteStructBeginAsync(tmp200, cancellationToken);
-        var tmp201 = new TField();
-        if((Partition_info != null) && __isset.partition_info)
+        var tmp194 = new TStruct("CheckpointInfo");
+        await oprot.WriteStructBeginAsync(tmp194, cancellationToken);
+        var tmp195 = new TField();
+        if(__isset.space_id)
         {
-          tmp201.Name = "partition_info";
-          tmp201.Type = TType.Struct;
-          tmp201.ID = 1;
-          await oprot.WriteFieldBeginAsync(tmp201, cancellationToken);
-          await Partition_info.WriteAsync(oprot, cancellationToken);
+          tmp195.Name = "space_id";
+          tmp195.Type = TType.I32;
+          tmp195.ID = 1;
+          await oprot.WriteFieldBeginAsync(tmp195, cancellationToken);
+          await oprot.WriteI32Async(Space_id, cancellationToken);
+          await oprot.WriteFieldEndAsync(cancellationToken);
+        }
+        if((Parts != null) && __isset.parts)
+        {
+          tmp195.Name = "parts";
+          tmp195.Type = TType.Map;
+          tmp195.ID = 2;
+          await oprot.WriteFieldBeginAsync(tmp195, cancellationToken);
+          {
+            await oprot.WriteMapBeginAsync(new TMap(TType.I32, TType.Struct, Parts.Count), cancellationToken);
+            foreach (int _iter196 in Parts.Keys)
+            {
+              await oprot.WriteI32Async(_iter196, cancellationToken);
+              await Parts[_iter196].WriteAsync(oprot, cancellationToken);
+            }
+            await oprot.WriteMapEndAsync(cancellationToken);
+          }
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
         if((Path != null) && __isset.path)
         {
-          tmp201.Name = "path";
-          tmp201.Type = TType.String;
-          tmp201.ID = 2;
-          await oprot.WriteFieldBeginAsync(tmp201, cancellationToken);
+          tmp195.Name = "path";
+          tmp195.Type = TType.String;
+          tmp195.ID = 3;
+          await oprot.WriteFieldBeginAsync(tmp195, cancellationToken);
           await oprot.WriteBinaryAsync(Path, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
@@ -184,16 +243,21 @@ namespace Nebula.Common
     {
       if (!(that is CheckpointInfo other)) return false;
       if (ReferenceEquals(this, other)) return true;
-      return ((__isset.partition_info == other.__isset.partition_info) && ((!__isset.partition_info) || (System.Object.Equals(Partition_info, other.Partition_info))))
+      return ((__isset.space_id == other.__isset.space_id) && ((!__isset.space_id) || (System.Object.Equals(Space_id, other.Space_id))))
+        && ((__isset.parts == other.__isset.parts) && ((!__isset.parts) || (TCollections.Equals(Parts, other.Parts))))
         && ((__isset.path == other.__isset.path) && ((!__isset.path) || (TCollections.Equals(Path, other.Path))));
     }
 
     public override int GetHashCode() {
       int hashcode = 157;
       unchecked {
-        if((Partition_info != null) && __isset.partition_info)
+        if(__isset.space_id)
         {
-          hashcode = (hashcode * 397) + Partition_info.GetHashCode();
+          hashcode = (hashcode * 397) + Space_id.GetHashCode();
+        }
+        if((Parts != null) && __isset.parts)
+        {
+          hashcode = (hashcode * 397) + TCollections.GetHashCode(Parts);
         }
         if((Path != null) && __isset.path)
         {
@@ -205,22 +269,28 @@ namespace Nebula.Common
 
     public override string ToString()
     {
-      var tmp202 = new StringBuilder("CheckpointInfo(");
-      int tmp203 = 0;
-      if((Partition_info != null) && __isset.partition_info)
+      var tmp197 = new StringBuilder("CheckpointInfo(");
+      int tmp198 = 0;
+      if(__isset.space_id)
       {
-        if(0 < tmp203++) { tmp202.Append(", "); }
-        tmp202.Append("Partition_info: ");
-        Partition_info.ToString(tmp202);
+        if(0 < tmp198++) { tmp197.Append(", "); }
+        tmp197.Append("Space_id: ");
+        Space_id.ToString(tmp197);
+      }
+      if((Parts != null) && __isset.parts)
+      {
+        if(0 < tmp198++) { tmp197.Append(", "); }
+        tmp197.Append("Parts: ");
+        Parts.ToString(tmp197);
       }
       if((Path != null) && __isset.path)
       {
-        if(0 < tmp203++) { tmp202.Append(", "); }
-        tmp202.Append("Path: ");
-        Path.ToString(tmp202);
+        if(0 < tmp198++) { tmp197.Append(", "); }
+        tmp197.Append("Path: ");
+        Path.ToString(tmp197);
       }
-      tmp202.Append(')');
-      return tmp202.ToString();
+      tmp197.Append(')');
+      return tmp197.ToString();
     }
   }
 

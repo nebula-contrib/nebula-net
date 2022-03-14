@@ -50,6 +50,7 @@ namespace Nebula.Common
     private global::Nebula.Common.NSet _uVal;
     private global::Nebula.Common.DataSet _gVal;
     private global::Nebula.Common.Geography _ggVal;
+    private global::Nebula.Common.Duration _duVal;
 
     /// <summary>
     /// 
@@ -263,6 +264,19 @@ namespace Nebula.Common
       }
     }
 
+    public global::Nebula.Common.Duration DuVal
+    {
+      get
+      {
+        return _duVal;
+      }
+      set
+      {
+        __isset.duVal = true;
+        this._duVal = value;
+      }
+    }
+
 
     public Isset __isset;
     public struct Isset
@@ -283,6 +297,7 @@ namespace Nebula.Common
       public bool uVal;
       public bool gVal;
       public bool ggVal;
+      public bool duVal;
     }
 
     public @Value()
@@ -372,6 +387,11 @@ namespace Nebula.Common
         tmp20.GgVal = (global::Nebula.Common.Geography)this.GgVal.DeepCopy();
       }
       tmp20.__isset.ggVal = this.__isset.ggVal;
+      if((DuVal != null) && __isset.duVal)
+      {
+        tmp20.DuVal = (global::Nebula.Common.Duration)this.DuVal.DeepCopy();
+      }
+      tmp20.__isset.duVal = this.__isset.duVal;
       return tmp20;
     }
 
@@ -563,6 +583,17 @@ namespace Nebula.Common
                 await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
               }
               break;
+            case 17:
+              if (field.Type == TType.Struct)
+              {
+                DuVal = new global::Nebula.Common.Duration();
+                await DuVal.ReadAsync(iprot, cancellationToken);
+              }
+              else
+              {
+                await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+              }
+              break;
             default: 
               await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
               break;
@@ -731,6 +762,15 @@ namespace Nebula.Common
           await GgVal.WriteAsync(oprot, cancellationToken);
           await oprot.WriteFieldEndAsync(cancellationToken);
         }
+        if((DuVal != null) && __isset.duVal)
+        {
+          tmp22.Name = "duVal";
+          tmp22.Type = TType.Struct;
+          tmp22.ID = 17;
+          await oprot.WriteFieldBeginAsync(tmp22, cancellationToken);
+          await DuVal.WriteAsync(oprot, cancellationToken);
+          await oprot.WriteFieldEndAsync(cancellationToken);
+        }
         await oprot.WriteFieldStopAsync(cancellationToken);
         await oprot.WriteStructEndAsync(cancellationToken);
       }
@@ -759,7 +799,8 @@ namespace Nebula.Common
         && ((__isset.mVal == other.__isset.mVal) && ((!__isset.mVal) || (System.Object.Equals(MVal, other.MVal))))
         && ((__isset.uVal == other.__isset.uVal) && ((!__isset.uVal) || (System.Object.Equals(UVal, other.UVal))))
         && ((__isset.gVal == other.__isset.gVal) && ((!__isset.gVal) || (System.Object.Equals(GVal, other.GVal))))
-        && ((__isset.ggVal == other.__isset.ggVal) && ((!__isset.ggVal) || (System.Object.Equals(GgVal, other.GgVal))));
+        && ((__isset.ggVal == other.__isset.ggVal) && ((!__isset.ggVal) || (System.Object.Equals(GgVal, other.GgVal))))
+        && ((__isset.duVal == other.__isset.duVal) && ((!__isset.duVal) || (System.Object.Equals(DuVal, other.DuVal))));
     }
 
     public override int GetHashCode() {
@@ -828,6 +869,10 @@ namespace Nebula.Common
         if((GgVal != null) && __isset.ggVal)
         {
           hashcode = (hashcode * 397) + GgVal.GetHashCode();
+        }
+        if((DuVal != null) && __isset.duVal)
+        {
+          hashcode = (hashcode * 397) + DuVal.GetHashCode();
         }
       }
       return hashcode;
@@ -932,6 +977,12 @@ namespace Nebula.Common
         if(0 < tmp24++) { tmp23.Append(", "); }
         tmp23.Append("GgVal: ");
         GgVal.ToString(tmp23);
+      }
+      if((DuVal != null) && __isset.duVal)
+      {
+        if(0 < tmp24++) { tmp23.Append(", "); }
+        tmp23.Append("DuVal: ");
+        DuVal.ToString(tmp23);
       }
       tmp23.Append(')');
       return tmp23.ToString();

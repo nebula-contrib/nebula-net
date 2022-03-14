@@ -41,7 +41,11 @@ namespace Nebula.Graph
 
       global::System.Threading.Tasks.Task<global::Nebula.Graph.ExecutionResponse> execute(long sessionId, byte[] stmt, CancellationToken cancellationToken = default);
 
+      global::System.Threading.Tasks.Task<global::Nebula.Graph.ExecutionResponse> executeWithParameter(long sessionId, byte[] stmt, Dictionary<byte[], global::Nebula.Common.@Value> parameterMap, CancellationToken cancellationToken = default);
+
       global::System.Threading.Tasks.Task<byte[]> executeJson(long sessionId, byte[] stmt, CancellationToken cancellationToken = default);
+
+      global::System.Threading.Tasks.Task<byte[]> executeJsonWithParameter(long sessionId, byte[] stmt, Dictionary<byte[], global::Nebula.Common.@Value> parameterMap, CancellationToken cancellationToken = default);
 
       global::System.Threading.Tasks.Task<global::Nebula.Graph.VerifyClientVersionResp> verifyClientVersion(global::Nebula.Graph.VerifyClientVersionReq req, CancellationToken cancellationToken = default);
 
@@ -158,19 +162,20 @@ namespace Nebula.Graph
         throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "execute failed: unknown result");
       }
 
-      public async global::System.Threading.Tasks.Task<byte[]> executeJson(long sessionId, byte[] stmt, CancellationToken cancellationToken = default)
+      public async global::System.Threading.Tasks.Task<global::Nebula.Graph.ExecutionResponse> executeWithParameter(long sessionId, byte[] stmt, Dictionary<byte[], global::Nebula.Common.@Value> parameterMap, CancellationToken cancellationToken = default)
       {
-        await send_executeJson(sessionId, stmt, cancellationToken);
-        return await recv_executeJson(cancellationToken);
+        await send_executeWithParameter(sessionId, stmt, parameterMap, cancellationToken);
+        return await recv_executeWithParameter(cancellationToken);
       }
 
-      public async global::System.Threading.Tasks.Task send_executeJson(long sessionId, byte[] stmt, CancellationToken cancellationToken = default)
+      public async global::System.Threading.Tasks.Task send_executeWithParameter(long sessionId, byte[] stmt, Dictionary<byte[], global::Nebula.Common.@Value> parameterMap, CancellationToken cancellationToken = default)
       {
-        await OutputProtocol.WriteMessageBeginAsync(new TMessage("executeJson", TMessageType.Call, SeqId), cancellationToken);
+        await OutputProtocol.WriteMessageBeginAsync(new TMessage("executeWithParameter", TMessageType.Call, SeqId), cancellationToken);
         
-        var tmp80 = new InternalStructs.executeJson_args() {
+        var tmp80 = new InternalStructs.executeWithParameter_args() {
           SessionId = sessionId,
           Stmt = stmt,
+          ParameterMap = parameterMap,
         };
         
         await tmp80.WriteAsync(OutputProtocol, cancellationToken);
@@ -178,7 +183,7 @@ namespace Nebula.Graph
         await OutputProtocol.Transport.FlushAsync(cancellationToken);
       }
 
-      public async global::System.Threading.Tasks.Task<byte[]> recv_executeJson(CancellationToken cancellationToken = default)
+      public async global::System.Threading.Tasks.Task<global::Nebula.Graph.ExecutionResponse> recv_executeWithParameter(CancellationToken cancellationToken = default)
       {
         
         var tmp81 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
@@ -189,14 +194,97 @@ namespace Nebula.Graph
           throw tmp82;
         }
 
-        var tmp83 = new InternalStructs.executeJson_result();
+        var tmp83 = new InternalStructs.executeWithParameter_result();
         await tmp83.ReadAsync(InputProtocol, cancellationToken);
         await InputProtocol.ReadMessageEndAsync(cancellationToken);
         if (tmp83.__isset.success)
         {
           return tmp83.Success;
         }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "executeWithParameter failed: unknown result");
+      }
+
+      public async global::System.Threading.Tasks.Task<byte[]> executeJson(long sessionId, byte[] stmt, CancellationToken cancellationToken = default)
+      {
+        await send_executeJson(sessionId, stmt, cancellationToken);
+        return await recv_executeJson(cancellationToken);
+      }
+
+      public async global::System.Threading.Tasks.Task send_executeJson(long sessionId, byte[] stmt, CancellationToken cancellationToken = default)
+      {
+        await OutputProtocol.WriteMessageBeginAsync(new TMessage("executeJson", TMessageType.Call, SeqId), cancellationToken);
+        
+        var tmp84 = new InternalStructs.executeJson_args() {
+          SessionId = sessionId,
+          Stmt = stmt,
+        };
+        
+        await tmp84.WriteAsync(OutputProtocol, cancellationToken);
+        await OutputProtocol.WriteMessageEndAsync(cancellationToken);
+        await OutputProtocol.Transport.FlushAsync(cancellationToken);
+      }
+
+      public async global::System.Threading.Tasks.Task<byte[]> recv_executeJson(CancellationToken cancellationToken = default)
+      {
+        
+        var tmp85 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
+        if (tmp85.Type == TMessageType.Exception)
+        {
+          var tmp86 = await TApplicationException.ReadAsync(InputProtocol, cancellationToken);
+          await InputProtocol.ReadMessageEndAsync(cancellationToken);
+          throw tmp86;
+        }
+
+        var tmp87 = new InternalStructs.executeJson_result();
+        await tmp87.ReadAsync(InputProtocol, cancellationToken);
+        await InputProtocol.ReadMessageEndAsync(cancellationToken);
+        if (tmp87.__isset.success)
+        {
+          return tmp87.Success;
+        }
         throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "executeJson failed: unknown result");
+      }
+
+      public async global::System.Threading.Tasks.Task<byte[]> executeJsonWithParameter(long sessionId, byte[] stmt, Dictionary<byte[], global::Nebula.Common.@Value> parameterMap, CancellationToken cancellationToken = default)
+      {
+        await send_executeJsonWithParameter(sessionId, stmt, parameterMap, cancellationToken);
+        return await recv_executeJsonWithParameter(cancellationToken);
+      }
+
+      public async global::System.Threading.Tasks.Task send_executeJsonWithParameter(long sessionId, byte[] stmt, Dictionary<byte[], global::Nebula.Common.@Value> parameterMap, CancellationToken cancellationToken = default)
+      {
+        await OutputProtocol.WriteMessageBeginAsync(new TMessage("executeJsonWithParameter", TMessageType.Call, SeqId), cancellationToken);
+        
+        var tmp88 = new InternalStructs.executeJsonWithParameter_args() {
+          SessionId = sessionId,
+          Stmt = stmt,
+          ParameterMap = parameterMap,
+        };
+        
+        await tmp88.WriteAsync(OutputProtocol, cancellationToken);
+        await OutputProtocol.WriteMessageEndAsync(cancellationToken);
+        await OutputProtocol.Transport.FlushAsync(cancellationToken);
+      }
+
+      public async global::System.Threading.Tasks.Task<byte[]> recv_executeJsonWithParameter(CancellationToken cancellationToken = default)
+      {
+        
+        var tmp89 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
+        if (tmp89.Type == TMessageType.Exception)
+        {
+          var tmp90 = await TApplicationException.ReadAsync(InputProtocol, cancellationToken);
+          await InputProtocol.ReadMessageEndAsync(cancellationToken);
+          throw tmp90;
+        }
+
+        var tmp91 = new InternalStructs.executeJsonWithParameter_result();
+        await tmp91.ReadAsync(InputProtocol, cancellationToken);
+        await InputProtocol.ReadMessageEndAsync(cancellationToken);
+        if (tmp91.__isset.success)
+        {
+          return tmp91.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "executeJsonWithParameter failed: unknown result");
       }
 
       public async global::System.Threading.Tasks.Task<global::Nebula.Graph.VerifyClientVersionResp> verifyClientVersion(global::Nebula.Graph.VerifyClientVersionReq req, CancellationToken cancellationToken = default)
@@ -209,11 +297,11 @@ namespace Nebula.Graph
       {
         await OutputProtocol.WriteMessageBeginAsync(new TMessage("verifyClientVersion", TMessageType.Call, SeqId), cancellationToken);
         
-        var tmp84 = new InternalStructs.verifyClientVersion_args() {
+        var tmp92 = new InternalStructs.verifyClientVersion_args() {
           Req = req,
         };
         
-        await tmp84.WriteAsync(OutputProtocol, cancellationToken);
+        await tmp92.WriteAsync(OutputProtocol, cancellationToken);
         await OutputProtocol.WriteMessageEndAsync(cancellationToken);
         await OutputProtocol.Transport.FlushAsync(cancellationToken);
       }
@@ -221,20 +309,20 @@ namespace Nebula.Graph
       public async global::System.Threading.Tasks.Task<global::Nebula.Graph.VerifyClientVersionResp> recv_verifyClientVersion(CancellationToken cancellationToken = default)
       {
         
-        var tmp85 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
-        if (tmp85.Type == TMessageType.Exception)
+        var tmp93 = await InputProtocol.ReadMessageBeginAsync(cancellationToken);
+        if (tmp93.Type == TMessageType.Exception)
         {
-          var tmp86 = await TApplicationException.ReadAsync(InputProtocol, cancellationToken);
+          var tmp94 = await TApplicationException.ReadAsync(InputProtocol, cancellationToken);
           await InputProtocol.ReadMessageEndAsync(cancellationToken);
-          throw tmp86;
+          throw tmp94;
         }
 
-        var tmp87 = new InternalStructs.verifyClientVersion_result();
-        await tmp87.ReadAsync(InputProtocol, cancellationToken);
+        var tmp95 = new InternalStructs.verifyClientVersion_result();
+        await tmp95.ReadAsync(InputProtocol, cancellationToken);
         await InputProtocol.ReadMessageEndAsync(cancellationToken);
-        if (tmp87.__isset.success)
+        if (tmp95.__isset.success)
         {
-          return tmp87.Success;
+          return tmp95.Success;
         }
         throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "verifyClientVersion failed: unknown result");
       }
@@ -253,7 +341,9 @@ namespace Nebula.Graph
         processMap_["authenticate"] = authenticate_ProcessAsync;
         processMap_["signout"] = signout_ProcessAsync;
         processMap_["execute"] = execute_ProcessAsync;
+        processMap_["executeWithParameter"] = executeWithParameter_ProcessAsync;
         processMap_["executeJson"] = executeJson_ProcessAsync;
+        processMap_["executeJsonWithParameter"] = executeJsonWithParameter_ProcessAsync;
         processMap_["verifyClientVersion"] = verifyClientVersion_ProcessAsync;
       }
 
@@ -298,30 +388,30 @@ namespace Nebula.Graph
 
       public async global::System.Threading.Tasks.Task authenticate_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot, CancellationToken cancellationToken)
       {
-        var tmp88 = new InternalStructs.authenticate_args();
-        await tmp88.ReadAsync(iprot, cancellationToken);
+        var tmp96 = new InternalStructs.authenticate_args();
+        await tmp96.ReadAsync(iprot, cancellationToken);
         await iprot.ReadMessageEndAsync(cancellationToken);
-        var tmp89 = new InternalStructs.authenticate_result();
+        var tmp97 = new InternalStructs.authenticate_result();
         try
         {
-          tmp89.Success = await _iAsync.authenticate(tmp88.Username, tmp88.Password, cancellationToken);
+          tmp97.Success = await _iAsync.authenticate(tmp96.Username, tmp96.Password, cancellationToken);
           await oprot.WriteMessageBeginAsync(new TMessage("authenticate", TMessageType.Reply, seqid), cancellationToken); 
-          await tmp89.WriteAsync(oprot, cancellationToken);
+          await tmp97.WriteAsync(oprot, cancellationToken);
         }
         catch (TTransportException)
         {
           throw;
         }
-        catch (Exception tmp90)
+        catch (Exception tmp98)
         {
-          var tmp91 = $"Error occurred in {GetType().FullName}: {tmp90.Message}";
+          var tmp99 = $"Error occurred in {GetType().FullName}: {tmp98.Message}";
           if(_logger != null)
-            _logger.LogError(tmp90, tmp91);
+            _logger.LogError(tmp98, tmp99);
           else
-            Console.Error.WriteLine(tmp91);
-          var tmp92 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
+            Console.Error.WriteLine(tmp99);
+          var tmp100 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
           await oprot.WriteMessageBeginAsync(new TMessage("authenticate", TMessageType.Exception, seqid), cancellationToken);
-          await tmp92.WriteAsync(oprot, cancellationToken);
+          await tmp100.WriteAsync(oprot, cancellationToken);
         }
         await oprot.WriteMessageEndAsync(cancellationToken);
         await oprot.Transport.FlushAsync(cancellationToken);
@@ -329,53 +419,84 @@ namespace Nebula.Graph
 
       public async global::System.Threading.Tasks.Task signout_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot, CancellationToken cancellationToken)
       {
-        var tmp93 = new InternalStructs.signout_args();
-        await tmp93.ReadAsync(iprot, cancellationToken);
+        var tmp101 = new InternalStructs.signout_args();
+        await tmp101.ReadAsync(iprot, cancellationToken);
         await iprot.ReadMessageEndAsync(cancellationToken);
         try
         {
-          await _iAsync.signout(tmp93.SessionId, cancellationToken);
+          await _iAsync.signout(tmp101.SessionId, cancellationToken);
         }
         catch (TTransportException)
         {
           throw;
         }
-        catch (Exception tmp95)
+        catch (Exception tmp103)
         {
-          var tmp96 = $"Error occurred in {GetType().FullName}: {tmp95.Message}";
+          var tmp104 = $"Error occurred in {GetType().FullName}: {tmp103.Message}";
           if(_logger != null)
-            _logger.LogError(tmp95, tmp96);
+            _logger.LogError(tmp103, tmp104);
           else
-            Console.Error.WriteLine(tmp96);
+            Console.Error.WriteLine(tmp104);
         }
       }
 
       public async global::System.Threading.Tasks.Task execute_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot, CancellationToken cancellationToken)
       {
-        var tmp97 = new InternalStructs.execute_args();
-        await tmp97.ReadAsync(iprot, cancellationToken);
+        var tmp105 = new InternalStructs.execute_args();
+        await tmp105.ReadAsync(iprot, cancellationToken);
         await iprot.ReadMessageEndAsync(cancellationToken);
-        var tmp98 = new InternalStructs.execute_result();
+        var tmp106 = new InternalStructs.execute_result();
         try
         {
-          tmp98.Success = await _iAsync.execute(tmp97.SessionId, tmp97.Stmt, cancellationToken);
+          tmp106.Success = await _iAsync.execute(tmp105.SessionId, tmp105.Stmt, cancellationToken);
           await oprot.WriteMessageBeginAsync(new TMessage("execute", TMessageType.Reply, seqid), cancellationToken); 
-          await tmp98.WriteAsync(oprot, cancellationToken);
+          await tmp106.WriteAsync(oprot, cancellationToken);
         }
         catch (TTransportException)
         {
           throw;
         }
-        catch (Exception tmp99)
+        catch (Exception tmp107)
         {
-          var tmp100 = $"Error occurred in {GetType().FullName}: {tmp99.Message}";
+          var tmp108 = $"Error occurred in {GetType().FullName}: {tmp107.Message}";
           if(_logger != null)
-            _logger.LogError(tmp99, tmp100);
+            _logger.LogError(tmp107, tmp108);
           else
-            Console.Error.WriteLine(tmp100);
-          var tmp101 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
+            Console.Error.WriteLine(tmp108);
+          var tmp109 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
           await oprot.WriteMessageBeginAsync(new TMessage("execute", TMessageType.Exception, seqid), cancellationToken);
-          await tmp101.WriteAsync(oprot, cancellationToken);
+          await tmp109.WriteAsync(oprot, cancellationToken);
+        }
+        await oprot.WriteMessageEndAsync(cancellationToken);
+        await oprot.Transport.FlushAsync(cancellationToken);
+      }
+
+      public async global::System.Threading.Tasks.Task executeWithParameter_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot, CancellationToken cancellationToken)
+      {
+        var tmp110 = new InternalStructs.executeWithParameter_args();
+        await tmp110.ReadAsync(iprot, cancellationToken);
+        await iprot.ReadMessageEndAsync(cancellationToken);
+        var tmp111 = new InternalStructs.executeWithParameter_result();
+        try
+        {
+          tmp111.Success = await _iAsync.executeWithParameter(tmp110.SessionId, tmp110.Stmt, tmp110.ParameterMap, cancellationToken);
+          await oprot.WriteMessageBeginAsync(new TMessage("executeWithParameter", TMessageType.Reply, seqid), cancellationToken); 
+          await tmp111.WriteAsync(oprot, cancellationToken);
+        }
+        catch (TTransportException)
+        {
+          throw;
+        }
+        catch (Exception tmp112)
+        {
+          var tmp113 = $"Error occurred in {GetType().FullName}: {tmp112.Message}";
+          if(_logger != null)
+            _logger.LogError(tmp112, tmp113);
+          else
+            Console.Error.WriteLine(tmp113);
+          var tmp114 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
+          await oprot.WriteMessageBeginAsync(new TMessage("executeWithParameter", TMessageType.Exception, seqid), cancellationToken);
+          await tmp114.WriteAsync(oprot, cancellationToken);
         }
         await oprot.WriteMessageEndAsync(cancellationToken);
         await oprot.Transport.FlushAsync(cancellationToken);
@@ -383,30 +504,61 @@ namespace Nebula.Graph
 
       public async global::System.Threading.Tasks.Task executeJson_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot, CancellationToken cancellationToken)
       {
-        var tmp102 = new InternalStructs.executeJson_args();
-        await tmp102.ReadAsync(iprot, cancellationToken);
+        var tmp115 = new InternalStructs.executeJson_args();
+        await tmp115.ReadAsync(iprot, cancellationToken);
         await iprot.ReadMessageEndAsync(cancellationToken);
-        var tmp103 = new InternalStructs.executeJson_result();
+        var tmp116 = new InternalStructs.executeJson_result();
         try
         {
-          tmp103.Success = await _iAsync.executeJson(tmp102.SessionId, tmp102.Stmt, cancellationToken);
+          tmp116.Success = await _iAsync.executeJson(tmp115.SessionId, tmp115.Stmt, cancellationToken);
           await oprot.WriteMessageBeginAsync(new TMessage("executeJson", TMessageType.Reply, seqid), cancellationToken); 
-          await tmp103.WriteAsync(oprot, cancellationToken);
+          await tmp116.WriteAsync(oprot, cancellationToken);
         }
         catch (TTransportException)
         {
           throw;
         }
-        catch (Exception tmp104)
+        catch (Exception tmp117)
         {
-          var tmp105 = $"Error occurred in {GetType().FullName}: {tmp104.Message}";
+          var tmp118 = $"Error occurred in {GetType().FullName}: {tmp117.Message}";
           if(_logger != null)
-            _logger.LogError(tmp104, tmp105);
+            _logger.LogError(tmp117, tmp118);
           else
-            Console.Error.WriteLine(tmp105);
-          var tmp106 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
+            Console.Error.WriteLine(tmp118);
+          var tmp119 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
           await oprot.WriteMessageBeginAsync(new TMessage("executeJson", TMessageType.Exception, seqid), cancellationToken);
-          await tmp106.WriteAsync(oprot, cancellationToken);
+          await tmp119.WriteAsync(oprot, cancellationToken);
+        }
+        await oprot.WriteMessageEndAsync(cancellationToken);
+        await oprot.Transport.FlushAsync(cancellationToken);
+      }
+
+      public async global::System.Threading.Tasks.Task executeJsonWithParameter_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot, CancellationToken cancellationToken)
+      {
+        var tmp120 = new InternalStructs.executeJsonWithParameter_args();
+        await tmp120.ReadAsync(iprot, cancellationToken);
+        await iprot.ReadMessageEndAsync(cancellationToken);
+        var tmp121 = new InternalStructs.executeJsonWithParameter_result();
+        try
+        {
+          tmp121.Success = await _iAsync.executeJsonWithParameter(tmp120.SessionId, tmp120.Stmt, tmp120.ParameterMap, cancellationToken);
+          await oprot.WriteMessageBeginAsync(new TMessage("executeJsonWithParameter", TMessageType.Reply, seqid), cancellationToken); 
+          await tmp121.WriteAsync(oprot, cancellationToken);
+        }
+        catch (TTransportException)
+        {
+          throw;
+        }
+        catch (Exception tmp122)
+        {
+          var tmp123 = $"Error occurred in {GetType().FullName}: {tmp122.Message}";
+          if(_logger != null)
+            _logger.LogError(tmp122, tmp123);
+          else
+            Console.Error.WriteLine(tmp123);
+          var tmp124 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
+          await oprot.WriteMessageBeginAsync(new TMessage("executeJsonWithParameter", TMessageType.Exception, seqid), cancellationToken);
+          await tmp124.WriteAsync(oprot, cancellationToken);
         }
         await oprot.WriteMessageEndAsync(cancellationToken);
         await oprot.Transport.FlushAsync(cancellationToken);
@@ -414,30 +566,30 @@ namespace Nebula.Graph
 
       public async global::System.Threading.Tasks.Task verifyClientVersion_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot, CancellationToken cancellationToken)
       {
-        var tmp107 = new InternalStructs.verifyClientVersion_args();
-        await tmp107.ReadAsync(iprot, cancellationToken);
+        var tmp125 = new InternalStructs.verifyClientVersion_args();
+        await tmp125.ReadAsync(iprot, cancellationToken);
         await iprot.ReadMessageEndAsync(cancellationToken);
-        var tmp108 = new InternalStructs.verifyClientVersion_result();
+        var tmp126 = new InternalStructs.verifyClientVersion_result();
         try
         {
-          tmp108.Success = await _iAsync.verifyClientVersion(tmp107.Req, cancellationToken);
+          tmp126.Success = await _iAsync.verifyClientVersion(tmp125.Req, cancellationToken);
           await oprot.WriteMessageBeginAsync(new TMessage("verifyClientVersion", TMessageType.Reply, seqid), cancellationToken); 
-          await tmp108.WriteAsync(oprot, cancellationToken);
+          await tmp126.WriteAsync(oprot, cancellationToken);
         }
         catch (TTransportException)
         {
           throw;
         }
-        catch (Exception tmp109)
+        catch (Exception tmp127)
         {
-          var tmp110 = $"Error occurred in {GetType().FullName}: {tmp109.Message}";
+          var tmp128 = $"Error occurred in {GetType().FullName}: {tmp127.Message}";
           if(_logger != null)
-            _logger.LogError(tmp109, tmp110);
+            _logger.LogError(tmp127, tmp128);
           else
-            Console.Error.WriteLine(tmp110);
-          var tmp111 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
+            Console.Error.WriteLine(tmp128);
+          var tmp129 = new TApplicationException(TApplicationException.ExceptionType.InternalError," Internal error.");
           await oprot.WriteMessageBeginAsync(new TMessage("verifyClientVersion", TMessageType.Exception, seqid), cancellationToken);
-          await tmp111.WriteAsync(oprot, cancellationToken);
+          await tmp129.WriteAsync(oprot, cancellationToken);
         }
         await oprot.WriteMessageEndAsync(cancellationToken);
         await oprot.Transport.FlushAsync(cancellationToken);
@@ -493,18 +645,18 @@ namespace Nebula.Graph
 
         public authenticate_args DeepCopy()
         {
-          var tmp112 = new authenticate_args();
+          var tmp130 = new authenticate_args();
           if((Username != null) && __isset.username)
           {
-            tmp112.Username = this.Username.ToArray();
+            tmp130.Username = this.Username.ToArray();
           }
-          tmp112.__isset.username = this.__isset.username;
+          tmp130.__isset.username = this.__isset.username;
           if((Password != null) && __isset.password)
           {
-            tmp112.Password = this.Password.ToArray();
+            tmp130.Password = this.Password.ToArray();
           }
-          tmp112.__isset.password = this.__isset.password;
-          return tmp112;
+          tmp130.__isset.password = this.__isset.password;
+          return tmp130;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -565,24 +717,24 @@ namespace Nebula.Graph
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp113 = new TStruct("authenticate_args");
-            await oprot.WriteStructBeginAsync(tmp113, cancellationToken);
-            var tmp114 = new TField();
+            var tmp131 = new TStruct("authenticate_args");
+            await oprot.WriteStructBeginAsync(tmp131, cancellationToken);
+            var tmp132 = new TField();
             if((Username != null) && __isset.username)
             {
-              tmp114.Name = "username";
-              tmp114.Type = TType.String;
-              tmp114.ID = 1;
-              await oprot.WriteFieldBeginAsync(tmp114, cancellationToken);
+              tmp132.Name = "username";
+              tmp132.Type = TType.String;
+              tmp132.ID = 1;
+              await oprot.WriteFieldBeginAsync(tmp132, cancellationToken);
               await oprot.WriteBinaryAsync(Username, cancellationToken);
               await oprot.WriteFieldEndAsync(cancellationToken);
             }
             if((Password != null) && __isset.password)
             {
-              tmp114.Name = "password";
-              tmp114.Type = TType.String;
-              tmp114.ID = 2;
-              await oprot.WriteFieldBeginAsync(tmp114, cancellationToken);
+              tmp132.Name = "password";
+              tmp132.Type = TType.String;
+              tmp132.ID = 2;
+              await oprot.WriteFieldBeginAsync(tmp132, cancellationToken);
               await oprot.WriteBinaryAsync(Password, cancellationToken);
               await oprot.WriteFieldEndAsync(cancellationToken);
             }
@@ -620,22 +772,22 @@ namespace Nebula.Graph
 
         public override string ToString()
         {
-          var tmp115 = new StringBuilder("authenticate_args(");
-          int tmp116 = 0;
+          var tmp133 = new StringBuilder("authenticate_args(");
+          int tmp134 = 0;
           if((Username != null) && __isset.username)
           {
-            if(0 < tmp116++) { tmp115.Append(", "); }
-            tmp115.Append("Username: ");
-            Username.ToString(tmp115);
+            if(0 < tmp134++) { tmp133.Append(", "); }
+            tmp133.Append("Username: ");
+            Username.ToString(tmp133);
           }
           if((Password != null) && __isset.password)
           {
-            if(0 < tmp116++) { tmp115.Append(", "); }
-            tmp115.Append("Password: ");
-            Password.ToString(tmp115);
+            if(0 < tmp134++) { tmp133.Append(", "); }
+            tmp133.Append("Password: ");
+            Password.ToString(tmp133);
           }
-          tmp115.Append(')');
-          return tmp115.ToString();
+          tmp133.Append(')');
+          return tmp133.ToString();
         }
       }
 
@@ -670,13 +822,13 @@ namespace Nebula.Graph
 
         public authenticate_result DeepCopy()
         {
-          var tmp117 = new authenticate_result();
+          var tmp135 = new authenticate_result();
           if((Success != null) && __isset.success)
           {
-            tmp117.Success = (global::Nebula.Graph.AuthResponse)this.Success.DeepCopy();
+            tmp135.Success = (global::Nebula.Graph.AuthResponse)this.Success.DeepCopy();
           }
-          tmp117.__isset.success = this.__isset.success;
-          return tmp117;
+          tmp135.__isset.success = this.__isset.success;
+          return tmp135;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -728,18 +880,18 @@ namespace Nebula.Graph
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp118 = new TStruct("authenticate_result");
-            await oprot.WriteStructBeginAsync(tmp118, cancellationToken);
-            var tmp119 = new TField();
+            var tmp136 = new TStruct("authenticate_result");
+            await oprot.WriteStructBeginAsync(tmp136, cancellationToken);
+            var tmp137 = new TField();
 
             if(this.__isset.success)
             {
               if (Success != null)
               {
-                tmp119.Name = "Success";
-                tmp119.Type = TType.Struct;
-                tmp119.ID = 0;
-                await oprot.WriteFieldBeginAsync(tmp119, cancellationToken);
+                tmp137.Name = "Success";
+                tmp137.Type = TType.Struct;
+                tmp137.ID = 0;
+                await oprot.WriteFieldBeginAsync(tmp137, cancellationToken);
                 await Success.WriteAsync(oprot, cancellationToken);
                 await oprot.WriteFieldEndAsync(cancellationToken);
               }
@@ -773,16 +925,16 @@ namespace Nebula.Graph
 
         public override string ToString()
         {
-          var tmp120 = new StringBuilder("authenticate_result(");
-          int tmp121 = 0;
+          var tmp138 = new StringBuilder("authenticate_result(");
+          int tmp139 = 0;
           if((Success != null) && __isset.success)
           {
-            if(0 < tmp121++) { tmp120.Append(", "); }
-            tmp120.Append("Success: ");
-            Success.ToString(tmp120);
+            if(0 < tmp139++) { tmp138.Append(", "); }
+            tmp138.Append("Success: ");
+            Success.ToString(tmp138);
           }
-          tmp120.Append(')');
-          return tmp120.ToString();
+          tmp138.Append(')');
+          return tmp138.ToString();
         }
       }
 
@@ -817,13 +969,13 @@ namespace Nebula.Graph
 
         public signout_args DeepCopy()
         {
-          var tmp122 = new signout_args();
+          var tmp140 = new signout_args();
           if(__isset.sessionId)
           {
-            tmp122.SessionId = this.SessionId;
+            tmp140.SessionId = this.SessionId;
           }
-          tmp122.__isset.sessionId = this.__isset.sessionId;
-          return tmp122;
+          tmp140.__isset.sessionId = this.__isset.sessionId;
+          return tmp140;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -874,15 +1026,15 @@ namespace Nebula.Graph
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp123 = new TStruct("signout_args");
-            await oprot.WriteStructBeginAsync(tmp123, cancellationToken);
-            var tmp124 = new TField();
+            var tmp141 = new TStruct("signout_args");
+            await oprot.WriteStructBeginAsync(tmp141, cancellationToken);
+            var tmp142 = new TField();
             if(__isset.sessionId)
             {
-              tmp124.Name = "sessionId";
-              tmp124.Type = TType.I64;
-              tmp124.ID = 1;
-              await oprot.WriteFieldBeginAsync(tmp124, cancellationToken);
+              tmp142.Name = "sessionId";
+              tmp142.Type = TType.I64;
+              tmp142.ID = 1;
+              await oprot.WriteFieldBeginAsync(tmp142, cancellationToken);
               await oprot.WriteI64Async(SessionId, cancellationToken);
               await oprot.WriteFieldEndAsync(cancellationToken);
             }
@@ -915,16 +1067,16 @@ namespace Nebula.Graph
 
         public override string ToString()
         {
-          var tmp125 = new StringBuilder("signout_args(");
-          int tmp126 = 0;
+          var tmp143 = new StringBuilder("signout_args(");
+          int tmp144 = 0;
           if(__isset.sessionId)
           {
-            if(0 < tmp126++) { tmp125.Append(", "); }
-            tmp125.Append("SessionId: ");
-            SessionId.ToString(tmp125);
+            if(0 < tmp144++) { tmp143.Append(", "); }
+            tmp143.Append("SessionId: ");
+            SessionId.ToString(tmp143);
           }
-          tmp125.Append(')');
-          return tmp125.ToString();
+          tmp143.Append(')');
+          return tmp143.ToString();
         }
       }
 
@@ -974,18 +1126,18 @@ namespace Nebula.Graph
 
         public execute_args DeepCopy()
         {
-          var tmp127 = new execute_args();
+          var tmp145 = new execute_args();
           if(__isset.sessionId)
           {
-            tmp127.SessionId = this.SessionId;
+            tmp145.SessionId = this.SessionId;
           }
-          tmp127.__isset.sessionId = this.__isset.sessionId;
+          tmp145.__isset.sessionId = this.__isset.sessionId;
           if((Stmt != null) && __isset.stmt)
           {
-            tmp127.Stmt = this.Stmt.ToArray();
+            tmp145.Stmt = this.Stmt.ToArray();
           }
-          tmp127.__isset.stmt = this.__isset.stmt;
-          return tmp127;
+          tmp145.__isset.stmt = this.__isset.stmt;
+          return tmp145;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -1046,24 +1198,24 @@ namespace Nebula.Graph
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp128 = new TStruct("execute_args");
-            await oprot.WriteStructBeginAsync(tmp128, cancellationToken);
-            var tmp129 = new TField();
+            var tmp146 = new TStruct("execute_args");
+            await oprot.WriteStructBeginAsync(tmp146, cancellationToken);
+            var tmp147 = new TField();
             if(__isset.sessionId)
             {
-              tmp129.Name = "sessionId";
-              tmp129.Type = TType.I64;
-              tmp129.ID = 1;
-              await oprot.WriteFieldBeginAsync(tmp129, cancellationToken);
+              tmp147.Name = "sessionId";
+              tmp147.Type = TType.I64;
+              tmp147.ID = 1;
+              await oprot.WriteFieldBeginAsync(tmp147, cancellationToken);
               await oprot.WriteI64Async(SessionId, cancellationToken);
               await oprot.WriteFieldEndAsync(cancellationToken);
             }
             if((Stmt != null) && __isset.stmt)
             {
-              tmp129.Name = "stmt";
-              tmp129.Type = TType.String;
-              tmp129.ID = 2;
-              await oprot.WriteFieldBeginAsync(tmp129, cancellationToken);
+              tmp147.Name = "stmt";
+              tmp147.Type = TType.String;
+              tmp147.ID = 2;
+              await oprot.WriteFieldBeginAsync(tmp147, cancellationToken);
               await oprot.WriteBinaryAsync(Stmt, cancellationToken);
               await oprot.WriteFieldEndAsync(cancellationToken);
             }
@@ -1101,22 +1253,22 @@ namespace Nebula.Graph
 
         public override string ToString()
         {
-          var tmp130 = new StringBuilder("execute_args(");
-          int tmp131 = 0;
+          var tmp148 = new StringBuilder("execute_args(");
+          int tmp149 = 0;
           if(__isset.sessionId)
           {
-            if(0 < tmp131++) { tmp130.Append(", "); }
-            tmp130.Append("SessionId: ");
-            SessionId.ToString(tmp130);
+            if(0 < tmp149++) { tmp148.Append(", "); }
+            tmp148.Append("SessionId: ");
+            SessionId.ToString(tmp148);
           }
           if((Stmt != null) && __isset.stmt)
           {
-            if(0 < tmp131++) { tmp130.Append(", "); }
-            tmp130.Append("Stmt: ");
-            Stmt.ToString(tmp130);
+            if(0 < tmp149++) { tmp148.Append(", "); }
+            tmp148.Append("Stmt: ");
+            Stmt.ToString(tmp148);
           }
-          tmp130.Append(')');
-          return tmp130.ToString();
+          tmp148.Append(')');
+          return tmp148.ToString();
         }
       }
 
@@ -1151,13 +1303,13 @@ namespace Nebula.Graph
 
         public execute_result DeepCopy()
         {
-          var tmp132 = new execute_result();
+          var tmp150 = new execute_result();
           if((Success != null) && __isset.success)
           {
-            tmp132.Success = (global::Nebula.Graph.ExecutionResponse)this.Success.DeepCopy();
+            tmp150.Success = (global::Nebula.Graph.ExecutionResponse)this.Success.DeepCopy();
           }
-          tmp132.__isset.success = this.__isset.success;
-          return tmp132;
+          tmp150.__isset.success = this.__isset.success;
+          return tmp150;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -1209,18 +1361,18 @@ namespace Nebula.Graph
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp133 = new TStruct("execute_result");
-            await oprot.WriteStructBeginAsync(tmp133, cancellationToken);
-            var tmp134 = new TField();
+            var tmp151 = new TStruct("execute_result");
+            await oprot.WriteStructBeginAsync(tmp151, cancellationToken);
+            var tmp152 = new TField();
 
             if(this.__isset.success)
             {
               if (Success != null)
               {
-                tmp134.Name = "Success";
-                tmp134.Type = TType.Struct;
-                tmp134.ID = 0;
-                await oprot.WriteFieldBeginAsync(tmp134, cancellationToken);
+                tmp152.Name = "Success";
+                tmp152.Type = TType.Struct;
+                tmp152.ID = 0;
+                await oprot.WriteFieldBeginAsync(tmp152, cancellationToken);
                 await Success.WriteAsync(oprot, cancellationToken);
                 await oprot.WriteFieldEndAsync(cancellationToken);
               }
@@ -1254,16 +1406,426 @@ namespace Nebula.Graph
 
         public override string ToString()
         {
-          var tmp135 = new StringBuilder("execute_result(");
-          int tmp136 = 0;
+          var tmp153 = new StringBuilder("execute_result(");
+          int tmp154 = 0;
           if((Success != null) && __isset.success)
           {
-            if(0 < tmp136++) { tmp135.Append(", "); }
-            tmp135.Append("Success: ");
-            Success.ToString(tmp135);
+            if(0 < tmp154++) { tmp153.Append(", "); }
+            tmp153.Append("Success: ");
+            Success.ToString(tmp153);
           }
-          tmp135.Append(')');
-          return tmp135.ToString();
+          tmp153.Append(')');
+          return tmp153.ToString();
+        }
+      }
+
+
+      public partial class executeWithParameter_args : TBase
+      {
+        private long _sessionId;
+        private byte[] _stmt;
+        private Dictionary<byte[], global::Nebula.Common.@Value> _parameterMap;
+
+        public long SessionId
+        {
+          get
+          {
+            return _sessionId;
+          }
+          set
+          {
+            __isset.sessionId = true;
+            this._sessionId = value;
+          }
+        }
+
+        public byte[] Stmt
+        {
+          get
+          {
+            return _stmt;
+          }
+          set
+          {
+            __isset.stmt = true;
+            this._stmt = value;
+          }
+        }
+
+        public Dictionary<byte[], global::Nebula.Common.@Value> ParameterMap
+        {
+          get
+          {
+            return _parameterMap;
+          }
+          set
+          {
+            __isset.parameterMap = true;
+            this._parameterMap = value;
+          }
+        }
+
+
+        public Isset __isset;
+        public struct Isset
+        {
+          public bool sessionId;
+          public bool stmt;
+          public bool parameterMap;
+        }
+
+        public executeWithParameter_args()
+        {
+        }
+
+        public executeWithParameter_args DeepCopy()
+        {
+          var tmp155 = new executeWithParameter_args();
+          if(__isset.sessionId)
+          {
+            tmp155.SessionId = this.SessionId;
+          }
+          tmp155.__isset.sessionId = this.__isset.sessionId;
+          if((Stmt != null) && __isset.stmt)
+          {
+            tmp155.Stmt = this.Stmt.ToArray();
+          }
+          tmp155.__isset.stmt = this.__isset.stmt;
+          if((ParameterMap != null) && __isset.parameterMap)
+          {
+            tmp155.ParameterMap = this.ParameterMap.DeepCopy();
+          }
+          tmp155.__isset.parameterMap = this.__isset.parameterMap;
+          return tmp155;
+        }
+
+        public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
+        {
+          iprot.IncrementRecursionDepth();
+          try
+          {
+            TField field;
+            await iprot.ReadStructBeginAsync(cancellationToken);
+            while (true)
+            {
+              field = await iprot.ReadFieldBeginAsync(cancellationToken);
+              if (field.Type == TType.Stop)
+              {
+                break;
+              }
+
+              switch (field.ID)
+              {
+                case 1:
+                  if (field.Type == TType.I64)
+                  {
+                    SessionId = await iprot.ReadI64Async(cancellationToken);
+                  }
+                  else
+                  {
+                    await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  }
+                  break;
+                case 2:
+                  if (field.Type == TType.String)
+                  {
+                    Stmt = await iprot.ReadBinaryAsync(cancellationToken);
+                  }
+                  else
+                  {
+                    await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  }
+                  break;
+                case 3:
+                  if (field.Type == TType.Map)
+                  {
+                    {
+                      TMap _map156 = await iprot.ReadMapBeginAsync(cancellationToken);
+                      ParameterMap = new Dictionary<byte[], global::Nebula.Common.@Value>(_map156.Count);
+                      for(int _i157 = 0; _i157 < _map156.Count; ++_i157)
+                      {
+                        byte[] _key158;
+                        global::Nebula.Common.@Value _val159;
+                        _key158 = await iprot.ReadBinaryAsync(cancellationToken);
+                        _val159 = new global::Nebula.Common.@Value();
+                        await _val159.ReadAsync(iprot, cancellationToken);
+                        ParameterMap[_key158] = _val159;
+                      }
+                      await iprot.ReadMapEndAsync(cancellationToken);
+                    }
+                  }
+                  else
+                  {
+                    await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  }
+                  break;
+                default: 
+                  await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  break;
+              }
+
+              await iprot.ReadFieldEndAsync(cancellationToken);
+            }
+
+            await iprot.ReadStructEndAsync(cancellationToken);
+          }
+          finally
+          {
+            iprot.DecrementRecursionDepth();
+          }
+        }
+
+        public async global::System.Threading.Tasks.Task WriteAsync(TProtocol oprot, CancellationToken cancellationToken)
+        {
+          oprot.IncrementRecursionDepth();
+          try
+          {
+            var tmp160 = new TStruct("executeWithParameter_args");
+            await oprot.WriteStructBeginAsync(tmp160, cancellationToken);
+            var tmp161 = new TField();
+            if(__isset.sessionId)
+            {
+              tmp161.Name = "sessionId";
+              tmp161.Type = TType.I64;
+              tmp161.ID = 1;
+              await oprot.WriteFieldBeginAsync(tmp161, cancellationToken);
+              await oprot.WriteI64Async(SessionId, cancellationToken);
+              await oprot.WriteFieldEndAsync(cancellationToken);
+            }
+            if((Stmt != null) && __isset.stmt)
+            {
+              tmp161.Name = "stmt";
+              tmp161.Type = TType.String;
+              tmp161.ID = 2;
+              await oprot.WriteFieldBeginAsync(tmp161, cancellationToken);
+              await oprot.WriteBinaryAsync(Stmt, cancellationToken);
+              await oprot.WriteFieldEndAsync(cancellationToken);
+            }
+            if((ParameterMap != null) && __isset.parameterMap)
+            {
+              tmp161.Name = "parameterMap";
+              tmp161.Type = TType.Map;
+              tmp161.ID = 3;
+              await oprot.WriteFieldBeginAsync(tmp161, cancellationToken);
+              {
+                await oprot.WriteMapBeginAsync(new TMap(TType.String, TType.Struct, ParameterMap.Count), cancellationToken);
+                foreach (byte[] _iter162 in ParameterMap.Keys)
+                {
+                  await oprot.WriteBinaryAsync(_iter162, cancellationToken);
+                  await ParameterMap[_iter162].WriteAsync(oprot, cancellationToken);
+                }
+                await oprot.WriteMapEndAsync(cancellationToken);
+              }
+              await oprot.WriteFieldEndAsync(cancellationToken);
+            }
+            await oprot.WriteFieldStopAsync(cancellationToken);
+            await oprot.WriteStructEndAsync(cancellationToken);
+          }
+          finally
+          {
+            oprot.DecrementRecursionDepth();
+          }
+        }
+
+        public override bool Equals(object that)
+        {
+          if (!(that is executeWithParameter_args other)) return false;
+          if (ReferenceEquals(this, other)) return true;
+          return ((__isset.sessionId == other.__isset.sessionId) && ((!__isset.sessionId) || (System.Object.Equals(SessionId, other.SessionId))))
+            && ((__isset.stmt == other.__isset.stmt) && ((!__isset.stmt) || (TCollections.Equals(Stmt, other.Stmt))))
+            && ((__isset.parameterMap == other.__isset.parameterMap) && ((!__isset.parameterMap) || (TCollections.Equals(ParameterMap, other.ParameterMap))));
+        }
+
+        public override int GetHashCode() {
+          int hashcode = 157;
+          unchecked {
+            if(__isset.sessionId)
+            {
+              hashcode = (hashcode * 397) + SessionId.GetHashCode();
+            }
+            if((Stmt != null) && __isset.stmt)
+            {
+              hashcode = (hashcode * 397) + Stmt.GetHashCode();
+            }
+            if((ParameterMap != null) && __isset.parameterMap)
+            {
+              hashcode = (hashcode * 397) + TCollections.GetHashCode(ParameterMap);
+            }
+          }
+          return hashcode;
+        }
+
+        public override string ToString()
+        {
+          var tmp163 = new StringBuilder("executeWithParameter_args(");
+          int tmp164 = 0;
+          if(__isset.sessionId)
+          {
+            if(0 < tmp164++) { tmp163.Append(", "); }
+            tmp163.Append("SessionId: ");
+            SessionId.ToString(tmp163);
+          }
+          if((Stmt != null) && __isset.stmt)
+          {
+            if(0 < tmp164++) { tmp163.Append(", "); }
+            tmp163.Append("Stmt: ");
+            Stmt.ToString(tmp163);
+          }
+          if((ParameterMap != null) && __isset.parameterMap)
+          {
+            if(0 < tmp164++) { tmp163.Append(", "); }
+            tmp163.Append("ParameterMap: ");
+            ParameterMap.ToString(tmp163);
+          }
+          tmp163.Append(')');
+          return tmp163.ToString();
+        }
+      }
+
+
+      public partial class executeWithParameter_result : TBase
+      {
+        private global::Nebula.Graph.ExecutionResponse _success;
+
+        public global::Nebula.Graph.ExecutionResponse Success
+        {
+          get
+          {
+            return _success;
+          }
+          set
+          {
+            __isset.success = true;
+            this._success = value;
+          }
+        }
+
+
+        public Isset __isset;
+        public struct Isset
+        {
+          public bool success;
+        }
+
+        public executeWithParameter_result()
+        {
+        }
+
+        public executeWithParameter_result DeepCopy()
+        {
+          var tmp165 = new executeWithParameter_result();
+          if((Success != null) && __isset.success)
+          {
+            tmp165.Success = (global::Nebula.Graph.ExecutionResponse)this.Success.DeepCopy();
+          }
+          tmp165.__isset.success = this.__isset.success;
+          return tmp165;
+        }
+
+        public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
+        {
+          iprot.IncrementRecursionDepth();
+          try
+          {
+            TField field;
+            await iprot.ReadStructBeginAsync(cancellationToken);
+            while (true)
+            {
+              field = await iprot.ReadFieldBeginAsync(cancellationToken);
+              if (field.Type == TType.Stop)
+              {
+                break;
+              }
+
+              switch (field.ID)
+              {
+                case 0:
+                  if (field.Type == TType.Struct)
+                  {
+                    Success = new global::Nebula.Graph.ExecutionResponse();
+                    await Success.ReadAsync(iprot, cancellationToken);
+                  }
+                  else
+                  {
+                    await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  }
+                  break;
+                default: 
+                  await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  break;
+              }
+
+              await iprot.ReadFieldEndAsync(cancellationToken);
+            }
+
+            await iprot.ReadStructEndAsync(cancellationToken);
+          }
+          finally
+          {
+            iprot.DecrementRecursionDepth();
+          }
+        }
+
+        public async global::System.Threading.Tasks.Task WriteAsync(TProtocol oprot, CancellationToken cancellationToken)
+        {
+          oprot.IncrementRecursionDepth();
+          try
+          {
+            var tmp166 = new TStruct("executeWithParameter_result");
+            await oprot.WriteStructBeginAsync(tmp166, cancellationToken);
+            var tmp167 = new TField();
+
+            if(this.__isset.success)
+            {
+              if (Success != null)
+              {
+                tmp167.Name = "Success";
+                tmp167.Type = TType.Struct;
+                tmp167.ID = 0;
+                await oprot.WriteFieldBeginAsync(tmp167, cancellationToken);
+                await Success.WriteAsync(oprot, cancellationToken);
+                await oprot.WriteFieldEndAsync(cancellationToken);
+              }
+            }
+            await oprot.WriteFieldStopAsync(cancellationToken);
+            await oprot.WriteStructEndAsync(cancellationToken);
+          }
+          finally
+          {
+            oprot.DecrementRecursionDepth();
+          }
+        }
+
+        public override bool Equals(object that)
+        {
+          if (!(that is executeWithParameter_result other)) return false;
+          if (ReferenceEquals(this, other)) return true;
+          return ((__isset.success == other.__isset.success) && ((!__isset.success) || (System.Object.Equals(Success, other.Success))));
+        }
+
+        public override int GetHashCode() {
+          int hashcode = 157;
+          unchecked {
+            if((Success != null) && __isset.success)
+            {
+              hashcode = (hashcode * 397) + Success.GetHashCode();
+            }
+          }
+          return hashcode;
+        }
+
+        public override string ToString()
+        {
+          var tmp168 = new StringBuilder("executeWithParameter_result(");
+          int tmp169 = 0;
+          if((Success != null) && __isset.success)
+          {
+            if(0 < tmp169++) { tmp168.Append(", "); }
+            tmp168.Append("Success: ");
+            Success.ToString(tmp168);
+          }
+          tmp168.Append(')');
+          return tmp168.ToString();
         }
       }
 
@@ -1313,18 +1875,18 @@ namespace Nebula.Graph
 
         public executeJson_args DeepCopy()
         {
-          var tmp137 = new executeJson_args();
+          var tmp170 = new executeJson_args();
           if(__isset.sessionId)
           {
-            tmp137.SessionId = this.SessionId;
+            tmp170.SessionId = this.SessionId;
           }
-          tmp137.__isset.sessionId = this.__isset.sessionId;
+          tmp170.__isset.sessionId = this.__isset.sessionId;
           if((Stmt != null) && __isset.stmt)
           {
-            tmp137.Stmt = this.Stmt.ToArray();
+            tmp170.Stmt = this.Stmt.ToArray();
           }
-          tmp137.__isset.stmt = this.__isset.stmt;
-          return tmp137;
+          tmp170.__isset.stmt = this.__isset.stmt;
+          return tmp170;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -1385,24 +1947,24 @@ namespace Nebula.Graph
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp138 = new TStruct("executeJson_args");
-            await oprot.WriteStructBeginAsync(tmp138, cancellationToken);
-            var tmp139 = new TField();
+            var tmp171 = new TStruct("executeJson_args");
+            await oprot.WriteStructBeginAsync(tmp171, cancellationToken);
+            var tmp172 = new TField();
             if(__isset.sessionId)
             {
-              tmp139.Name = "sessionId";
-              tmp139.Type = TType.I64;
-              tmp139.ID = 1;
-              await oprot.WriteFieldBeginAsync(tmp139, cancellationToken);
+              tmp172.Name = "sessionId";
+              tmp172.Type = TType.I64;
+              tmp172.ID = 1;
+              await oprot.WriteFieldBeginAsync(tmp172, cancellationToken);
               await oprot.WriteI64Async(SessionId, cancellationToken);
               await oprot.WriteFieldEndAsync(cancellationToken);
             }
             if((Stmt != null) && __isset.stmt)
             {
-              tmp139.Name = "stmt";
-              tmp139.Type = TType.String;
-              tmp139.ID = 2;
-              await oprot.WriteFieldBeginAsync(tmp139, cancellationToken);
+              tmp172.Name = "stmt";
+              tmp172.Type = TType.String;
+              tmp172.ID = 2;
+              await oprot.WriteFieldBeginAsync(tmp172, cancellationToken);
               await oprot.WriteBinaryAsync(Stmt, cancellationToken);
               await oprot.WriteFieldEndAsync(cancellationToken);
             }
@@ -1440,22 +2002,22 @@ namespace Nebula.Graph
 
         public override string ToString()
         {
-          var tmp140 = new StringBuilder("executeJson_args(");
-          int tmp141 = 0;
+          var tmp173 = new StringBuilder("executeJson_args(");
+          int tmp174 = 0;
           if(__isset.sessionId)
           {
-            if(0 < tmp141++) { tmp140.Append(", "); }
-            tmp140.Append("SessionId: ");
-            SessionId.ToString(tmp140);
+            if(0 < tmp174++) { tmp173.Append(", "); }
+            tmp173.Append("SessionId: ");
+            SessionId.ToString(tmp173);
           }
           if((Stmt != null) && __isset.stmt)
           {
-            if(0 < tmp141++) { tmp140.Append(", "); }
-            tmp140.Append("Stmt: ");
-            Stmt.ToString(tmp140);
+            if(0 < tmp174++) { tmp173.Append(", "); }
+            tmp173.Append("Stmt: ");
+            Stmt.ToString(tmp173);
           }
-          tmp140.Append(')');
-          return tmp140.ToString();
+          tmp173.Append(')');
+          return tmp173.ToString();
         }
       }
 
@@ -1490,13 +2052,13 @@ namespace Nebula.Graph
 
         public executeJson_result DeepCopy()
         {
-          var tmp142 = new executeJson_result();
+          var tmp175 = new executeJson_result();
           if((Success != null) && __isset.success)
           {
-            tmp142.Success = this.Success.ToArray();
+            tmp175.Success = this.Success.ToArray();
           }
-          tmp142.__isset.success = this.__isset.success;
-          return tmp142;
+          tmp175.__isset.success = this.__isset.success;
+          return tmp175;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -1547,18 +2109,18 @@ namespace Nebula.Graph
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp143 = new TStruct("executeJson_result");
-            await oprot.WriteStructBeginAsync(tmp143, cancellationToken);
-            var tmp144 = new TField();
+            var tmp176 = new TStruct("executeJson_result");
+            await oprot.WriteStructBeginAsync(tmp176, cancellationToken);
+            var tmp177 = new TField();
 
             if(this.__isset.success)
             {
               if (Success != null)
               {
-                tmp144.Name = "Success";
-                tmp144.Type = TType.String;
-                tmp144.ID = 0;
-                await oprot.WriteFieldBeginAsync(tmp144, cancellationToken);
+                tmp177.Name = "Success";
+                tmp177.Type = TType.String;
+                tmp177.ID = 0;
+                await oprot.WriteFieldBeginAsync(tmp177, cancellationToken);
                 await oprot.WriteBinaryAsync(Success, cancellationToken);
                 await oprot.WriteFieldEndAsync(cancellationToken);
               }
@@ -1592,16 +2154,425 @@ namespace Nebula.Graph
 
         public override string ToString()
         {
-          var tmp145 = new StringBuilder("executeJson_result(");
-          int tmp146 = 0;
+          var tmp178 = new StringBuilder("executeJson_result(");
+          int tmp179 = 0;
           if((Success != null) && __isset.success)
           {
-            if(0 < tmp146++) { tmp145.Append(", "); }
-            tmp145.Append("Success: ");
-            Success.ToString(tmp145);
+            if(0 < tmp179++) { tmp178.Append(", "); }
+            tmp178.Append("Success: ");
+            Success.ToString(tmp178);
           }
-          tmp145.Append(')');
-          return tmp145.ToString();
+          tmp178.Append(')');
+          return tmp178.ToString();
+        }
+      }
+
+
+      public partial class executeJsonWithParameter_args : TBase
+      {
+        private long _sessionId;
+        private byte[] _stmt;
+        private Dictionary<byte[], global::Nebula.Common.@Value> _parameterMap;
+
+        public long SessionId
+        {
+          get
+          {
+            return _sessionId;
+          }
+          set
+          {
+            __isset.sessionId = true;
+            this._sessionId = value;
+          }
+        }
+
+        public byte[] Stmt
+        {
+          get
+          {
+            return _stmt;
+          }
+          set
+          {
+            __isset.stmt = true;
+            this._stmt = value;
+          }
+        }
+
+        public Dictionary<byte[], global::Nebula.Common.@Value> ParameterMap
+        {
+          get
+          {
+            return _parameterMap;
+          }
+          set
+          {
+            __isset.parameterMap = true;
+            this._parameterMap = value;
+          }
+        }
+
+
+        public Isset __isset;
+        public struct Isset
+        {
+          public bool sessionId;
+          public bool stmt;
+          public bool parameterMap;
+        }
+
+        public executeJsonWithParameter_args()
+        {
+        }
+
+        public executeJsonWithParameter_args DeepCopy()
+        {
+          var tmp180 = new executeJsonWithParameter_args();
+          if(__isset.sessionId)
+          {
+            tmp180.SessionId = this.SessionId;
+          }
+          tmp180.__isset.sessionId = this.__isset.sessionId;
+          if((Stmt != null) && __isset.stmt)
+          {
+            tmp180.Stmt = this.Stmt.ToArray();
+          }
+          tmp180.__isset.stmt = this.__isset.stmt;
+          if((ParameterMap != null) && __isset.parameterMap)
+          {
+            tmp180.ParameterMap = this.ParameterMap.DeepCopy();
+          }
+          tmp180.__isset.parameterMap = this.__isset.parameterMap;
+          return tmp180;
+        }
+
+        public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
+        {
+          iprot.IncrementRecursionDepth();
+          try
+          {
+            TField field;
+            await iprot.ReadStructBeginAsync(cancellationToken);
+            while (true)
+            {
+              field = await iprot.ReadFieldBeginAsync(cancellationToken);
+              if (field.Type == TType.Stop)
+              {
+                break;
+              }
+
+              switch (field.ID)
+              {
+                case 1:
+                  if (field.Type == TType.I64)
+                  {
+                    SessionId = await iprot.ReadI64Async(cancellationToken);
+                  }
+                  else
+                  {
+                    await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  }
+                  break;
+                case 2:
+                  if (field.Type == TType.String)
+                  {
+                    Stmt = await iprot.ReadBinaryAsync(cancellationToken);
+                  }
+                  else
+                  {
+                    await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  }
+                  break;
+                case 3:
+                  if (field.Type == TType.Map)
+                  {
+                    {
+                      TMap _map181 = await iprot.ReadMapBeginAsync(cancellationToken);
+                      ParameterMap = new Dictionary<byte[], global::Nebula.Common.@Value>(_map181.Count);
+                      for(int _i182 = 0; _i182 < _map181.Count; ++_i182)
+                      {
+                        byte[] _key183;
+                        global::Nebula.Common.@Value _val184;
+                        _key183 = await iprot.ReadBinaryAsync(cancellationToken);
+                        _val184 = new global::Nebula.Common.@Value();
+                        await _val184.ReadAsync(iprot, cancellationToken);
+                        ParameterMap[_key183] = _val184;
+                      }
+                      await iprot.ReadMapEndAsync(cancellationToken);
+                    }
+                  }
+                  else
+                  {
+                    await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  }
+                  break;
+                default: 
+                  await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  break;
+              }
+
+              await iprot.ReadFieldEndAsync(cancellationToken);
+            }
+
+            await iprot.ReadStructEndAsync(cancellationToken);
+          }
+          finally
+          {
+            iprot.DecrementRecursionDepth();
+          }
+        }
+
+        public async global::System.Threading.Tasks.Task WriteAsync(TProtocol oprot, CancellationToken cancellationToken)
+        {
+          oprot.IncrementRecursionDepth();
+          try
+          {
+            var tmp185 = new TStruct("executeJsonWithParameter_args");
+            await oprot.WriteStructBeginAsync(tmp185, cancellationToken);
+            var tmp186 = new TField();
+            if(__isset.sessionId)
+            {
+              tmp186.Name = "sessionId";
+              tmp186.Type = TType.I64;
+              tmp186.ID = 1;
+              await oprot.WriteFieldBeginAsync(tmp186, cancellationToken);
+              await oprot.WriteI64Async(SessionId, cancellationToken);
+              await oprot.WriteFieldEndAsync(cancellationToken);
+            }
+            if((Stmt != null) && __isset.stmt)
+            {
+              tmp186.Name = "stmt";
+              tmp186.Type = TType.String;
+              tmp186.ID = 2;
+              await oprot.WriteFieldBeginAsync(tmp186, cancellationToken);
+              await oprot.WriteBinaryAsync(Stmt, cancellationToken);
+              await oprot.WriteFieldEndAsync(cancellationToken);
+            }
+            if((ParameterMap != null) && __isset.parameterMap)
+            {
+              tmp186.Name = "parameterMap";
+              tmp186.Type = TType.Map;
+              tmp186.ID = 3;
+              await oprot.WriteFieldBeginAsync(tmp186, cancellationToken);
+              {
+                await oprot.WriteMapBeginAsync(new TMap(TType.String, TType.Struct, ParameterMap.Count), cancellationToken);
+                foreach (byte[] _iter187 in ParameterMap.Keys)
+                {
+                  await oprot.WriteBinaryAsync(_iter187, cancellationToken);
+                  await ParameterMap[_iter187].WriteAsync(oprot, cancellationToken);
+                }
+                await oprot.WriteMapEndAsync(cancellationToken);
+              }
+              await oprot.WriteFieldEndAsync(cancellationToken);
+            }
+            await oprot.WriteFieldStopAsync(cancellationToken);
+            await oprot.WriteStructEndAsync(cancellationToken);
+          }
+          finally
+          {
+            oprot.DecrementRecursionDepth();
+          }
+        }
+
+        public override bool Equals(object that)
+        {
+          if (!(that is executeJsonWithParameter_args other)) return false;
+          if (ReferenceEquals(this, other)) return true;
+          return ((__isset.sessionId == other.__isset.sessionId) && ((!__isset.sessionId) || (System.Object.Equals(SessionId, other.SessionId))))
+            && ((__isset.stmt == other.__isset.stmt) && ((!__isset.stmt) || (TCollections.Equals(Stmt, other.Stmt))))
+            && ((__isset.parameterMap == other.__isset.parameterMap) && ((!__isset.parameterMap) || (TCollections.Equals(ParameterMap, other.ParameterMap))));
+        }
+
+        public override int GetHashCode() {
+          int hashcode = 157;
+          unchecked {
+            if(__isset.sessionId)
+            {
+              hashcode = (hashcode * 397) + SessionId.GetHashCode();
+            }
+            if((Stmt != null) && __isset.stmt)
+            {
+              hashcode = (hashcode * 397) + Stmt.GetHashCode();
+            }
+            if((ParameterMap != null) && __isset.parameterMap)
+            {
+              hashcode = (hashcode * 397) + TCollections.GetHashCode(ParameterMap);
+            }
+          }
+          return hashcode;
+        }
+
+        public override string ToString()
+        {
+          var tmp188 = new StringBuilder("executeJsonWithParameter_args(");
+          int tmp189 = 0;
+          if(__isset.sessionId)
+          {
+            if(0 < tmp189++) { tmp188.Append(", "); }
+            tmp188.Append("SessionId: ");
+            SessionId.ToString(tmp188);
+          }
+          if((Stmt != null) && __isset.stmt)
+          {
+            if(0 < tmp189++) { tmp188.Append(", "); }
+            tmp188.Append("Stmt: ");
+            Stmt.ToString(tmp188);
+          }
+          if((ParameterMap != null) && __isset.parameterMap)
+          {
+            if(0 < tmp189++) { tmp188.Append(", "); }
+            tmp188.Append("ParameterMap: ");
+            ParameterMap.ToString(tmp188);
+          }
+          tmp188.Append(')');
+          return tmp188.ToString();
+        }
+      }
+
+
+      public partial class executeJsonWithParameter_result : TBase
+      {
+        private byte[] _success;
+
+        public byte[] Success
+        {
+          get
+          {
+            return _success;
+          }
+          set
+          {
+            __isset.success = true;
+            this._success = value;
+          }
+        }
+
+
+        public Isset __isset;
+        public struct Isset
+        {
+          public bool success;
+        }
+
+        public executeJsonWithParameter_result()
+        {
+        }
+
+        public executeJsonWithParameter_result DeepCopy()
+        {
+          var tmp190 = new executeJsonWithParameter_result();
+          if((Success != null) && __isset.success)
+          {
+            tmp190.Success = this.Success.ToArray();
+          }
+          tmp190.__isset.success = this.__isset.success;
+          return tmp190;
+        }
+
+        public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
+        {
+          iprot.IncrementRecursionDepth();
+          try
+          {
+            TField field;
+            await iprot.ReadStructBeginAsync(cancellationToken);
+            while (true)
+            {
+              field = await iprot.ReadFieldBeginAsync(cancellationToken);
+              if (field.Type == TType.Stop)
+              {
+                break;
+              }
+
+              switch (field.ID)
+              {
+                case 0:
+                  if (field.Type == TType.String)
+                  {
+                    Success = await iprot.ReadBinaryAsync(cancellationToken);
+                  }
+                  else
+                  {
+                    await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  }
+                  break;
+                default: 
+                  await TProtocolUtil.SkipAsync(iprot, field.Type, cancellationToken);
+                  break;
+              }
+
+              await iprot.ReadFieldEndAsync(cancellationToken);
+            }
+
+            await iprot.ReadStructEndAsync(cancellationToken);
+          }
+          finally
+          {
+            iprot.DecrementRecursionDepth();
+          }
+        }
+
+        public async global::System.Threading.Tasks.Task WriteAsync(TProtocol oprot, CancellationToken cancellationToken)
+        {
+          oprot.IncrementRecursionDepth();
+          try
+          {
+            var tmp191 = new TStruct("executeJsonWithParameter_result");
+            await oprot.WriteStructBeginAsync(tmp191, cancellationToken);
+            var tmp192 = new TField();
+
+            if(this.__isset.success)
+            {
+              if (Success != null)
+              {
+                tmp192.Name = "Success";
+                tmp192.Type = TType.String;
+                tmp192.ID = 0;
+                await oprot.WriteFieldBeginAsync(tmp192, cancellationToken);
+                await oprot.WriteBinaryAsync(Success, cancellationToken);
+                await oprot.WriteFieldEndAsync(cancellationToken);
+              }
+            }
+            await oprot.WriteFieldStopAsync(cancellationToken);
+            await oprot.WriteStructEndAsync(cancellationToken);
+          }
+          finally
+          {
+            oprot.DecrementRecursionDepth();
+          }
+        }
+
+        public override bool Equals(object that)
+        {
+          if (!(that is executeJsonWithParameter_result other)) return false;
+          if (ReferenceEquals(this, other)) return true;
+          return ((__isset.success == other.__isset.success) && ((!__isset.success) || (TCollections.Equals(Success, other.Success))));
+        }
+
+        public override int GetHashCode() {
+          int hashcode = 157;
+          unchecked {
+            if((Success != null) && __isset.success)
+            {
+              hashcode = (hashcode * 397) + Success.GetHashCode();
+            }
+          }
+          return hashcode;
+        }
+
+        public override string ToString()
+        {
+          var tmp193 = new StringBuilder("executeJsonWithParameter_result(");
+          int tmp194 = 0;
+          if((Success != null) && __isset.success)
+          {
+            if(0 < tmp194++) { tmp193.Append(", "); }
+            tmp193.Append("Success: ");
+            Success.ToString(tmp193);
+          }
+          tmp193.Append(')');
+          return tmp193.ToString();
         }
       }
 
@@ -1636,13 +2607,13 @@ namespace Nebula.Graph
 
         public verifyClientVersion_args DeepCopy()
         {
-          var tmp147 = new verifyClientVersion_args();
+          var tmp195 = new verifyClientVersion_args();
           if((Req != null) && __isset.req)
           {
-            tmp147.Req = (global::Nebula.Graph.VerifyClientVersionReq)this.Req.DeepCopy();
+            tmp195.Req = (global::Nebula.Graph.VerifyClientVersionReq)this.Req.DeepCopy();
           }
-          tmp147.__isset.req = this.__isset.req;
-          return tmp147;
+          tmp195.__isset.req = this.__isset.req;
+          return tmp195;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -1694,15 +2665,15 @@ namespace Nebula.Graph
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp148 = new TStruct("verifyClientVersion_args");
-            await oprot.WriteStructBeginAsync(tmp148, cancellationToken);
-            var tmp149 = new TField();
+            var tmp196 = new TStruct("verifyClientVersion_args");
+            await oprot.WriteStructBeginAsync(tmp196, cancellationToken);
+            var tmp197 = new TField();
             if((Req != null) && __isset.req)
             {
-              tmp149.Name = "req";
-              tmp149.Type = TType.Struct;
-              tmp149.ID = 1;
-              await oprot.WriteFieldBeginAsync(tmp149, cancellationToken);
+              tmp197.Name = "req";
+              tmp197.Type = TType.Struct;
+              tmp197.ID = 1;
+              await oprot.WriteFieldBeginAsync(tmp197, cancellationToken);
               await Req.WriteAsync(oprot, cancellationToken);
               await oprot.WriteFieldEndAsync(cancellationToken);
             }
@@ -1735,16 +2706,16 @@ namespace Nebula.Graph
 
         public override string ToString()
         {
-          var tmp150 = new StringBuilder("verifyClientVersion_args(");
-          int tmp151 = 0;
+          var tmp198 = new StringBuilder("verifyClientVersion_args(");
+          int tmp199 = 0;
           if((Req != null) && __isset.req)
           {
-            if(0 < tmp151++) { tmp150.Append(", "); }
-            tmp150.Append("Req: ");
-            Req.ToString(tmp150);
+            if(0 < tmp199++) { tmp198.Append(", "); }
+            tmp198.Append("Req: ");
+            Req.ToString(tmp198);
           }
-          tmp150.Append(')');
-          return tmp150.ToString();
+          tmp198.Append(')');
+          return tmp198.ToString();
         }
       }
 
@@ -1779,13 +2750,13 @@ namespace Nebula.Graph
 
         public verifyClientVersion_result DeepCopy()
         {
-          var tmp152 = new verifyClientVersion_result();
+          var tmp200 = new verifyClientVersion_result();
           if((Success != null) && __isset.success)
           {
-            tmp152.Success = (global::Nebula.Graph.VerifyClientVersionResp)this.Success.DeepCopy();
+            tmp200.Success = (global::Nebula.Graph.VerifyClientVersionResp)this.Success.DeepCopy();
           }
-          tmp152.__isset.success = this.__isset.success;
-          return tmp152;
+          tmp200.__isset.success = this.__isset.success;
+          return tmp200;
         }
 
         public async global::System.Threading.Tasks.Task ReadAsync(TProtocol iprot, CancellationToken cancellationToken)
@@ -1837,18 +2808,18 @@ namespace Nebula.Graph
           oprot.IncrementRecursionDepth();
           try
           {
-            var tmp153 = new TStruct("verifyClientVersion_result");
-            await oprot.WriteStructBeginAsync(tmp153, cancellationToken);
-            var tmp154 = new TField();
+            var tmp201 = new TStruct("verifyClientVersion_result");
+            await oprot.WriteStructBeginAsync(tmp201, cancellationToken);
+            var tmp202 = new TField();
 
             if(this.__isset.success)
             {
               if (Success != null)
               {
-                tmp154.Name = "Success";
-                tmp154.Type = TType.Struct;
-                tmp154.ID = 0;
-                await oprot.WriteFieldBeginAsync(tmp154, cancellationToken);
+                tmp202.Name = "Success";
+                tmp202.Type = TType.Struct;
+                tmp202.ID = 0;
+                await oprot.WriteFieldBeginAsync(tmp202, cancellationToken);
                 await Success.WriteAsync(oprot, cancellationToken);
                 await oprot.WriteFieldEndAsync(cancellationToken);
               }
@@ -1882,16 +2853,16 @@ namespace Nebula.Graph
 
         public override string ToString()
         {
-          var tmp155 = new StringBuilder("verifyClientVersion_result(");
-          int tmp156 = 0;
+          var tmp203 = new StringBuilder("verifyClientVersion_result(");
+          int tmp204 = 0;
           if((Success != null) && __isset.success)
           {
-            if(0 < tmp156++) { tmp155.Append(", "); }
-            tmp155.Append("Success: ");
-            Success.ToString(tmp155);
+            if(0 < tmp204++) { tmp203.Append(", "); }
+            tmp203.Append("Success: ");
+            Success.ToString(tmp203);
           }
-          tmp155.Append(')');
-          return tmp155.ToString();
+          tmp203.Append(')');
+          return tmp203.ToString();
         }
       }
 

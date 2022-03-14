@@ -25,6 +25,7 @@ namespace Nebula.Common
     INT16 = 9,
     INT32 = 10,
     TIMESTAMP = 21,
+    DURATION = 23,
     DATE = 24,
     DATETIME = 25,
     TIME = 26,
