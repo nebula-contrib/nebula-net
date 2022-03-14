@@ -4,12 +4,12 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageProjectUrl>https://github.com/shyboylpf/nebula-net</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/nebula-contrib/nebula-net</PackageProjectUrl>
     <Copyright>Apache-2.0</Copyright>
-    <Description>nebula net client.</Description>
+    <Description>nebula 3.0.0 net client.</Description>
 	<PackageId>NebulaNet</PackageId>
-	<Version>1.0.0</Version>
-	<Authors>matt liu</Authors>
+	<Version>3.0.0</Version>
+	<Authors>pengpeng</Authors>
   </PropertyGroup>
 
   <ItemGroup>
