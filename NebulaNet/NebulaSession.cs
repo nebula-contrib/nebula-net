@@ -9,6 +9,7 @@ namespace NebulaNet
         private readonly SessionId _session;
         private NebulaConnection? _connection = null;
         private readonly NebulaPool _nebulaPool;
+
         public NebulaSession(SessionId session, NebulaConnection connection, NebulaPool nebulaPool)
         {
             _session = session;
@@ -26,18 +27,20 @@ namespace NebulaNet
 
             return executionResponse;
         }
+
         /// <summary>
-        /// 重新获取连接
+        /// Refresh session.
         /// </summary>
         /// <returns></returns>
         public void RefreshAsync()
         {
-            if (_connection!=null)
+            if (_connection != null)
             {
                 _nebulaPool.ReturnConnect(_connection);
             }
             _connection = _nebulaPool.GetConnect();
         }
+
         public async Task<bool> PingAsync()
         {
             if (_connection == null)
@@ -46,8 +49,9 @@ namespace NebulaNet
             }
             return await _connection.PingAsync();
         }
+
         /// <summary>
-        /// 释放session
+        /// release session
         /// </summary>
         /// <returns></returns>
         public void Release()
