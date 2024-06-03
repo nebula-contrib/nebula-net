@@ -16,10 +16,10 @@ dotnet add package NebulaNet
 
 Released [versions](https://www.nuget.org/packages/NebulaNet/#versions-tab) are mapped to Nebula Graph Core as following table:
 
-| nebula-net | nebula graph core |
+| nebula-net | NebulaGraph Core  |
 | ---------- | ----------------- |
 | 1.0.0      | 2.6.x             |
-| 3.0.0      | 3.0.x             |
+| 3.0.0      | 3.x               |
 
 
 ## Quick Start
